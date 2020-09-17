@@ -3,7 +3,7 @@
 @import 'variables.scss';
 
 html {
-  background-color: $primaryColor;
+  background-color: $primaryLight;
   scroll-behavior: smooth;
 }
 
@@ -39,7 +39,7 @@ body,
 }
 
 section {
-  padding: 80px 0;
+  padding: 0 0 80px 0;
 }
 
 .section-title {
@@ -52,11 +52,67 @@ section {
   margin-bottom: 0.2rem;
 }
 
+.section-title p {
+  margin: 0 auto;
+  max-width: 38rem;
+}
+
 .section-cta {
   margin-top: 30px;
   text-align: center;
 }
 
+
+.landing-item {
+  padding-bottom: 50px;
+}
+
+.landing-panel {
+  display: flex;
+  align-items: center;
+}
+
+
+.skill-section {
+  margin-bottom: 60px;
+
+  h3.background {
+    font-size: 1.5em;
+    text-align: center;
+    color: $lightText;
+    margin-bottom: .5em;
+
+    position: relative;
+    z-index: 1;
+
+    &:before {
+      border-top: 2px solid $lightGray;
+      content: "";
+      margin: 0 auto;
+      /* this centers the line to the full width specified */
+      position: absolute;
+      /* positioning must be absolute here, and relative positioning must be applied to the parent */
+      top: 50%;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 95%;
+      z-index: -1;
+    }
+
+
+    span {
+      background: $white;
+      padding: 0 .8rem;
+    }
+  }
+
+  p.sectionDescription {
+    text-align: center;
+    color: $lightText;
+  }
+
+}
 
 // section.section-dark {
 //   padding: 60px 0 70px;
@@ -649,7 +705,7 @@ a.panel {
 
 .panel {
   padding: 1rem;
-  border: solid 1px $lightGray;
+  // border: solid 1px $lightGray;
   border-radius: 7px;
   box-shadow: $box-shadow-medium;
   color: $darkText;
@@ -870,7 +926,7 @@ a.panel {
 }
 
 .hero-pic {
-  height: 200px;
+  height: 160px;
 }
 
 @media screen and (min-width: 992px) {
@@ -897,5 +953,3 @@ a.panel {
   }
 
 }
-
-/* Hero */

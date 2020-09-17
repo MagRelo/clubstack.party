@@ -8,7 +8,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: ['position-paper'],
+  app_name: ['reading-skills'],
   /**
    * Your New Relic license key.
    */

@@ -35,16 +35,12 @@ function Header() {
           </button>
 
           <Link to="/">
-            <span>
-              <span className="header-title">Position</span>
-              &#8201;
-              <span className="header-title">Paper</span>
-            </span>
+            <span>{/* <span className="header-title">Lectio</span> */}</span>
           </Link>
         </div>
 
         <div className="header-container">
-          <span className="header-tagline">Stake Your Claim.</span>
+          {/* <span className="header-tagline">User-Generated Communities</span> */}
         </div>
 
         <div className="header-container desktop-menu">

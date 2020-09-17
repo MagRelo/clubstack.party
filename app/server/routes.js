@@ -22,8 +22,8 @@ router.get('*', function(req, res) {
     }
 
     // replace values
-    data = data.replace(/\$OG_TITLE/g, 'Position Paper');
-    data = data.replace(/\$OG_DESCRIPTION/g, `Stake Your Claim.`);
+    data = data.replace(/\$OG_TITLE/g, 'Skills of Reading');
+    data = data.replace(/\$OG_DESCRIPTION/g, `Skills of Reading`);
     const result = data.replace(
       /\$OG_IMAGE/g,
       'https://' + req.hostname + '/logo_share.png'

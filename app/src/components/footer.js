@@ -13,12 +13,10 @@ function Footer(props) {
           <div style={{ zIndex: 1 }}>
             <div className="footer-logo">
               <span>
-                <span className="footer-title">Position</span>
-                &#8201;
-                <span className="footer-title">Paper</span>
+                <span className="footer-title">Lectio</span>
               </span>
             </div>
-            <p>Stake Your Claim</p>
+            <p>User-Generated Communities</p>
           </div>
 
           <div style={{ zIndex: 1 }}>
@@ -54,7 +52,7 @@ function Footer(props) {
             className="copyright"
             style={{ position: 'relative', zIndex: 1 }}
           >
-            <span>Position&#8201;Paper | 2020</span>
+            <span>Incentive&#8201;Exchange | 2020</span>
           </div>
         </div>
       </div>

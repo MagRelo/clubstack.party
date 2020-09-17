@@ -6,8 +6,8 @@ header {
   padding: 1em 2em;
 
   text-align: center;
-  background-color: $primaryColor;
-  border-bottom: $primaryLight solid 1px;
+  // background-color: $primaryColor;
+  // border-bottom: $primaryLight solid 1px;
 
   margin-bottom: 40px;
 }
@@ -15,25 +15,20 @@ header {
 
 .header-title {
   font-family: 'Libre Baskerville', serif;
-  background-color: $primaryColor;
+  // background-color: $primaryColor;
   font-size: 32px;
   position: relative;
   z-index: 1;
 }
 
 .header-title:first-child {
-  color: $primaryLight
+  color: $lighterText;
 }
-
-.header-title:last-child {
-  color: $white;
-}
-
 
 .header-tagline {
   font-family: 'Libre Baskerville', serif;
   font-size: smaller;
-  color: $lighterGray;
+  color: $lighterText;
 }
 
 .nav-list {
@@ -55,16 +50,16 @@ a.nav-link {
   display: inline-block;
 
   padding: 0.33rem 0.67rem;
-  color: $primaryLight;
-  background-color: $primaryColor;
+  color: $lighterText;
+  font-family: 'Libre Baskerville', serif;
 
   // to preserve spacing
-  border-bottom: solid 1px $primaryColor;
+  border-bottom: solid 1px $white;
 }
 
 a.nav-link:hover {
-  color: $primaryLight;
-  border-bottom: solid 1px $primaryLight;
+  // color: $primaryLight;
+  border-bottom: solid 1px $lighterText;
 }
 
 a.nav-link.active,
@@ -151,34 +146,30 @@ footer {
   overflow: hidden;
 
   font-family: 'Libre Baskerville', serif;
-  background-color: $primaryColor;
-  border-top: $primaryLight solid 2px;
-  color: $white;
+  // background-color: $primaryColor;
+  border-top: $lighterGray solid 2px;
+  color: $lighterText;
   padding: 40px 0;
   font-size: 16px;
 }
 
-footer p,
-footer li a,
-footer .footer-logo,
-footer h4 span {
-  background-color: $primaryColor;
-}
+// footer p,
+// footer li a,
+// footer .footer-logo,
+// footer h4 span {
+//   background-color: $primaryColor;
+// }
 
 footer>.container {
   z-index: 1;
 }
 
 .footer-title:first-child {
-  color: $primaryLight;
-}
-
-.footer-title:last-child {
-  color: $white;
+  color: $lighterText
 }
 
 .links-title {
-  color: $white;
+  color: $lighterText;
 }
 
 .footer-logo {
@@ -199,12 +190,7 @@ footer>.container {
   position: relative;
   font-size: 16px;
   font-weight: 400;
-  color: $primaryLight;
-}
-
-.footer-list li a:hover {
-  border-bottom: solid 1px $primaryLight;
-  color: $primaryLight;
+  color: $lighterText;
 }
 
 .footer-list .list-inline li {
@@ -213,12 +199,13 @@ footer>.container {
 }
 
 .copyright span {
-  color: $white;
-  background-color: $primaryColor;
+  font-size: small;
+  color: $lighterText;
+  // background-color: $primaryColor;
   padding: 5px;
   border-radius: 5px;
 }
 
 .copyright span a {
-  color: $secondaryColor;
+  // color: $secondaryColor;
 }

@@ -4,7 +4,7 @@ import { Link } from '@reach/router';
 import { UserProfile } from 'pages/account/userProfile';
 import Feed from 'pages/position/feed';
 
-import { EthereumAccount, DYdX } from 'components/random';
+// import { EthereumAccount, DYdX } from 'components/random';
 
 import LineChart from 'components/lineChart';
 
@@ -36,14 +36,7 @@ function Dashboard({ isMe, user, stats }) {
         </div>
         <hr />
         <div className="mb-4"></div>
-        {isMe ? (
-          <React.Fragment>
-            <EthereumAccount user={user} />
-            <hr />
-            <DYdX />
-            <hr />
-          </React.Fragment>
-        ) : null}
+        {isMe ? <React.Fragment>{/* test */}</React.Fragment> : null}
       </div>
     </div>
   );

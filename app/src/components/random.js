@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 
 // import Img from 'react-image';
 import { getBalance } from 'api/magic';
-import { dydxGetBalance } from 'api/dydx';
+// import { dydxGetBalance } from 'api/dydx';
 
 import { Link } from '@reach/router';
 // import { FaBuilding } from 'react-icons/fa';
@@ -230,169 +230,169 @@ export const NavLink = (props) => (
   />
 );
 
-export function EthereumAccount({ user }) {
-  const [loading, setLoading] = useState(false);
-  const [network, setNetwork] = useState('');
-  const [balance, setBalance] = useState(0);
+// export function EthereumAccount({ user }) {
+//   const [loading, setLoading] = useState(false);
+//   const [network, setNetwork] = useState('');
+//   const [balance, setBalance] = useState(0);
 
-  useEffect(() => {
-    setLoading(true);
-    getBalance(user.publicAddress).then(({ network, balance }) => {
-      setNetwork(network.name);
-      setBalance(balance);
-      setLoading(false);
-    });
-  }, [user.publicAddress]);
+//   useEffect(() => {
+//     setLoading(true);
+//     getBalance(user.publicAddress).then(({ network, balance }) => {
+//       setNetwork(network.name);
+//       setBalance(balance);
+//       setLoading(false);
+//     });
+//   }, [user.publicAddress]);
 
-  return (
-    <div>
-      <div>
-        <Link
-          className="btn btn-sm btn-unstyled"
-          style={{ float: 'right' }}
-          to="/deposit"
-        >
-          Deposit
-        </Link>
-        <b>Ethereum</b>
-        <div className="mb-3"></div>
-      </div>
+//   return (
+//     <div>
+//       <div>
+//         <Link
+//           className="btn btn-sm btn-unstyled"
+//           style={{ float: 'right' }}
+//           to="/deposit"
+//         >
+//           Deposit
+//         </Link>
+//         <b>Ethereum</b>
+//         <div className="mb-3"></div>
+//       </div>
 
-      {/* Balance */}
-      <div className="line-item">
-        <div>Balance</div>
-        <div className="line-item-filler"></div>
-        <div>
-          {loading ? (
-            <span>
-              <Bouncing />
-            </span>
-          ) : (
-            <span>{balance}Ξ</span>
-          )}
-        </div>
-      </div>
+//       {/* Balance */}
+//       <div className="line-item">
+//         <div>Balance</div>
+//         <div className="line-item-filler"></div>
+//         <div>
+//           {loading ? (
+//             <span>
+//               <Bouncing />
+//             </span>
+//           ) : (
+//             <span>{balance}Ξ</span>
+//           )}
+//         </div>
+//       </div>
 
-      {/* Balance */}
-      <div className="line-item">
-        <div>Network</div>
-        <div className="line-item-filler"></div>
-        <div>
-          {loading ? (
-            <span>
-              <Bouncing />
-            </span>
-          ) : (
-            <span>{network}</span>
-          )}
-        </div>
-      </div>
+//       {/* Balance */}
+//       <div className="line-item">
+//         <div>Network</div>
+//         <div className="line-item-filler"></div>
+//         <div>
+//           {loading ? (
+//             <span>
+//               <Bouncing />
+//             </span>
+//           ) : (
+//             <span>{network}</span>
+//           )}
+//         </div>
+//       </div>
 
-      {/* Address */}
-      <div className="line-item">
-        <div>Address</div>
-        <div className="line-item-filler"></div>
-        <div>
-          {user.publicAddress.substring(0, 10)}
+//       {/* Address */}
+//       <div className="line-item">
+//         <div>Address</div>
+//         <div className="line-item-filler"></div>
+//         <div>
+//           {user.publicAddress.substring(0, 10)}
 
-          <button
-            className="btn btn-sm btn-unstyled"
-            style={{ marginLeft: '0.5rem' }}
-            onClick={() => {
-              copyTextToClipboard(user.publicAddress);
-            }}
-          >
-            Copy
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
+//           <button
+//             className="btn btn-sm btn-unstyled"
+//             style={{ marginLeft: '0.5rem' }}
+//             onClick={() => {
+//               copyTextToClipboard(user.publicAddress);
+//             }}
+//           >
+//             Copy
+//           </button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
 
-export function DYdX({ user }) {
-  const [loading, setLoading] = useState(false);
+// export function DYdX({ user }) {
+//   const [loading, setLoading] = useState(false);
 
-  const [weth, setWeth] = useState(0);
-  const [dai, setDai] = useState(0);
-  const [usdc, setUsdc] = useState(0);
+//   const [weth, setWeth] = useState(0);
+//   const [dai, setDai] = useState(0);
+//   const [usdc, setUsdc] = useState(0);
 
-  useEffect(() => {
-    setLoading(true);
-    dydxGetBalance().then(([weth, dai, usdc]) => {
-      setWeth(weth);
-      setDai(dai);
-      setUsdc(usdc);
+//   useEffect(() => {
+//     setLoading(true);
+//     dydxGetBalance().then(([weth, dai, usdc]) => {
+//       setWeth(weth);
+//       setDai(dai);
+//       setUsdc(usdc);
 
-      setLoading(false);
-    });
-  }, []);
+//       setLoading(false);
+//     });
+//   }, []);
 
-  return (
-    <div>
-      <div>
-        <Link
-          className="btn btn-sm btn-unstyled"
-          style={{ float: 'right' }}
-          to="/dydx"
-        >
-          Manage
-        </Link>
-        <b>dYdX</b>
-        <p className="small">
-          Deposits held on dydx{' '}
-          <a
-            href="https://docs.dydx.exchange/#/protocol?id=interest"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {' '}
-            earn or pay interest
-          </a>
-        </p>
-        <div className="mb-3"></div>
-      </div>
+//   return (
+//     <div>
+//       <div>
+//         <Link
+//           className="btn btn-sm btn-unstyled"
+//           style={{ float: 'right' }}
+//           to="/dydx"
+//         >
+//           Manage
+//         </Link>
+//         <b>dYdX</b>
+//         <p className="small">
+//           Deposits held on dydx{' '}
+//           <a
+//             href="https://docs.dydx.exchange/#/protocol?id=interest"
+//             target="_blank"
+//             rel="noopener noreferrer"
+//           >
+//             {' '}
+//             earn or pay interest
+//           </a>
+//         </p>
+//         <div className="mb-3"></div>
+//       </div>
 
-      <div className="line-item">
-        <div>{weth.name}</div>
-        <div className="line-item-filler"></div>
-        <div>
-          {loading ? (
-            <span>
-              <Bouncing />
-            </span>
-          ) : (
-            <span>{weth.eth}Ξ</span>
-          )}
-        </div>
-      </div>
-      <div className="line-item">
-        <div>{dai.name}</div>
-        <div className="line-item-filler"></div>
+//       <div className="line-item">
+//         <div>{weth.name}</div>
+//         <div className="line-item-filler"></div>
+//         <div>
+//           {loading ? (
+//             <span>
+//               <Bouncing />
+//             </span>
+//           ) : (
+//             <span>{weth.eth}Ξ</span>
+//           )}
+//         </div>
+//       </div>
+//       <div className="line-item">
+//         <div>{dai.name}</div>
+//         <div className="line-item-filler"></div>
 
-        <div>
-          {loading ? (
-            <span>
-              <Bouncing />
-            </span>
-          ) : (
-            <span>${dai.eth}</span>
-          )}
-        </div>
-      </div>
-      <div className="line-item">
-        <div>{usdc.name}</div>
-        <div className="line-item-filler"></div>
-        <div>
-          {loading ? (
-            <span>
-              <Bouncing />
-            </span>
-          ) : (
-            <span>${usdc.eth}</span>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
+//         <div>
+//           {loading ? (
+//             <span>
+//               <Bouncing />
+//             </span>
+//           ) : (
+//             <span>${dai.eth}</span>
+//           )}
+//         </div>
+//       </div>
+//       <div className="line-item">
+//         <div>{usdc.name}</div>
+//         <div className="line-item-filler"></div>
+//         <div>
+//           {loading ? (
+//             <span>
+//               <Bouncing />
+//             </span>
+//           ) : (
+//             <span>${usdc.eth}</span>
+//           )}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }

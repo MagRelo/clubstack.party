@@ -21,8 +21,8 @@ import NotFound from 'pages/404';
 import Account from 'pages/account/user';
 import ViewUser from 'pages/account/user';
 import UpdateProfile from 'pages/account/updateProfile';
-import Deposit from 'pages/account/ethDeposit';
-import DYDX from 'pages/account/dydxDeposit';
+// import Deposit from 'pages/account/ethDeposit';
+// import DYDX from 'pages/account/dydxDeposit';
 // import OnboardingForm from 'pages/account/onboarding';
 
 import Leaderboard from 'pages/frontpage';
@@ -182,8 +182,8 @@ function App() {
                   <Account path="/account" />
                   <AddProp path="/addposition" />
                   <UpdateProfile path="/profile" />
-                  <Deposit path="/deposit" />
-                  <DYDX path="/dydx" />
+                  {/* <Deposit path="/deposit" /> */}
+                  {/* <DYDX path="/dydx" /> */}
                   {/* <OnboardingForm path="/onboarding" /> */}
                 </React.Fragment>
               ) : null}
@@ -209,8 +209,8 @@ export default App;
 function MetaData() {
   return (
     <Helmet>
-      <title>Position Paper</title>
-      <meta name="description" content="Stake Your Claim" />
+      <title>Skills of Reading</title>
+      <meta name="description" content="The Fundamental Skills of Reading" />
       <link rel="canonical" href={'https://localconnect.app'} />
 
       <meta property="og:site_name" content="Local Connect" />

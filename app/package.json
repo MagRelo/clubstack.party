@@ -1,23 +1,24 @@
 {
-  "name": "position-paper",
+  "name": "reading-project",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:8080",
   "dependencies": {
-    "@dydxprotocol/solo": "^0.35.1",
     "@magic-sdk/admin": "^1.0.0",
+
     "@reach/dialog": "^0.2.8",
     "@reach/menu-button": "^0.1.18",
     "@reach/rect": "^0.8.2",
     "@reach/router": "^1.2.1",
     "@reach/tabs": "^0.1.6",
+
     "@sendgrid/mail": "^6.4.0",
     "connect-mongodb-session": "^2.3.1",
     "cookie-parser": "^1.4.4",
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
     "draft-convert": "^2.1.10",
-    "ethers": "^4.0.47",
+
     "express": "^4.16.4",
     "express-session": "^1.17.1",
     "format-currency": "^1.0.0",
@@ -43,8 +44,7 @@
     "react-spring": "^8.0.27",
     "react-stripe-elements": "^3.0.0",
     "request": "^2.88.0",
-    "victory": "^34.3.4",
-    "web3": "^1.2.7"
+    "victory": "^34.3.4"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -53,11 +53,11 @@
     "eject": "react-scripts eject",
     "server": "node server/index.js",
     "dev": "NODE_ENV=development nodemon --inspect server/index.js",
-    "build-prod": "react-app-rewired build && docker build . -t magrelo/position-paper && docker push magrelo/position-paper",
-    "build-staging": "react-app-rewired build && docker build . -t magrelo/position-paper-staging && docker push magrelo/position-paper-staging",
+    "build-prod": "react-app-rewired build && docker build . -t magrelo/reading-project && docker push magrelo/reading-project",
+    "build-staging": "react-app-rewired build && docker build . -t magrelo/reading-project-staging && docker push magrelo/reading-project-staging",
     "ssh": "echo 'not setup'",
-    "dump-db": "mongodump  --db position-paper",
-    "restore-db": "mongorestore --db position-paper dump/position-paper",
+    "dump-db": "mongodump  --db reading-project",
+    "restore-db": "mongorestore --db reading-project dump/reading-project",
     "seed-db": "node server/utils/seedDb.js"
   },
   "devDependencies": {

@@ -33,7 +33,7 @@ try {
   console.error('MongoDB connection error: ' + error);
 }
 
-mongoose.connection.on('error', function(error) {
+mongoose.connection.on('error', function (error) {
   console.error('MongoDB error: ' + error);
   process.exit(-1);
 });
@@ -48,15 +48,17 @@ const app = require('express')();
 const server = require('http').Server(app);
 const morgan = require('morgan');
 const cookieParser = require('cookie-parser');
+const helmet = require('helmet');
 
 // configure express middleware
 app.set('trust proxy', true);
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(helmet());
 app.use(
   morgan('dev', {
-    skip: function(req, res) {
+    skip: function (req, res) {
       // remove the frontend dev server's 'json' calls from the console output
       return req.originalUrl.indexOf('json') > 0;
     },
@@ -73,7 +75,7 @@ var store = new MongoDBStore({
   uri: process.env.MONGODB_URL_INT,
   collection: 'sessions',
 });
-store.on('error', function(error) {
+store.on('error', function (error) {
   console.log('MongoStore Error', error);
 });
 
