@@ -27,9 +27,10 @@ import UpdateProfile from 'pages/account/updateProfile';
 
 import Leaderboard from 'pages/frontpage';
 import Network from 'pages/network/network';
-
 import AddProp from 'pages/position/addPosition';
 import ViewProp from 'pages/position/position';
+
+// import Subscribe from 'pages/';
 
 // Setup Auth context
 export const AuthContext = React.createContext({});
@@ -167,6 +168,7 @@ function App() {
             <Router>
               <LandingPage path="/" />
 
+              {/* <Subscribe path="/subscribe" /> */}
               <Login path="/login" />
               <Terms path="/terms" />
               <About path="/about" />

@@ -3,7 +3,7 @@
 @import 'variables.scss';
 
 html {
-  background-color: $primaryLight;
+  background-color: $lighterGray;
   scroll-behavior: smooth;
 }
 
@@ -19,7 +19,6 @@ body,
   min-height: 100vh;
   box-sizing: border-box;
 }
-
 
 // => header/body/footer
 .page-wrapper {
@@ -62,7 +61,6 @@ section {
   text-align: center;
 }
 
-
 .landing-item {
   padding-bottom: 50px;
 }
@@ -72,46 +70,45 @@ section {
   align-items: center;
 }
 
+h3.background {
+  font-size: 1.5em;
+  text-align: center;
+  color: $lightText;
+  margin-bottom: 0.5em;
+
+  margin-top: 69px;
+
+  position: relative;
+  z-index: 1;
+
+  &:before {
+    border-top: 2px solid $lightGray;
+    content: '';
+    margin: 0 auto;
+    /* this centers the line to the full width specified */
+    position: absolute;
+    /* positioning must be absolute here, and relative positioning must be applied to the parent */
+    top: 50%;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 95%;
+    z-index: -1;
+  }
+
+  span {
+    background: $white;
+    padding: 0 0.8rem;
+  }
+}
 
 .skill-section {
   margin-bottom: 60px;
-
-  h3.background {
-    font-size: 1.5em;
-    text-align: center;
-    color: $lightText;
-    margin-bottom: .5em;
-
-    position: relative;
-    z-index: 1;
-
-    &:before {
-      border-top: 2px solid $lightGray;
-      content: "";
-      margin: 0 auto;
-      /* this centers the line to the full width specified */
-      position: absolute;
-      /* positioning must be absolute here, and relative positioning must be applied to the parent */
-      top: 50%;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      width: 95%;
-      z-index: -1;
-    }
-
-
-    span {
-      background: $white;
-      padding: 0 .8rem;
-    }
-  }
 
   p.sectionDescription {
     text-align: center;
     color: $lightText;
   }
-
 }
 
 // section.section-dark {
@@ -157,7 +154,6 @@ section {
 //   position: relative;
 //   z-index: 1;
 // }
-
 
 a {
   color: $primaryLight;
@@ -218,8 +214,6 @@ table {
   color: $primaryLight;
 }
 
-
-
 .social-label {
   text-transform: uppercase;
   color: #b4b4b4;
@@ -246,7 +240,7 @@ table {
   z-index: 9;
 }
 
-.btn+.btn {
+.btn + .btn {
   margin-left: 1em;
 }
 
@@ -276,7 +270,6 @@ table {
   background: lighten($color: $primaryLight, $amount: 5);
 }
 
-
 .btn.btn-unstyled {
   background-color: inherit;
   border: none;
@@ -284,10 +277,9 @@ table {
   color: $lighterText;
 }
 
-.button-unstyled>* {
+.button-unstyled > * {
   pointer-events: none;
 }
-
 
 /* getstream activity */
 .stream {
@@ -314,8 +306,6 @@ table {
   font-size: 1.2em;
 }
 
-
-
 // Profile
 .user-container {
   min-height: 90vh;
@@ -336,7 +326,6 @@ table {
     width: 40px;
     height: 40px;
   }
-
 }
 
 .user-text {
@@ -360,7 +349,7 @@ table {
   align-items: center;
   height: 100%;
   font-size: 28px;
-  color: $primaryLight,
+  color: $primaryLight;
 }
 
 .user-info p {
@@ -391,7 +380,7 @@ table {
 
 /* form */
 
-form>hr {
+form > hr {
   margin: 1rem -1rem;
 }
 
@@ -666,7 +655,6 @@ iframe {
   color: $white;
 }
 
-
 /* Data grid */
 .grid-left {
   display: grid;
@@ -697,7 +685,6 @@ iframe {
   display: block;
 }
 
-
 /* Panel */
 a.panel {
   display: block;
@@ -722,7 +709,7 @@ a.panel {
   padding: 8px 1rem;
 }
 
-.panel>a {
+.panel > a {
   color: initial;
   border-bottom: solid 1px $primaryLight;
 }
@@ -757,7 +744,6 @@ a.panel {
   border-radius: 4px;
 }
 
-
 .job-description-container {
   position: relative;
   min-height: 200px;
@@ -785,7 +771,6 @@ a.panel {
 }
 
 @media screen and (min-width: 900px) {
-
   .job-description {
     padding: 0 2em;
   }
@@ -820,7 +805,6 @@ a.panel {
 }
 
 @media screen and (min-width: 900px) {
-
   /* swap grid order to alternate images */
   .swap-order {
     order: 2;
@@ -903,7 +887,6 @@ a.panel {
   }
 }
 
-
 /* Hero */
 .hero-grid {
   display: grid;
@@ -930,7 +913,6 @@ a.panel {
 }
 
 @media screen and (min-width: 992px) {
-
   .hero-grid {
     display: grid;
     // gap: 3em;
@@ -951,5 +933,12 @@ a.panel {
     padding: 0 1.5em;
     height: 250px;
   }
+}
 
+.feature-list {
+  color: $darkText;
+
+  li {
+    margin-bottom: 8px;
+  }
 }

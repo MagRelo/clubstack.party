@@ -1,5 +1,5 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { Link, globalHistory } from '@reach/router';
+import React from 'react';
+// import { Link, globalHistory } from '@reach/router';
 
 import 'css/videoCard.scss';
 
