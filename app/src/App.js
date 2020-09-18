@@ -19,18 +19,7 @@ import About from 'pages/about';
 import NotFound from 'pages/404';
 
 import Account from 'pages/account/user';
-import ViewUser from 'pages/account/user';
 import UpdateProfile from 'pages/account/updateProfile';
-// import Deposit from 'pages/account/ethDeposit';
-// import DYDX from 'pages/account/dydxDeposit';
-// import OnboardingForm from 'pages/account/onboarding';
-
-import Leaderboard from 'pages/frontpage';
-import Network from 'pages/network/network';
-import AddProp from 'pages/position/addPosition';
-import ViewProp from 'pages/position/position';
-
-// import Subscribe from 'pages/';
 
 // Setup Auth context
 export const AuthContext = React.createContext({});
@@ -167,26 +156,15 @@ function App() {
           <div className="content-wrapper">
             <Router>
               <LandingPage path="/" />
-
-              {/* <Subscribe path="/subscribe" /> */}
-              <Login path="/login" />
               <Terms path="/terms" />
               <About path="/about" />
 
-              <Leaderboard path="/leaderboard" />
-              <ViewProp path="/position/:propId" />
-              <ViewUser path="/user/:userId" />
-
+              <Login path="/login" />
               {/* Auth required */}
               {activeSession ? (
                 <React.Fragment>
-                  <Network path="/network" />
                   <Account path="/account" />
-                  <AddProp path="/addposition" />
                   <UpdateProfile path="/profile" />
-                  {/* <Deposit path="/deposit" /> */}
-                  {/* <DYDX path="/dydx" /> */}
-                  {/* <OnboardingForm path="/onboarding" /> */}
                 </React.Fragment>
               ) : null}
 

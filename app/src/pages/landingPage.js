@@ -5,6 +5,10 @@ import Content from 'images/undraw_sharing_articles_t5aa.svg';
 import childReading from 'images/child_reading.jpg';
 
 import { HiCheck } from 'react-icons/hi';
+import { GiWhiteBook, GiPerspectiveDiceSix } from 'react-icons/gi';
+import { RiVideoChatFill, RiVideoDownloadFill } from 'react-icons/ri';
+import { IoMdChatbubbles } from 'react-icons/io';
+import { MdViewList } from 'react-icons/md';
 
 import GoogleDriveLogo from 'images/google-drive.svg';
 import ZoomLogo from 'images/zoom-communications-logo.svg';
@@ -143,13 +147,13 @@ function LandingPage() {
               >
                 <img src={ZoomLogo} alt="zoom" height="28px" />
               </div>
-              <div className="mb-3"></div>
+              <div className="mb-4"></div>
               <ul className="list-unstyled text-center feature-list">
                 <li>
-                  <HiCheck color="green" /> Weekly Live Webinar
+                  <RiVideoChatFill color="green" /> Weekly Live Webinar
                 </li>
                 <li>
-                  <HiCheck color="green" /> Access to archives
+                  <RiVideoDownloadFill color="green" /> Video Archives
                 </li>
               </ul>
             </div>
@@ -159,15 +163,15 @@ function LandingPage() {
                 <img src={Slack} alt="google" height="28px" />{' '}
               </div>
 
-              <div className="mb-3"></div>
+              <div className="mb-4"></div>
 
               <ul className="list-unstyled text-center feature-list">
                 <li>
-                  <HiCheck color="green" /> Access to private Slack workspace
+                  <IoMdChatbubbles color="green" /> Private Slack workspace
                 </li>
                 <li>
-                  <HiCheck color="green" /> Channels: #lorem, #ipsum, #party,
-                  #recruiting
+                  <MdViewList color="green" /> Channels: <br /> #lorem, #ipsum,
+                  #party, #recruiting
                 </li>
               </ul>
             </div>
@@ -185,13 +189,13 @@ function LandingPage() {
                 </div>
               </div>
 
-              <div className="mb-3"></div>
+              <div className="mb-4"></div>
               <ul className="list-unstyled text-center feature-list">
                 <li>
-                  <HiCheck color="green" /> Games, Wordlists
+                  <GiPerspectiveDiceSix color="green" /> Games, Wordlists
                 </li>
                 <li>
-                  <HiCheck color="green" /> Access to archives
+                  <GiWhiteBook color="green" /> Access to archives
                 </li>
               </ul>
             </div>

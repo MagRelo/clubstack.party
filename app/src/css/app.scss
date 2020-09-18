@@ -74,9 +74,9 @@ h3.background {
   font-size: 1.5em;
   text-align: center;
   color: $lightText;
-  margin-bottom: 0.5em;
 
-  margin-top: 69px;
+  margin-top: 50px;
+  margin-bottom: 1rem;
 
   position: relative;
   z-index: 1;
@@ -182,6 +182,10 @@ table {
   background-color: $lighterGray;
 }
 
+.react-icons {
+  vertical-align: middle;
+}
+
 .icon {
   color: white;
   height: 40px;
@@ -240,7 +244,7 @@ table {
   z-index: 9;
 }
 
-.btn + .btn {
+.btn+.btn {
   margin-left: 1em;
 }
 
@@ -277,7 +281,7 @@ table {
   color: $lighterText;
 }
 
-.button-unstyled > * {
+.button-unstyled>* {
   pointer-events: none;
 }
 
@@ -380,7 +384,7 @@ table {
 
 /* form */
 
-form > hr {
+form>hr {
   margin: 1rem -1rem;
 }
 
@@ -709,7 +713,7 @@ a.panel {
   padding: 8px 1rem;
 }
 
-.panel > a {
+.panel>a {
   color: initial;
   border-bottom: solid 1px $primaryLight;
 }
@@ -805,6 +809,7 @@ a.panel {
 }
 
 @media screen and (min-width: 900px) {
+
   /* swap grid order to alternate images */
   .swap-order {
     order: 2;
