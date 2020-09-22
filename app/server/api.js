@@ -89,6 +89,7 @@ router.post('/props', authenticate, async function(req, res) {
 // USER
 //
 
+// Get User's Network Data
 router.get('/user/network', authenticate, async function(req, res) {
   try {
     const feed = await getStream.getFeed('User', req.user._id, req.user._id);
@@ -121,8 +122,7 @@ router.get('/user/network', authenticate, async function(req, res) {
   }
 });
 
-// router.get('/user', populateUser);
-
+// Get User
 router.get('/user/:userId', async function(req, res) {
   try {
     const user = await UserModel.findOne({ _id: req.params.userId })

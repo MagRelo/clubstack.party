@@ -3,6 +3,10 @@ var router = express.Router();
 
 const passport = require('passport');
 const magicLogout = require('./controllers/magic-auth').logout;
+const payments = require('./integrations/payments');
+
+const UserModel = require('./models').UserModel;
+
 //
 // AUTH
 router.post('/login', passport.authenticate('magic'), (req, res) => {
@@ -26,9 +30,28 @@ router.get('/status', (req, res) => {
   return res.status(200).send(req.user);
 });
 
-// function authenticate(req, res, next) {
+router.post('/email', async (req, res) => {
+  // console.log(req.body.email);
+  const user = await UserModel.findOne({ email: req.body.email });
+  if (user) {
+    return res.status(200).send({ email: req.body.email });
+  }
 
-//   next();
-// }
+  return res.status(401).send({ error: 'Not Authenticated' });
+});
+
+router.post('/stripe/webhook', async (request, res) => {
+  const signature = request.headers['stripe-signature'];
+
+  // console.log(request.rawBody);
+
+  try {
+    await payments.handleStripeEvent(request.rawBody, signature);
+    return res.status(200).end();
+  } catch (error) {
+    console.log(error);
+    return res.status(500).end(`Server Error`);
+  }
+});
 
 module.exports = router;

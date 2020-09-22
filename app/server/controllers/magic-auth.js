@@ -8,12 +8,15 @@ const magic = new Magic(process.env.MAGIC_SECRET_KEY);
 const passport = require('passport');
 const MagicStrategy = require('passport-magic').Strategy;
 
-const strategy = new MagicStrategy(async function (user, done) {
+const strategy = new MagicStrategy(async function(user, done) {
   const userMetadata = await magic.users.getMetadataByIssuer(user.issuer);
-  const existingUser = await UserModel.findOne({ issuer: user.issuer });
+  const existingUser = await UserModel.findOne({ email: userMetadata.email });
   if (!existingUser) {
-    /* Create new user if doesn't exist */
-    return signup(user, userMetadata, done);
+    console.log('unknown user:', userMetadata.email);
+    return done(null, false, { message: 'unknown user' });
+  } else if (!existingUser.lastLoginAt) {
+    /* Login user if otherwise */
+    return newSubscriber(user, userMetadata, done);
   } else {
     /* Login user if otherwise */
     return login(user, done);
@@ -22,24 +25,27 @@ const strategy = new MagicStrategy(async function (user, done) {
 
 passport.use(strategy);
 
-/* 3️⃣ Implement Auth Behaviors */
+/* User Signup */
+const newSubscriber = async (user, userMetadata, done) => {
+  console.log('new subscriber:', user);
 
-/* Implement User Signup */
-const signup = async (user, userMetadata, done) => {
-  console.log('signup - updated:', user);
+  const updatedUser = await UserModel.findOneAndUpdate(
+    { email: userMetadata.email },
+    {
+      $set: {
+        issuer: user.issuer,
+        email: userMetadata.email,
+        lastLoginAt: user.claim.iat,
+        publicAddress: user.publicAddress,
+      },
+    },
+    { new: true }
+  );
 
-  let newUser = new UserModel({
-    issuer: user.issuer,
-    email: userMetadata.email,
-    lastLoginAt: user.claim.iat,
-    publicAddress: user.publicAddress,
-  });
-
-  await newUser.save();
-  return done(null, newUser);
+  return done(null, updatedUser);
 };
 
-/* Implement User Login */
+/* User Login */
 const login = async (user, done) => {
   /* Replay attack protection (https://go.magic.link/replay-attack) */
   if (user.claim.iat <= user.lastLoginAt) {
@@ -57,7 +63,7 @@ const login = async (user, done) => {
   return done(null, updatedUser);
 };
 
-exports.logout = async function (issuer) {
+exports.logout = async function(issuer) {
   return magic.users.logoutByIssuer(issuer);
 };
 
@@ -76,7 +82,7 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-exports.authenticate = function (req, res, next) {
+exports.authenticate = function(req, res, next) {
   if (!req.isAuthenticated()) {
     return res.status(401).send({ error: 'Not Authenticated' });
   }

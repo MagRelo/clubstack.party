@@ -17,9 +17,12 @@ import Login from 'pages/login';
 import Terms from 'pages/legal';
 import About from 'pages/about';
 import NotFound from 'pages/404';
+import SubscribeSuccess from 'pages/subscribeSuccess';
+import SubscribeFailure from 'pages/subscribeFailure';
 
-import Account from 'pages/account/user';
-import UpdateProfile from 'pages/account/updateProfile';
+import Dashboard from 'pages/account/dashboard';
+import Account from 'pages/account/account';
+import Admin from 'pages/admin/admin';
 
 // Setup Auth context
 export const AuthContext = React.createContext({});
@@ -28,7 +31,7 @@ function App() {
   const nonAuthPages = ['/', '/login', '/about', '/terms'];
   const pathname = window.location.pathname;
   const isAuthPage = !~nonAuthPages.indexOf(pathname);
-  console.log(pathname, 'redirect?', isAuthPage);
+  // console.log(pathname, 'redirect?', isAuthPage);
 
   const [loadingSession, setLoadingSession] = useState(isAuthPage);
   const [activeSession, setActiveSession] = useState(false);
@@ -91,10 +94,10 @@ function App() {
       navigate(redirect);
       // } else if (user.needsOnboarding) {
       //   navigate('/onboarding');
-    } else if (!user.displayName) {
-      navigate('/profile');
+      // } else if (!user.displayName) {
+      //   navigate('/profile');
     } else {
-      navigate('/account');
+      navigate('/dashboard');
     }
   }
 
@@ -158,13 +161,16 @@ function App() {
               <LandingPage path="/" />
               <Terms path="/terms" />
               <About path="/about" />
+              <SubscribeSuccess path="/subscribe" />
+              <SubscribeFailure path="/error" />
 
               <Login path="/login" />
               {/* Auth required */}
               {activeSession ? (
                 <React.Fragment>
+                  <Dashboard path="/dashboard" />
                   <Account path="/account" />
-                  <UpdateProfile path="/profile" />
+                  <Admin path="/admin" />
                 </React.Fragment>
               ) : null}
 

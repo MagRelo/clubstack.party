@@ -16,13 +16,13 @@ header {
 .header-title {
   font-family: 'Libre Baskerville', serif;
   // background-color: $primaryColor;
-  font-size: 32px;
+  font-size: 24px;
   position: relative;
   z-index: 1;
 }
 
 .header-title:first-child {
-  color: $lighterText;
+  color: $darkText;
 }
 
 .header-tagline {
@@ -50,7 +50,7 @@ a.nav-link {
   display: inline-block;
 
   padding: 0.33rem 0.67rem;
-  color: $lighterText;
+  color: $lightText;
   font-family: 'Libre Baskerville', serif;
 
   // to preserve spacing
@@ -64,8 +64,8 @@ a.nav-link:hover {
 
 a.nav-link.active,
 a.nav-link.active:hover {
-  color: $white;
-  border-bottom: solid 1px $white;
+  // color: $white;
+  border-bottom: solid 1px $darkText;
 }
 
 
@@ -105,7 +105,8 @@ a.nav-link.active:hover {
   }
 
   .header-title {
-    font-size: 36px;
+    font-size: 24px;
+    color: $darkText;
   }
 
   .header-tagline {

@@ -35,9 +35,9 @@ function UpdateProfile(props) {
     <div className="container">
       <div className="form-wrapper">
         <form name="updateProfile" onSubmit={submit}>
-          <legend>Update Your Profile</legend>
+          {/* <legend>Update Your Profile</legend> */}
 
-          <hr />
+          {/* <hr /> */}
 
           <div className="mb-4"></div>
           <UserProfile

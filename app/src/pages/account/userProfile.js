@@ -26,7 +26,7 @@ export function UserProfile({
   const linkStyle = disableLink ? { pointerEvents: 'none' } : null;
 
   return (
-    <React.Fragment>
+    <div>
       {user ? (
         <div className="user-profile">
           {showEdit && isMe ? (
@@ -63,7 +63,7 @@ export function UserProfile({
               <div className="user-text">
                 <div className="user-name">{displayUser.displayName}</div>
                 <div className="user-caption">{displayUser.caption}</div>
-
+                {/* 
                 {displayUser.units ? (
                   <div>
                     <div className="mb-1"></div>
@@ -71,13 +71,13 @@ export function UserProfile({
                       <span className="highlight">{displayUser.units}</span>
                     </div>
                   </div>
-                ) : null}
+                ) : null} */}
               </div>
             </div>
           </Link>
         </div>
       ) : null}
-    </React.Fragment>
+    </div>
   );
 }
 

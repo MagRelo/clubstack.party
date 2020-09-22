@@ -35,7 +35,9 @@ function Header() {
           </button>
 
           <Link to="/">
-            <span>{/* <span className="header-title">Lectio</span> */}</span>
+            <span>
+              <span className="header-title">The Skills of Reading</span>
+            </span>
           </Link>
         </div>
 
@@ -68,7 +70,7 @@ function Header() {
                 </li>
 
                 <li style={{ float: 'right' }}>
-                  <NavLink to="/network">My Network</NavLink>
+                  <NavLink to="/dashboard">Dashboard</NavLink>
                 </li>
               </React.Fragment>
             ) : null}
@@ -87,11 +89,7 @@ function Header() {
               {activeSession ? (
                 <React.Fragment>
                   <li>
-                    <NavLink to="/account">My Account</NavLink>
-                  </li>
-
-                  <li>
-                    <NavLink to="/network">My Network</NavLink>
+                    <NavLink to="/dashboard">Dashboard</NavLink>
                   </li>
                 </React.Fragment>
               ) : null}

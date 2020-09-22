@@ -1,32 +1,35 @@
 //  Plaid Config
-var plaid = require('plaid');
-var plaidClient = new plaid.Client(
-  process.env.PLAID_CLIENT_ID,
-  process.env.PLAID_SECRET,
-  process.env.PLAID_PUBLIC_KEY,
-  plaid.environments[process.env.PLAID_ENV],
-  {
-    version: '2019-05-29',
-    clientApp: process.env.PLAID_CLIENT_APP_NAME
-  }
-);
-console.log('Plaid mode:' + process.env.PLAID_ENV);
+// var plaid = require('plaid');
+// var plaidClient = new plaid.Client(
+//   process.env.PLAID_CLIENT_ID,
+//   process.env.PLAID_SECRET,
+//   process.env.PLAID_PUBLIC_KEY,
+//   plaid.environments[process.env.PLAID_ENV],
+//   {
+//     version: '2019-05-29',
+//     clientApp: process.env.PLAID_CLIENT_APP_NAME,
+//   }
+// );
+// console.log('Plaid mode:' + process.env.PLAID_ENV);
 
 // Stripe
 let stripeApiKey = '';
-if (process.env.STRIPE_TEST_MODE) {
-  stripeApiKey = process.env.STRIPE_TEST_KEY;
-  console.log('Stripe mode: test, key: ' + stripeApiKey);
-} else {
+const subscribeEndpointSecret = process.env.STRIPE_SUBSCRIBE_SECRET;
+if (process.env.STRIPE_LIVE_KEY) {
   stripeApiKey = process.env.STRIPE_LIVE_KEY;
   console.log('Stripe mode: LIVE!');
+} else {
+  stripeApiKey = process.env.STRIPE_TEST_KEY;
+  console.log('Stripe mode: test, key: ' + stripeApiKey);
 }
 const stripe = require('stripe')(stripeApiKey);
+
+const UserModel = require('../models').UserModel;
 
 //
 // Methods
 //
-exports.createStripeCharge = async function(
+exports.createStripeCharge = async function (
   stripeCustomerId,
   stripeToken,
   amount_in_cents,
@@ -38,7 +41,7 @@ exports.createStripeCharge = async function(
     customer: stripeCustomerId,
     source: stripeToken,
     description: 'Test payment',
-    metadata: otherDataObject
+    metadata: otherDataObject,
   };
 
   if (process.env.STRIPE_TEST_MODE) {
@@ -52,12 +55,12 @@ exports.createStripeCharge = async function(
 };
 
 // https://stripe.com/docs/api/customers/create
-exports.createStripeCustomer = async function(userData, stripeCustomerId) {
+exports.createStripeCustomer = async function (userData, stripeCustomerId) {
   const userObject = {
     name: userData.firstname + ' ' + userData.lastname,
     email: userData.email,
     description: '(' + (process.env.STRIPE_TEST_MODE ? 'TEST' : 'LIVE') + ')',
-    source: userData.token.id
+    source: userData.token.id,
   };
 
   // add or update
@@ -71,17 +74,17 @@ exports.createStripeCustomer = async function(userData, stripeCustomerId) {
   }
 };
 
-exports.deleteCustomerPaymentSource = async function(customerId, cardId) {
+exports.deleteCustomerPaymentSource = async function (customerId, cardId) {
   return await stripe.customers.deleteSource(customerId, cardId);
 };
 
-exports.createStripeAccount = async function(userData, ipAddress) {
-  // exchange plaid token for stripe token
-  const accessToken = await plaidClient.exchangePublicToken(userData.token);
-  const bankToken = await plaidClient.createStripeToken(
-    accessToken.access_token,
-    userData.metaData.account_id
-  );
+exports.createStripeAccount = async function (userData, ipAddress) {
+  // // exchange plaid token for stripe token
+  // const accessToken = await plaidClient.exchangePublicToken(userData.token);
+  // const bankToken = await plaidClient.createStripeToken(
+  //   accessToken.access_token,
+  //   userData.metaData.account_id
+  // );
 
   // create "Stripe Connect" account with bank account
   const dob_array = userData.dob.split('-'); // "2019-06-13"
@@ -96,27 +99,61 @@ exports.createStripeAccount = async function(userData, ipAddress) {
       dob: {
         year: dob_array[0],
         month: dob_array[1],
-        day: dob_array[2]
+        day: dob_array[2],
       },
-      ssn_last_4: userData.ssn
+      ssn_last_4: userData.ssn,
     },
     business_profile: {
       product_description:
-        'User refers information and/or applicants to platform customers'
+        'User refers information and/or applicants to platform customers',
     },
     external_account: bankToken.stripe_bank_account_token,
     tos_acceptance: {
       date: userData.tos.date,
       ip: ipAddress,
-      user_agent: userData.tos.user_agent
+      user_agent: userData.tos.user_agent,
     },
-    requested_capabilities: ['platform_payments']
+    requested_capabilities: ['platform_payments'],
   });
 
   return account;
 };
 
 // https://stripe.com/docs/api/external_account_bank_accounts/delete
-exports.deleteStripeAccountSource = async function(accountId, sourceId) {
+exports.deleteStripeAccountSource = async function (accountId, sourceId) {
   return await stripe.accounts.deleteExternalAccount(accountId, sourceId);
+};
+
+exports.handleStripeEvent = async function (body, signature) {
+  // console.log(body, signature);
+  // reconstruct event
+  let event = stripe.webhooks.constructEvent(
+    body,
+    signature,
+    subscribeEndpointSecret
+  );
+
+  if (event.type === 'checkout.session.completed') {
+    console.log('New Subscribe:', event.type);
+    const session = event.data.object;
+    // console.log('create user', session);
+
+    // create user
+    return signup(session);
+  }
+
+  console.log('Other Stripe Event:', event.type);
+};
+
+/* User Signup */
+const signup = async (session, done) => {
+  // console.log('signup - updated:', user);
+
+  let newUser = new UserModel({
+    stripeSubscribeSession: session,
+    stripeCustomerId: session.customer,
+    email: session.customer_email,
+  });
+
+  return newUser.save();
 };

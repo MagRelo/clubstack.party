@@ -75,7 +75,6 @@ h3.background {
   text-align: center;
   color: $lightText;
 
-  margin-top: 50px;
   margin-bottom: 1rem;
 
   position: relative;
@@ -184,6 +183,7 @@ table {
 
 .react-icons {
   vertical-align: middle;
+  height: 2em;
 }
 
 .icon {
@@ -344,7 +344,7 @@ table {
   height: 60px;
 
   border-radius: 50%;
-  border: solid 1px $lightText;
+  border: solid 1px $lightGray;
 }
 
 .user-avatar-pic {
@@ -353,7 +353,7 @@ table {
   align-items: center;
   height: 100%;
   font-size: 28px;
-  color: $primaryLight;
+  color: $lightGray;
 }
 
 .user-info p {
@@ -505,7 +505,7 @@ textarea.form-control {
   box-shadow: $box-shadow-inner;
 
   // font-family: monospace;
-  font-family: 'Nunito Sans';
+  // font-family: 'Nunito Sans';
 }
 
 .form-wrapper {
@@ -946,4 +946,53 @@ a.panel {
   li {
     margin-bottom: 8px;
   }
+}
+
+
+/* Start statistics */
+
+.box {
+  // background-color: #313348;
+  // padding: 15px;
+  overflow: hidden;
+}
+
+.box>i {
+  float: left;
+  color: #FFF;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  font-size: 22px;
+}
+
+
+.box>i.blue {
+  background: $primaryLight;
+}
+
+.box>i.green {
+  background: #4DBA62;
+}
+
+.box>i.red {
+  background: #FF7579;
+}
+
+.box .info {
+  // float: left;
+  width: auto;
+  // margin-left: 10px;
+  padding-left: 74px;
+}
+
+.box .info h3 {
+  margin: 5px 0 0;
+  display: inline-block;
+}
+
+.box .info p {
+  color: $lighterText;
+  margin-bottom: 0;
 }

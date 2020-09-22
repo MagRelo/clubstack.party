@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from 'react';
 
 import { Loading } from 'components/random';
 
-import Dashboard from 'pages/account/dashboard';
+import UpdateProfile from 'pages/account/updateProfile';
 
 import { AuthContext } from 'App';
 
@@ -39,10 +39,27 @@ function User({ userId }) {
   return (
     <div className="container">
       {error ? <p>{error}</p> : null}
-      {loading ? <Loading /> : null}
-      {displayUser ? (
-        <Dashboard isMe={isMe} user={displayUser} stats={stats} />
-      ) : null}
+      {loading ? (
+        <Loading />
+      ) : (
+        <div className="container">
+          {/* Profile */}
+          <h3 className="background">
+            <span>Profile</span>
+          </h3>
+          <UpdateProfile />
+
+          {/* Email */}
+          <h3 className="background">
+            <span>Email Preferences</span>
+          </h3>
+
+          {/* Subscription */}
+          <h3 className="background">
+            <span>Subscription</span>
+          </h3>
+        </div>
+      )}
     </div>
   );
 }

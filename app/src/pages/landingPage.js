@@ -125,10 +125,6 @@ function LandingPage() {
             </p>
           </div>
 
-          <div style={{ textAlign: 'center' }}>
-            <SubscribeButton />
-          </div>
-
           <div className="mb-4"></div>
 
           <h3 className="background">
@@ -137,7 +133,7 @@ function LandingPage() {
 
           <div className="mb-4"></div>
 
-          <div className="grid grid-3">
+          <div className="grid grid-3" style={{ margin: '60px 0' }}>
             <div>
               <div
                 style={{
@@ -147,33 +143,12 @@ function LandingPage() {
               >
                 <img src={ZoomLogo} alt="zoom" height="28px" />
               </div>
-              <div className="mb-4"></div>
-              <ul className="list-unstyled text-center feature-list">
-                <li>
-                  <RiVideoChatFill color="green" /> Weekly Live Webinar
-                </li>
-                <li>
-                  <RiVideoDownloadFill color="green" /> Video Archives
-                </li>
-              </ul>
             </div>
 
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-around' }}>
                 <img src={Slack} alt="google" height="28px" />{' '}
               </div>
-
-              <div className="mb-4"></div>
-
-              <ul className="list-unstyled text-center feature-list">
-                <li>
-                  <IoMdChatbubbles color="green" /> Private Slack workspace
-                </li>
-                <li>
-                  <MdViewList color="green" /> Channels: <br /> #lorem, #ipsum,
-                  #party, #recruiting
-                </li>
-              </ul>
             </div>
 
             <div>
@@ -188,16 +163,6 @@ function LandingPage() {
                   <b>Google Drive</b>
                 </div>
               </div>
-
-              <div className="mb-4"></div>
-              <ul className="list-unstyled text-center feature-list">
-                <li>
-                  <GiPerspectiveDiceSix color="green" /> Games, Wordlists
-                </li>
-                <li>
-                  <GiWhiteBook color="green" /> Access to archives
-                </li>
-              </ul>
             </div>
           </div>
 
@@ -227,7 +192,7 @@ function LandingPage() {
                 </i>
               </p>
               <div className="mb-2"></div>
-              <div style={{ maxWidth: '16em', float: 'right' }}>
+              <div style={{ maxWidth: '16em', marginLeft: 'auto' }}>
                 <UserProfile
                   displayUser={{
                     _id: 0,
@@ -240,6 +205,7 @@ function LandingPage() {
                 />
               </div>
             </div>
+
             <div>
               <div>
                 <SubscribeButton />
@@ -247,20 +213,6 @@ function LandingPage() {
                 <div>Cost: $29/mo</div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section>
-        <div className="container">
-          <div className="section-title">
-            <h3>Professional Consulting</h3>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ipsam
-              dicta accusamus molestiae sunt. Sed soluta aut inventore quasi.
-            </p>
-            <div className="mb-4"></div>
-            <button className="btn btn-theme">Learn More</button>
           </div>
         </div>
       </section>

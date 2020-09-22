@@ -36,6 +36,9 @@ const UserSchema = new mongoose.Schema(
     lastLoginAt: String,
     publicAddress: String,
 
+    stripeCustomerId: String,
+    stripeSubscribeSession: Object,
+
     follows: { type: Array, default: [] },
     positions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Position' }],
   },

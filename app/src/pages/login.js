@@ -1,13 +1,15 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from 'App';
 
-import { magicLogin } from 'api/magic';
+import { ImWarning } from 'react-icons/im';
 
+import { magicLogin } from 'api/magic';
 import { Bouncing } from 'components/random';
 
 function Login(props) {
   const { createSession } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   async function login(event) {
     event.preventDefault();
@@ -21,25 +23,39 @@ function Login(props) {
       formObject[key] = value;
     });
 
-    // do magic thing
-    const didToken = await magicLogin(formObject.email);
-
-    // send to server
-    await fetch(`/auth/login`, {
-      headers: new Headers({
-        Authorization: 'Bearer ' + didToken,
-      }),
-      withCredentials: true,
-      credentials: 'same-origin',
+    // test email
+    await fetch(`/auth/email`, {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: formObject.email }),
     })
       .then(async (response) => {
-        const user = await response.json();
-        return createSession(user);
+        if (response.status !== 200) {
+          throw new Error(response.status);
+        }
+
+        // do magic thing
+        const didToken = await magicLogin(formObject.email);
+
+        // send to server
+        await fetch(`/auth/login`, {
+          headers: new Headers({
+            Authorization: 'Bearer ' + didToken,
+          }),
+          withCredentials: true,
+          credentials: 'same-origin',
+          method: 'POST',
+        }).then(async (response) => {
+          const user = await response.json();
+          return createSession(user);
+        });
       })
       .catch((error) => {
         console.log(error);
         setLoading(false);
+        setErrorMessage(error.message);
       });
   }
 
@@ -64,6 +80,7 @@ function Login(props) {
               </div>
 
               <hr />
+
               <button className="btn btn-theme">
                 {loading ? (
                   <span>
@@ -73,6 +90,16 @@ function Login(props) {
                   <span>Login</span>
                 )}
               </button>
+
+              <div className="mb-4"></div>
+              {errorMessage ? (
+                <div className="panel">
+                  <div>
+                    <ImWarning />
+                    <span> Email Not Found</span>
+                  </div>
+                </div>
+              ) : null}
             </form>
           </div>
         </div>
