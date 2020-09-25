@@ -13,7 +13,7 @@ function Footer(props) {
           <div style={{ zIndex: 1 }}>
             <div className="footer-logo">
               <span>
-                <span className="footer-title">Lectio</span>
+                <span className="footer-title">ClubStack</span>
               </span>
             </div>
             <p>User-Generated Communities</p>
@@ -36,7 +36,7 @@ function Footer(props) {
             <div className="footer-list justify-content-between d-flex">
               <ul className="list-unstyled w-100">
                 <li>
-                  <NavLink to="/login">Login</NavLink>
+                  <NavLink to="/login">Sign In</NavLink>
                   <NavLink to="/about">About</NavLink>
                   <NavLink to="/terms">Terms</NavLink>
                 </li>

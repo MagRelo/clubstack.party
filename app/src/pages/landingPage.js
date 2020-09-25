@@ -1,5 +1,5 @@
 import React from 'react';
-// import { Link } from '@reach/router';
+import { Link } from '@reach/router';
 
 import Content from 'images/undraw_sharing_articles_t5aa.svg';
 import childReading from 'images/child_reading.jpg';
@@ -15,7 +15,6 @@ import ZoomLogo from 'images/zoom-communications-logo.svg';
 import Slack from 'images/slack-2.svg';
 
 import VideoCard from 'components/videoCard';
-import SubscribeButton from 'components/subscribe';
 
 import { UserProfile } from 'pages/account/userProfile';
 
@@ -208,9 +207,16 @@ function LandingPage() {
 
             <div>
               <div>
-                <SubscribeButton />
-                <div className="mb-2"></div>
-                <div>Cost: $29/mo</div>
+                <b>Coming Up This Week</b>
+                <ul>
+                  <li>1</li>
+                  <li>2</li>
+                  <li>3</li>
+                </ul>
+
+                <a href="/subscribe" className="btn btn-theme">
+                  Join Now
+                </a>
               </div>
             </div>
           </div>

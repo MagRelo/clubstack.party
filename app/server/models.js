@@ -22,7 +22,7 @@ const UserSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ['Pending', 'Approved', 'Closed'],
+      enum: ['Pending', 'NewSubscriber', 'Active', 'Closed'],
       default: 'Pending',
     },
     needsOnboarding: {
@@ -37,7 +37,7 @@ const UserSchema = new mongoose.Schema(
     publicAddress: String,
 
     stripeCustomerId: String,
-    stripeSubscribeSession: Object,
+    stripeEvents: [Object],
 
     follows: { type: Array, default: [] },
     positions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Position' }],
@@ -47,31 +47,43 @@ const UserSchema = new mongoose.Schema(
 
 exports.UserModel = mongoose.model('User', UserSchema);
 
+//
+// Events
+//
+
+const EventSchema = new mongoose.Schema({}, { timestamps: true });
+
+exports.EventModel = mongoose.model('Event', EventSchema);
+
+//
+// Content
+//
+
 // prop
-const Position = new mongoose.Schema(
-  {
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-    type: {
-      type: String,
-      enum: ['Standard', 'Admin', 'Closed'],
-      default: 'Standard',
-    },
-    status: {
-      type: String,
-      enum: ['Pending', 'Approved', 'Closed'],
-      default: 'Pending',
-    },
-    title: String,
-    amount: String,
-    direction: String,
-    length: String,
-    leverage: String,
-    rawState: Object,
-    renderedHtml: String,
-  },
-  { timestamps: true }
-);
-exports.PositionModel = mongoose.model('Position', Position);
+// const Position = new mongoose.Schema(
+//   {
+//     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+//     type: {
+//       type: String,
+//       enum: ['Standard', 'Admin', 'Closed'],
+//       default: 'Standard',
+//     },
+//     status: {
+//       type: String,
+//       enum: ['Pending', 'Approved', 'Closed'],
+//       default: 'Pending',
+//     },
+//     title: String,
+//     amount: String,
+//     direction: String,
+//     length: String,
+//     leverage: String,
+//     rawState: Object,
+//     renderedHtml: String,
+//   },
+//   { timestamps: true }
+// );
+// exports.PositionModel = mongoose.model('Position', Position);
 
 //
 // Give/Get

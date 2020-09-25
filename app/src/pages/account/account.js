@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react';
-// import { Link } from '@reach/router';
+import { navigate } from '@reach/router';
 
-import { Loading } from 'components/random';
+import { BiLinkExternal } from 'react-icons/bi';
 
 import UpdateProfile from 'pages/account/updateProfile';
-
+import { Loading } from 'components/random';
 import { AuthContext } from 'App';
 
 function User({ userId }) {
@@ -36,6 +36,25 @@ function User({ userId }) {
       });
   }, [apiUserId, callApi]);
 
+  function redirectToStripe(params) {
+    const method = 'POST';
+    const endPoint = '/api/user/subscription';
+    callApi(method, endPoint)
+      .then((body) => {
+        // redirect
+        console.log(body.url);
+
+        navigate(body.url);
+
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setError(error.toString());
+        setLoading(false);
+      });
+  }
+
   return (
     <div className="container">
       {error ? <p>{error}</p> : null}
@@ -43,21 +62,34 @@ function User({ userId }) {
         <Loading />
       ) : (
         <div className="container">
-          {/* Profile */}
-          <h3 className="background">
-            <span>Profile</span>
-          </h3>
-          <UpdateProfile />
+          <div className="grid grid-3-5">
+            <div>Something</div>
 
-          {/* Email */}
-          <h3 className="background">
+            <div>
+              {/* Profile */}
+              <h3 className="background">
+                <span>Profile</span>
+              </h3>
+              <UpdateProfile />
+
+              {/* Email */}
+              {/* <h3 className="background">
             <span>Email Preferences</span>
-          </h3>
+          </h3> */}
 
-          {/* Subscription */}
-          <h3 className="background">
-            <span>Subscription</span>
-          </h3>
+              {/* Subscription */}
+              <h3 className="background">
+                <span>Subscription</span>
+              </h3>
+              <p>This will redirect you to a new page</p>
+              <button
+                className="btn btn-sm btn-theme"
+                onClick={redirectToStripe}
+              >
+                Manage Subscription <BiLinkExternal />
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

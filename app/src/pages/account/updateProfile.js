@@ -32,7 +32,7 @@ function UpdateProfile(props) {
   }
 
   return (
-    <div className="container">
+    <div>
       <div className="form-wrapper">
         <form name="updateProfile" onSubmit={submit}>
           {/* <legend>Update Your Profile</legend> */}

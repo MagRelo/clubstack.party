@@ -12,13 +12,13 @@ import Header from 'components/header';
 import Footer from 'components/footer';
 
 // Routes
+import Home from 'pages/home';
 import LandingPage from 'pages/landingPage';
 import Login from 'pages/login';
+import Subscribe from 'pages/subscribe';
 import Terms from 'pages/legal';
 import About from 'pages/about';
 import NotFound from 'pages/404';
-import SubscribeSuccess from 'pages/subscribeSuccess';
-import SubscribeFailure from 'pages/subscribeFailure';
 
 import Dashboard from 'pages/account/dashboard';
 import Account from 'pages/account/account';
@@ -159,12 +159,12 @@ function App() {
           <div className="content-wrapper">
             <Router>
               <LandingPage path="/" />
+              {/* <Home path="/" /> */}
               <Terms path="/terms" />
               <About path="/about" />
-              <SubscribeSuccess path="/subscribe" />
-              <SubscribeFailure path="/error" />
 
               <Login path="/login" />
+              <Subscribe path="/subscribe" />
               {/* Auth required */}
               {activeSession ? (
                 <React.Fragment>

@@ -10,17 +10,23 @@ const MagicStrategy = require('passport-magic').Strategy;
 
 const strategy = new MagicStrategy(async function(user, done) {
   const userMetadata = await magic.users.getMetadataByIssuer(user.issuer);
-  const existingUser = await UserModel.findOne({ email: userMetadata.email });
-  if (!existingUser) {
-    console.log('unknown user:', userMetadata.email);
-    return done(null, false, { message: 'unknown user' });
-  } else if (!existingUser.lastLoginAt) {
-    /* Login user if otherwise */
+  const existingUser = await UserModel.findOne({
+    $and: [
+      { email: userMetadata.email },
+      { status: { $in: ['NewSubscriber', 'Active'] } },
+    ],
+  });
+
+  if (existingUser.status === 'NewSubscriber') {
     return newSubscriber(user, userMetadata, done);
-  } else {
-    /* Login user if otherwise */
+  }
+
+  if (existingUser.status === 'Active') {
     return login(user, done);
   }
+
+  console.log('unknown user:', userMetadata.email);
+  return done(null, false, { message: 'unknown user' });
 });
 
 passport.use(strategy);
@@ -37,6 +43,7 @@ const newSubscriber = async (user, userMetadata, done) => {
         email: userMetadata.email,
         lastLoginAt: user.claim.iat,
         publicAddress: user.publicAddress,
+        status: 'Active',
       },
     },
     { new: true }

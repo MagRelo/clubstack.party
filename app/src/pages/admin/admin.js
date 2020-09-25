@@ -85,10 +85,23 @@ function User({ userId }) {
             <span>Subscribers</span>
           </h3>
 
+          <button className="btn btn-sm btn-theme">Manage Subscribers</button>
+
           {/* Subscription */}
           <h3 className="background">
             <span>Content</span>
           </h3>
+
+          {/* Resources */}
+          <h3 className="background">
+            <span>Resources</span>
+          </h3>
+
+          {/* Profile */}
+          <h3 className="background">
+            <span>Profile</span>
+          </h3>
+          <UpdateProfile />
         </div>
       )}
     </div>

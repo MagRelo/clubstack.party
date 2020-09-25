@@ -1,13 +1,19 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from 'App';
-import { Link } from '@reach/router';
 
 import { ImWarning } from 'react-icons/im';
 
 import { magicLogin } from 'api/magic';
 import { Bouncing } from 'components/random';
 
-function Login(props) {
+// Stripe setup
+import { loadStripe } from '@stripe/stripe-js';
+const stripePromise = loadStripe('pk_test_dMv1AAldL0wj69FLCG4c8jce00J8jWxWg9');
+const successUrl = 'https://google.com';
+const cancelUrl = 'https://bing.com';
+const priceID = 'price_1HSPMlKDqYLeupJPUCOdWIju';
+
+function Subscribe(props) {
   const { createSession } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -33,25 +39,45 @@ function Login(props) {
       body: JSON.stringify({ email: formObject.email }),
     })
       .then(async (response) => {
-        if (response.status !== 200) {
-          throw new Error(response.status);
+        const { userId, status } = await response.json();
+
+        // Subscribe
+        if (status === 'Pending') {
+          // Email not found => User created => redirect them to Stripe to Subscribe
+          const stripe = await stripePromise;
+          const { error } = await stripe.redirectToCheckout({
+            lineItems: [{ price: priceID, quantity: 1 }],
+            mode: 'subscription',
+            successUrl: successUrl,
+            cancelUrl: cancelUrl,
+            customerEmail: formObject.email,
+            clientReferenceId: userId,
+          });
+
+          if (error) throw new Error(error);
+          return;
         }
 
-        // do magic thing
-        const didToken = await magicLogin(formObject.email);
+        // Login
+        if (status === 'NewSubscriber' || status === 'Active') {
+          // do magic thing
+          const didToken = await magicLogin(formObject.email);
 
-        // send to server
-        await fetch(`/auth/login`, {
-          headers: new Headers({
-            Authorization: 'Bearer ' + didToken,
-          }),
-          withCredentials: true,
-          credentials: 'same-origin',
-          method: 'POST',
-        }).then(async (response) => {
-          const user = await response.json();
-          return createSession(user);
-        });
+          // send to server
+          return await fetch(`/auth/login`, {
+            headers: new Headers({
+              Authorization: 'Bearer ' + didToken,
+            }),
+            withCredentials: true,
+            credentials: 'same-origin',
+            method: 'POST',
+          }).then(async (response) => {
+            const user = await response.json();
+            return createSession(user);
+          });
+        }
+
+        console.error('TEST - Unhandled User Status');
       })
       .catch((error) => {
         console.log(error);
@@ -66,9 +92,7 @@ function Login(props) {
         <div className="container">
           <div className="form-wrapper panel">
             <form name="loginForm" onSubmit={login}>
-              <legend>Sign In</legend>
-
-              <p>We'll send a link to your email address.</p>
+              <legend>Join Now</legend>
 
               <div className="form-group">
                 <label htmlFor="email">Email Address</label>
@@ -88,19 +112,18 @@ function Login(props) {
                     <Bouncing />
                   </span>
                 ) : (
-                  <span>Sign In</span>
+                  <span>Subscribe</span>
                 )}
               </button>
 
               <div className="mb-4"></div>
 
               {errorMessage ? (
-                <div>
-                  <ImWarning />{' '}
-                  <span>
-                    Email Not Found.{' '}
-                    <Link to="/subscribe">Click here to Subscribe</Link>
-                  </span>
+                <div className="panel">
+                  <div>
+                    <ImWarning />
+                    <span> Email Not Found</span>
+                  </div>
                 </div>
               ) : null}
             </form>
@@ -111,4 +134,6 @@ function Login(props) {
   );
 }
 
-export default Login;
+export default Subscribe;
+
+// <SubscribeButton />

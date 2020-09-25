@@ -34,10 +34,22 @@ router.post('/email', async (req, res) => {
   // console.log(req.body.email);
   const user = await UserModel.findOne({ email: req.body.email });
   if (user) {
-    return res.status(200).send({ email: req.body.email });
+    // Return User
+    return res
+      .status(200)
+      .send({ email: user.email, userId: user.userId, status: user.status });
+  } else {
+    // Create User
+    let newUser = new UserModel({
+      email: req.body.email,
+    });
+    await newUser.save();
+    return res.status(201).send({
+      email: newUser.email,
+      userId: newUser.userId,
+      status: newUser.status,
+    });
   }
-
-  return res.status(401).send({ error: 'Not Authenticated' });
 });
 
 router.post('/stripe/webhook', async (request, res) => {

@@ -7,10 +7,10 @@ const getStream = require('./integrations/getstream');
 
 // Controllers
 const { authenticate } = require('./controllers/magic-auth');
-// const { populateUser } = require('./controllers/user');
+const { getSubscriberRedirectURL } = require('./integrations/payments');
 
 // const UserModel = require('./models').UserModel;
-const PositionModel = require('./models').PositionModel;
+// const PositionModel = require('./models').PositionModel;
 const UserModel = require('./models').UserModel;
 
 //
@@ -18,72 +18,72 @@ const UserModel = require('./models').UserModel;
 //
 
 // GET ONE
-router.get('/props/:propId', async function(req, res) {
-  try {
-    // get latest
-    const prop = await PositionModel.findOne({
-      _id: req.params.propId,
-    })
-      .populate('user')
-      .lean();
+// router.get('/props/:propId', async function(req, res) {
+//   try {
+//     // get latest
+//     const prop = await PositionModel.findOne({
+//       _id: req.params.propId,
+//     })
+//       .populate('user')
+//       .lean();
 
-    if (!prop) {
-      return res.status(404).send({ error: 'notfound' });
-    }
+//     if (!prop) {
+//       return res.status(404).send({ error: 'notfound' });
+//     }
 
-    res.status(200).send({ prop: prop });
-  } catch (error) {
-    console.log({ error: error.message });
-    res.status(500).send({ error: error.message });
-  }
-});
+//     res.status(200).send({ prop: prop });
+//   } catch (error) {
+//     console.log({ error: error.message });
+//     res.status(500).send({ error: error.message });
+//   }
+// });
 
-// GET MULTIPLE
-router.get('/props', async function(req, res) {
-  try {
-    // check for filters
+// // GET MULTIPLE
+// router.get('/props', async function(req, res) {
+//   try {
+//     // check for filters
 
-    let query = {};
-    if (req.query.user) {
-      query.user = req.query.user;
-    }
-    // console.log(req.query, query);
+//     let query = {};
+//     if (req.query.user) {
+//       query.user = req.query.user;
+//     }
+//     // console.log(req.query, query);
 
-    const propsList = await PositionModel.find(query)
-      .populate('user')
-      .sort({ createdAt: 1 })
-      .lean();
-    res.status(200).send({ props: propsList });
-  } catch (error) {
-    console.log({ error: error.message });
-    res.status(500).send({ error: error.message });
-  }
-});
+//     const propsList = await PositionModel.find(query)
+//       .populate('user')
+//       .sort({ createdAt: 1 })
+//       .lean();
+//     res.status(200).send({ props: propsList });
+//   } catch (error) {
+//     console.log({ error: error.message });
+//     res.status(500).send({ error: error.message });
+//   }
+// });
 
-// ADD POSITION
-router.post('/props', authenticate, async function(req, res) {
-  try {
-    // calc
+// // ADD POSITION
+// router.post('/props', authenticate, async function(req, res) {
+//   try {
+//     // calc
 
-    // create new and save
-    const newPosition = new PositionModel({ user: req.user._id, ...req.body });
-    await newPosition.save();
+//     // create new and save
+//     const newPosition = new PositionModel({ user: req.user._id, ...req.body });
+//     await newPosition.save();
 
-    // save on user
-    await UserModel.findOneAndUpdate(
-      { _id: req.user._id },
-      { $push: { positions: newPosition._id } }
-    );
+//     // save on user
+//     await UserModel.findOneAndUpdate(
+//       { _id: req.user._id },
+//       { $push: { positions: newPosition._id } }
+//     );
 
-    //add position to User's feed
-    await getStream.addPosition(req.user, newPosition);
+//     //add position to User's feed
+//     await getStream.addPosition(req.user, newPosition);
 
-    res.status(201).send(newPosition);
-  } catch (error) {
-    console.log({ error: error.message });
-    res.status(500).send({ error: error.message });
-  }
-});
+//     res.status(201).send(newPosition);
+//   } catch (error) {
+//     console.log({ error: error.message });
+//     res.status(500).send({ error: error.message });
+//   }
+// });
 
 //
 // USER
@@ -125,15 +125,28 @@ router.get('/user/network', authenticate, async function(req, res) {
 // Get User
 router.get('/user/:userId', async function(req, res) {
   try {
-    const user = await UserModel.findOne({ _id: req.params.userId })
-      .populate('positions')
-      .lean();
+    const user = await UserModel.findOne({ _id: req.params.userId }).lean();
 
     const stats = await getStats(user);
     res.status(200).send({
       user,
       stats: stats,
     });
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).send({ error: error.message });
+  }
+});
+
+// REDIRECT TO SUBSCRIPTION
+router.post('/user/subscription', authenticate, async function(req, res) {
+  try {
+    //
+    const redirectUrl = await getSubscriberRedirectURL(
+      req.user.stripeCustomerId
+    );
+
+    res.status(200).send({ url: redirectUrl });
   } catch (error) {
     console.log({ error: error.message });
     res.status(500).send({ error: error.message });

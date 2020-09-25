@@ -15,7 +15,7 @@ function AboutPage(props) {
           </li>
 
           <li>
-            <Link to="/login">Login</Link>
+            <Link to="/login">Sign In</Link>
           </li>
         </ul>
       </div>

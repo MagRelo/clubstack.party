@@ -36,7 +36,7 @@ function Header() {
 
           <Link to="/">
             <span>
-              <span className="header-title">The Skills of Reading</span>
+              {/* <span className="header-title">The Skills of Reading</span> */}
             </span>
           </Link>
         </div>
@@ -53,7 +53,7 @@ function Header() {
 
             {!activeSession ? (
               <li style={{ float: 'right' }}>
-                <NavLink to="/login">Login</NavLink>
+                <NavLink to="/login">Sign In</NavLink>
               </li>
             ) : null}
 
@@ -63,16 +63,16 @@ function Header() {
               </li>
             ) : null}
 
-            {activeSession ? (
-              <React.Fragment>
-                <li style={{ float: 'right' }}>
-                  <NavLink to="/account">My Account</NavLink>
-                </li>
+            {activeSession && user.type === 'Standard' ? (
+              <li style={{ float: 'right' }}>
+                <NavLink to="/account">Account</NavLink>
+              </li>
+            ) : null}
 
-                <li style={{ float: 'right' }}>
-                  <NavLink to="/dashboard">Dashboard</NavLink>
-                </li>
-              </React.Fragment>
+            {activeSession ? (
+              <li style={{ float: 'right' }}>
+                <NavLink to="/dashboard">Home</NavLink>
+              </li>
             ) : null}
           </ul>
         </div>
@@ -82,21 +82,25 @@ function Header() {
             <ul className="nav-list">
               {!activeSession ? (
                 <li>
-                  <NavLink to="/login">Login</NavLink>
+                  <NavLink to="/login">Sign In</NavLink>
                 </li>
               ) : null}
 
               {activeSession ? (
-                <React.Fragment>
-                  <li>
-                    <NavLink to="/dashboard">Dashboard</NavLink>
-                  </li>
-                </React.Fragment>
+                <li>
+                  <NavLink to="/dashboard">Home</NavLink>
+                </li>
               ) : null}
 
               {activeSession && user.type === 'Admin' ? (
                 <li>
                   <NavLink to="/admin">Admin</NavLink>
+                </li>
+              ) : null}
+
+              {activeSession && user.type === 'Standard' ? (
+                <li>
+                  <NavLink to="/account">Account</NavLink>
                 </li>
               ) : null}
             </ul>

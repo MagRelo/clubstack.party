@@ -12,9 +12,15 @@
 // );
 // console.log('Plaid mode:' + process.env.PLAID_ENV);
 
+// User
+const UserModel = require('../models').UserModel;
+
 // Stripe
-let stripeApiKey = '';
 const subscribeEndpointSecret = process.env.STRIPE_SUBSCRIBE_SECRET;
+const subscribeReturnUrl =
+  process.env.STRIPE_SUBSCRIBE_RETURN_URL || 'https://example.com/account';
+
+let stripeApiKey = '';
 if (process.env.STRIPE_LIVE_KEY) {
   stripeApiKey = process.env.STRIPE_LIVE_KEY;
   console.log('Stripe mode: LIVE!');
@@ -23,8 +29,6 @@ if (process.env.STRIPE_LIVE_KEY) {
   console.log('Stripe mode: test, key: ' + stripeApiKey);
 }
 const stripe = require('stripe')(stripeApiKey);
-
-const UserModel = require('../models').UserModel;
 
 //
 // Methods
@@ -125,7 +129,6 @@ exports.deleteStripeAccountSource = async function (accountId, sourceId) {
 };
 
 exports.handleStripeEvent = async function (body, signature) {
-  // console.log(body, signature);
   // reconstruct event
   let event = stripe.webhooks.constructEvent(
     body,
@@ -133,27 +136,79 @@ exports.handleStripeEvent = async function (body, signature) {
     subscribeEndpointSecret
   );
 
-  if (event.type === 'checkout.session.completed') {
-    console.log('New Subscribe:', event.type);
-    const session = event.data.object;
-    // console.log('create user', session);
+  const session = event.data.object;
+  // console.log('New Event:', event.type, event);
+  console.log('New Event:', event);
 
-    // create user
-    return signup(session);
+  // new subscriber
+  if (event.type === 'checkout.session.completed') {
+    return UserModel.updateOne(
+      {
+        $or: [
+          { email: session.customer_email },
+          { userId: session.client_reference_id },
+          { stripeCustomerId: session.customer },
+        ],
+      },
+      {
+        $set: {
+          status: 'NewSubscriber',
+          stripeCustomerId: session.customer,
+        },
+        $push: { stripeEvents: event },
+      }
+    );
   }
 
-  console.log('Other Stripe Event:', event.type);
+  // new subscriber
+  if (event.type === 'customer.subscription.deleted') {
+    // console.log('Subscribe Deleted:', event.type);
+    console.log('Data:', session);
+
+    return UserModel.updateOne(
+      {
+        $or: [
+          { email: session.customer_email },
+          { userId: session.client_reference_id },
+          { stripeCustomerId: session.customer },
+        ],
+      },
+      {
+        $set: {
+          status: 'Closed',
+        },
+        $push: { stripeEvents: event },
+      }
+    );
+  }
+
+  // shove event into a customer (if found) just in case
+  return UserModel.updateOne(
+    {
+      $or: [
+        { email: session.customer_email },
+        { userId: session.client_reference_id },
+        { stripeCustomerId: session.customer },
+      ],
+    },
+    {
+      $set: {
+        stripeCustomerId: session.customer,
+      },
+      $push: {
+        stripeEvents: event,
+      },
+    }
+  );
 };
 
-/* User Signup */
-const signup = async (session, done) => {
-  // console.log('signup - updated:', user);
-
-  let newUser = new UserModel({
-    stripeSubscribeSession: session,
-    stripeCustomerId: session.customer,
-    email: session.customer_email,
+exports.getSubscriberRedirectURL = async function (stripeCustomerId) {
+  var session = await stripe.billingPortal.sessions.create({
+    customer: stripeCustomerId,
+    return_url: subscribeReturnUrl,
   });
 
-  return newUser.save();
+  // console.log(session);
+
+  return session.url;
 };
