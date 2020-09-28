@@ -7,8 +7,6 @@ import Slack from 'images/slack-2.svg';
 import { UserProfile } from 'pages/account/userProfile';
 import Feed from 'pages/position/feed';
 
-// import { EthereumAccount, DYdX } from 'components/random';
-
 import LineChart from 'components/lineChart';
 
 function Dashboard({ isMe, user, stats }) {

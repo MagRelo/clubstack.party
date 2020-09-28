@@ -40,7 +40,6 @@ const UserSchema = new mongoose.Schema(
     stripeEvents: [Object],
 
     follows: { type: Array, default: [] },
-    positions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Position' }],
   },
   { timestamps: true }
 );
@@ -52,12 +51,30 @@ exports.UserModel = mongoose.model('User', UserSchema);
 //
 
 const EventSchema = new mongoose.Schema({}, { timestamps: true });
-
 exports.EventModel = mongoose.model('Event', EventSchema);
 
 //
 // Content
 //
+
+const ContentSchema = new mongoose.Schema(
+  {
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    type: {
+      type: String,
+      enum: ['Text', 'Video', 'Podcast'],
+      default: 'Text',
+    },
+    title: String,
+    length: String,
+    description: String,
+    image: String,
+    alt: String,
+    category: String,
+  },
+  { timestamps: true }
+);
+exports.ContentModel = mongoose.model('ContentItem', ContentSchema);
 
 // prop
 // const Position = new mongoose.Schema(

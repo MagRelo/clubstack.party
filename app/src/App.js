@@ -23,12 +23,17 @@ import NotFound from 'pages/404';
 import Dashboard from 'pages/account/dashboard';
 import Account from 'pages/account/account';
 import Admin from 'pages/admin/admin';
+import Subscribers from 'pages/admin/subscribers';
+import Resources from 'pages/admin/resources';
+import Content from 'pages/admin/content';
+import AddContent from 'pages/admin/editContent';
+import EditContent from 'pages/admin/editContent';
 
 // Setup Auth context
 export const AuthContext = React.createContext({});
 
 function App() {
-  const nonAuthPages = ['/', '/login', '/about', '/terms'];
+  const nonAuthPages = ['/', '/login', '/about', '/terms', '/subscribe'];
   const pathname = window.location.pathname;
   const isAuthPage = !~nonAuthPages.indexOf(pathname);
   // console.log(pathname, 'redirect?', isAuthPage);
@@ -170,6 +175,15 @@ function App() {
                 <React.Fragment>
                   <Dashboard path="/dashboard" />
                   <Account path="/account" />
+
+                  {/* Admin */}
+                  <Subscribers path="/admin/subscribers" />
+                  <Resources path="/admin/resources" />
+                  <Content path="/admin/content" />
+
+                  <AddContent path="/admin/content/add" />
+                  <EditContent path="/admin/content/:contentId" />
+
                   <Admin path="/admin" />
                 </React.Fragment>
               ) : null}

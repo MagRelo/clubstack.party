@@ -1,5 +1,9 @@
 import React, { useState, useEffect, useContext } from 'react';
-// import { Link } from '@reach/router';
+import { Link } from '@reach/router';
+
+import GoogleDriveLogo from 'images/google-drive.svg';
+import ZoomLogo from 'images/zoom-communications-logo.svg';
+import Slack from 'images/slack-2.svg';
 
 import { Loading } from 'components/random';
 
@@ -43,14 +47,20 @@ function User({ userId }) {
         <Loading />
       ) : (
         <div className="container">
+          {/* Email */}
+          <h3 className="background">
+            <span>Subscribers</span>
+          </h3>
+
+          <div>graph</div>
           <div className="grid grid-3">
             <div className="panel">
               <div className="box">
-                <i className="fa fa-video fa-fw danger blue"></i>
+                <i className="fa fa-file-invoice-dollar fa-fw green"></i>
                 <div className="info">
-                  <h3>24</h3>
-                  <span> Videos</span>
-                  <p>5,388 Views</p>
+                  <h3>$5,965</h3>
+                  <span> per month</span>
+                  <p>Recurring Revenue</p>
                 </div>
               </div>
             </div>
@@ -66,37 +76,124 @@ function User({ userId }) {
               </div>
             </div>
 
-            <div className="panel">
-              <div className="box">
-                <i className="fa fa-file-invoice-dollar fa-fw green"></i>
-                <div className="info">
-                  <h3>$5,965</h3>
-                  <span> per month</span>
-                  <p>Recurring Revenue</p>
-                </div>
-              </div>
+            <div>
+              <Link to="subscribers" className="btn btn-sm btn-theme">
+                Manage Subscribers
+              </Link>
             </div>
           </div>
 
           <div className="mb-4"></div>
 
-          {/* Email */}
-          <h3 className="background">
-            <span>Subscribers</span>
-          </h3>
-
-          <button className="btn btn-sm btn-theme">Manage Subscribers</button>
-
           {/* Subscription */}
           <h3 className="background">
             <span>Content</span>
           </h3>
+          <div>Graph</div>
+
+          <div className="grid grid-3">
+            <div className="panel">
+              <div className="box">
+                <i className="fa fa-video fa-fw danger blue"></i>
+                <div className="info">
+                  <h3>24</h3>
+                  <span> Videos</span>
+                  <p>5,388 Views</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="panel">
+              <div className="box">
+                <i className="fa fa-video fa-fw danger blue"></i>
+                <div className="info">
+                  <h3>24,234</h3>
+                  <span> Views</span>
+                  <p>5,388 Views</p>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <Link to="content" className="btn btn-sm btn-theme">
+                Manage Content
+              </Link>
+            </div>
+          </div>
+
+          <div className="mb-4"></div>
 
           {/* Resources */}
           <h3 className="background">
             <span>Resources</span>
           </h3>
 
+          <div className="grid grid-3">
+            <div className="panel mb-3">
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-around',
+                }}
+              >
+                <img src={ZoomLogo} alt="zoom" height="28px" />
+              </div>
+              <hr />
+              <p className="small">
+                Zoom is a live video-conferencing service.
+              </p>
+
+              <div className="text-center">
+                <a href="/slack" className="btn btn-sm btn-theme">
+                  View Schedule
+                </a>
+              </div>
+            </div>
+
+            <div className="panel mb-3">
+              <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+                <img src={Slack} alt="google" height="28px" />{' '}
+              </div>
+              <hr />
+              <p className="small">
+                Slack provides chat rooms (channels) organized by topic, private
+                groups, and direct messaging.
+              </p>
+
+              <div className="text-center">
+                <a href="/slack" className="btn btn-sm btn-theme">
+                  Open Slack
+                </a>
+              </div>
+            </div>
+
+            <div className="panel mb-3">
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-around',
+                }}
+              >
+                <div>
+                  <img src={GoogleDriveLogo} alt="google" height="28px" />{' '}
+                  <b>Google Drive</b>
+                </div>
+              </div>
+              <hr />
+              <p className="small">
+                Google Drive is a file storage and synchronization service
+                developed by Google.
+              </p>
+
+              <div className="text-center">
+                <a href="/slack" className="btn btn-sm btn-theme">
+                  Open Drive
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="mb-4"></div>
           {/* Profile */}
           <h3 className="background">
             <span>Profile</span>
