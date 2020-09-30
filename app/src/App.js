@@ -14,6 +14,7 @@ import Footer from 'components/footer';
 // Routes
 import Home from 'pages/home';
 import LandingPage from 'pages/landingPage';
+import Preview from 'pages/preview';
 import Login from 'pages/login';
 import Subscribe from 'pages/subscribe';
 import Terms from 'pages/legal';
@@ -33,7 +34,14 @@ import EditContent from 'pages/admin/editContent';
 export const AuthContext = React.createContext({});
 
 function App() {
-  const nonAuthPages = ['/', '/login', '/about', '/terms', '/subscribe'];
+  const nonAuthPages = [
+    '/',
+    '/login',
+    '/about',
+    '/terms',
+    '/subscribe',
+    '/preview',
+  ];
   const pathname = window.location.pathname;
   const isAuthPage = !~nonAuthPages.indexOf(pathname);
   // console.log(pathname, 'redirect?', isAuthPage);
@@ -164,9 +172,10 @@ function App() {
           <div className="content-wrapper">
             <Router>
               <LandingPage path="/" />
-              {/* <Home path="/" /> */}
               <Terms path="/terms" />
               <About path="/about" />
+
+              <Preview path="/preview" />
 
               <Login path="/login" />
               <Subscribe path="/subscribe" />

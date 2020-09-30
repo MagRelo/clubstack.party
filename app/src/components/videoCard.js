@@ -16,6 +16,7 @@ function VideoCard({
   alt,
   locked,
   active,
+  editing,
 }) {
   // const [menuOpen, setMenuOpen] = useState(false);
 
@@ -47,7 +48,7 @@ function VideoCard({
         <p>{description}</p>
       </article>
 
-      {active ? null : (
+      {editing ? (
         <div>
           <Link
             to={'/admin/content/' + _id}
@@ -60,7 +61,7 @@ function VideoCard({
             </span>
           </Link>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

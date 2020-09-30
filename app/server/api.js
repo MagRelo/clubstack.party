@@ -2,16 +2,19 @@ var express = require('express');
 var router = express.Router();
 var ObjectId = require('mongodb').ObjectID;
 
-// const SendGrid = require('./integrations/sendgrid');
+const fetch = require('node-fetch');
+
 const getStream = require('./integrations/getstream');
 
 // Controllers
 const { authenticate } = require('./controllers/magic-auth');
 const { getSubscriberRedirectURL } = require('./integrations/payments');
+const { convertToJSON } = require('./integrations/xml');
 
 const UserModel = require('./models').UserModel;
 
 const Content = require('./controllers/content');
+const { GiEel } = require('react-icons/gi');
 
 //
 // CONTENT
@@ -22,6 +25,99 @@ router.get('/content/:id', Content.getContentItem);
 router.post('/content', authenticate, Content.addContentItem);
 router.put('/content', authenticate, Content.upsertContentItem);
 router.delete('/content/:id', authenticate, Content.deleteContentItem);
+
+router.post('/preview', async function(req, res) {
+  // get RSS
+
+  const url = req.body.url;
+  const fullUrl = 'https://' + url + '.substack.com/feed';
+  console.log(fullUrl);
+
+  try {
+    const response = await fetch(fullUrl)
+      .then((response) => {
+        if (response.status === 200) {
+          return response.text();
+        } else {
+          throw new Error('failed to fetch from substack');
+        }
+      })
+      .then((xml) => {
+        return convertToJSON(xml);
+      });
+
+    const site = response.rss.channel[0];
+
+    // reformat
+    const previewContent = {
+      title: site.title,
+      description: site.description,
+      copyright: site.copyright,
+      headerImage: site.image,
+      items: site.item.map((item) => {
+        return {
+          title: item.title,
+          description: item.description,
+          length: extractLength(item) + ' min',
+          category: extractCategory(item),
+          image: extractImage(item),
+        };
+      }),
+    };
+
+    res.status(200).send(previewContent);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
+  }
+});
+
+function extractCategory(item) {
+  const type = item.enclosure[0].$.type;
+
+  switch (type) {
+    case 'image/jpeg':
+      return 'Blog Post';
+    case 'audio/mpeg':
+      return 'Podcast';
+    case 'video/mpeg':
+      return 'video';
+    default:
+      break;
+  }
+}
+
+function extractLength(item) {
+  const type = item.enclosure[0].$.type;
+
+  const magicLengthNumber = 2100;
+
+  switch (type) {
+    case 'image/jpeg':
+      return Math.floor(item['content:encoded'][0].length / magicLengthNumber);
+    case 'audio/mpeg':
+      return 'Podcast';
+    case 'video/mpeg':
+      return 'video';
+    default:
+      break;
+  }
+}
+
+function extractImage(item) {
+  const type = item.enclosure[0].$.type;
+
+  switch (type) {
+    case 'image/jpeg':
+      return item.enclosure[0].$.url;
+    case 'audio/mpeg':
+      return 'https://via.placeholder.com/500x200?text=►';
+    case 'video/mpeg':
+      return 'https://via.placeholder.com/500x200?text=Video';
+    default:
+      break;
+  }
+}
 
 //
 // USER

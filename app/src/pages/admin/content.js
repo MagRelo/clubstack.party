@@ -54,7 +54,14 @@ function Content() {
           <div className="grid grid-3">
             {content &&
               content.map((item) => {
-                return <VideoCard {...item} key={item._id} active={false} />;
+                return (
+                  <VideoCard
+                    {...item}
+                    key={item._id}
+                    active={false}
+                    editing={true}
+                  />
+                );
               })}
           </div>
         </div>

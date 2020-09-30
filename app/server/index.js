@@ -37,7 +37,7 @@ mongoose.connection.on('error', function (error) {
   console.error('MongoDB error: ' + error);
   process.exit(-1);
 });
-require('./utils/seedDb');
+// require('./utils/seedDb');
 
 // *
 // Server
