@@ -13,6 +13,7 @@ import { getParams, Loading } from 'components/random';
 import VideoCard from 'components/videoCard';
 
 import { UserProfile } from 'pages/account/userProfile';
+import { Subscribe } from 'pages/subscribe';
 
 import { AuthContext } from 'App';
 
@@ -21,9 +22,14 @@ function Preview() {
 
   const { callApi } = useContext(AuthContext);
   const params = getParams(useLocation());
-  // console.log(params.substack);
+  const subdomain = window.location.host.split('.')[2]
+    ? window.location.host.split('.')[0]
+    : false;
+  const site = subdomain || params.substack;
 
-  const [loading, setLoading] = useState(true);
+  console.log('site:', site);
+
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
   const [content, setContent] = useState(null);
@@ -37,18 +43,26 @@ function Preview() {
     const method = 'POST';
     const endPoint = '/api/preview/';
 
-    if (params.substack) {
-      setError(null);
+    if (site) {
       setLoading(true);
-      callApi(method, endPoint, { url: params.substack })
+
+      // reset state
+      setError(null);
+      setContent(null);
+
+      callApi(method, endPoint, { url: site })
         .then((body) => {
           setTitle(body.title);
           setDesc(body.description);
           setImg(body.headerImage[0]);
           setCopyright(body.copyright);
           setContent(body.items);
-          
-          setPodcasts(body.items.filter(item => {item.category === 'Podcast'}));
+
+          setPodcasts(
+            body.items.filter((item) => {
+              return item.category === 'Podcast';
+            })
+          );
 
           setLoading(false);
         })
@@ -58,11 +72,20 @@ function Preview() {
           setLoading(false);
         });
     }
-  }, [callApi, params.substack]);
+  }, [callApi, site]);
 
   return (
     <React.Fragment>
-      {error ? <p>{error}</p> : null}
+      {(!loading && !content && !site) || (!loading && !content && error) ? (
+        <div className="container">
+          <h1 className="hero">
+            <span className="highlight">Club</span>Stack <br />{' '}
+            <span className="sub">( dot )</span>{' '}
+            <span className="sub">PARTY</span>
+            {error ? <p>{error}</p> : null}
+          </h1>
+        </div>
+      ) : null}
       {loading ? <Loading /> : null}
 
       {content ? (
@@ -100,54 +123,11 @@ function Preview() {
             </section>
           </div>
 
-          {/* Frontpage */}
-          <section>
-            <div className="container">
-              <div className="section-title">
-                <h2>Latest Content</h2>
-                <p>{desc}</p>
-              </div>
-
-              <div className="skill-section">
-                <h3 className="background">
-                  <span>{'section title'}</span>
-                </h3>
-                <p className="sectionDescription">{'section desc'}</p>
-                <div className="grid grid-3">
-                  {content &&
-                    content.map((item, index) => {
-                      return (
-                        <VideoCard
-                          key={index}
-                          title={item.title}
-                          category={item.category}
-                          length={item.length}
-                          image={
-                            item.category === 'Blog Post'
-                              ? item.image
-                              : cassette
-                          }
-                          description={item.description}
-                          active={item.category === 'Blog Post' ? false : true}
-                        />
-                      );
-                    })}
-                </div>                
-              </div>
-
-              
-            </div>
-          </section>
-
           {/* Join Now */}
           <section>
             <div className="container">
               <div className="section-title">
                 <h2>Join The Community</h2>
-                <p>
-                  Join <b>242</b> other people connecting around <br />
-                  <b>{title}</b>
-                </p>
               </div>
 
               <div className="mb-4"></div>
@@ -158,37 +138,18 @@ function Preview() {
 
               <div className="mb-4"></div>
 
-              <div className="grid grid-3" style={{ margin: '60px 0' }}>
-                <div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-around',
-                    }}
-                  >
-                    <img src={ZoomLogo} alt="zoom" height="28px" />
-                  </div>
+              <div className="grid grid-3" style={{ margin: '40px 0' }}>
+                <div className="logo-box">
+                  <img src={ZoomLogo} alt="zoom" height="28px" />
                 </div>
 
-                <div>
-                  <div
-                    style={{ display: 'flex', justifyContent: 'space-around' }}
-                  >
-                    <img src={Slack} alt="google" height="28px" />{' '}
-                  </div>
+                <div className="logo-box">
+                  <img src={Slack} alt="google" height="28px" />{' '}
                 </div>
-
-                <div>
-                  <div
-                    style={{
-                      display: 'flex',
-                      justifyContent: 'space-around',
-                    }}
-                  >
-                    <div>
-                      <img src={GoogleDriveLogo} alt="google" height="28px" />{' '}
-                      <b>Google Drive</b>
-                    </div>
+                <div className="logo-box">
+                  <div>
+                    <img src={GoogleDriveLogo} alt="google" height="28px" />{' '}
+                    <b>Google Drive</b>
                   </div>
                 </div>
               </div>
@@ -202,22 +163,16 @@ function Preview() {
               <div className="mb-4"></div>
 
               <div className="grid grid-2">
-                <div
-                  style={{
-                    textAlign: 'right',
-                    borderRight: 'solid 2px lightgray',
-                    paddingRight: '1.5rem',
-                  }}
-                >
+                <div className="quote">
                   <p>
                     <i>
-                      "The most important thing to remember is to stay{' '}
-                      <b>motivated and optimistic!</b> We've built a community
-                      of parents & teachers to share our successes and our
-                      challenges, ask questions, and support each other during
-                      this difficult time."
+                      “I don't know where we should take this community, but I
+                      do know that if I start with the right people, ask them
+                      the right questions, and engage them in vigorous debate,
+                      we will find a way to make this community great.”
                     </i>
                   </p>
+
                   <div className="mb-2"></div>
                   <div style={{ maxWidth: '26em', marginLeft: 'auto' }}>
                     <UserProfile
@@ -233,9 +188,50 @@ function Preview() {
                 </div>
 
                 <div>
-                  <a href="/subscribe" className="btn btn-theme">
-                    Join Free for 7 Days
-                  </a>
+                  {/* <p>
+                    Join <b>242</b> other people connecting around <br />
+                    <b>{title}</b>
+                  </p> */}
+                  <Subscribe caption="Join Free for 7 Days" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Frontpage */}
+          <section>
+            <div className="container">
+              <div className="section-title">
+                <h2>Latest Content</h2>
+                <p>{desc}</p>
+              </div>
+
+              <div className="skill-section">
+                {/* <h3 className="background">
+                  <span>{'section title'}</span>
+                </h3>
+                <p className="sectionDescription">{'section desc'}</p> */}
+
+                <div className="grid grid-3">
+                  {content &&
+                    content.map((item, index) => {
+                      return (
+                        <VideoCard
+                          key={index}
+                          title={item.title}
+                          link={item.link}
+                          category={item.category}
+                          length={item.length}
+                          image={
+                            item.category === 'Blog Post'
+                              ? item.image
+                              : cassette
+                          }
+                          description={item.description}
+                          active={item.category === 'Blog Post' ? false : true}
+                        />
+                      );
+                    })}
                 </div>
               </div>
             </div>

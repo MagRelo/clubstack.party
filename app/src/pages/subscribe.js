@@ -13,7 +13,21 @@ const successUrl = 'https://google.com';
 const cancelUrl = 'https://bing.com';
 const priceID = 'price_1HSPMlKDqYLeupJPUCOdWIju';
 
-function Subscribe(props) {
+function SubscribePage({ caption }) {
+  return (
+    <React.Fragment>
+      <section>
+        <div className="container">
+          <Subscribe />
+        </div>
+      </section>
+    </React.Fragment>
+  );
+}
+
+export default SubscribePage;
+
+export function Subscribe({ caption }) {
   const { createSession } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -87,53 +101,43 @@ function Subscribe(props) {
   }
 
   return (
-    <React.Fragment>
-      <section>
-        <div className="container">
-          <div className="form-wrapper panel">
-            <form name="loginForm" onSubmit={login}>
-              <legend>Join Now</legend>
-
-              <div className="form-group">
-                <label htmlFor="email">Email Address</label>
-                <input
-                  type="email"
-                  name="email"
-                  required={true}
-                  className="form-control"
-                />
-              </div>
-
-              <hr />
-
-              <button className="btn btn-theme">
-                {loading ? (
-                  <span>
-                    <Bouncing />
-                  </span>
-                ) : (
-                  <span>Subscribe</span>
-                )}
-              </button>
-
-              <div className="mb-4"></div>
-
-              {errorMessage ? (
-                <div className="panel">
-                  <div>
-                    <ImWarning />
-                    <span> Email Not Found</span>
-                  </div>
-                </div>
-              ) : null}
-            </form>
-          </div>
+    <div className="form-wrapper panel">
+      <form name="loginForm" onSubmit={login}>
+        <div className="form-group">
+          <label htmlFor="email">Email Address</label>
+          <input
+            type="email"
+            name="email"
+            required={true}
+            className="form-control"
+          />
         </div>
-      </section>
-    </React.Fragment>
+
+        <hr />
+
+        <button className="btn btn-theme">
+          {loading ? (
+            <span>
+              <Bouncing />
+            </span>
+          ) : (
+            <span>{caption}</span>
+          )}
+        </button>
+
+        {errorMessage ? (
+          <div className="panel">
+            <div>
+              <ImWarning />
+              <span> Email Not Found</span>
+            </div>
+          </div>
+        ) : null}
+      </form>
+    </div>
   );
 }
 
-export default Subscribe;
+// export default Subscribe;
 
 // <SubscribeButton />

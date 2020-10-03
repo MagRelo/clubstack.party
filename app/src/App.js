@@ -8,12 +8,12 @@ import Helmet from 'react-helmet';
 import { Loading } from './components/random';
 
 // Header
-import Header from 'components/header';
+// import Header from 'components/header';
 import Footer from 'components/footer';
 
 // Routes
-import Home from 'pages/home';
-import LandingPage from 'pages/landingPage';
+// import Home from 'pages/home';
+// import LandingPage from 'pages/landingPage';
 import Preview from 'pages/preview';
 import Login from 'pages/login';
 import Subscribe from 'pages/subscribe';
@@ -164,14 +164,14 @@ function App() {
       {MetaData()}
 
       <div className="page-wrapper">
-        <Header />
+        {/* <Header /> */}
 
         {loadingSession ? (
           <Loading />
         ) : (
           <div className="content-wrapper">
             <Router>
-              <LandingPage path="/" />
+              <Preview path="/" />
               <Terms path="/terms" />
               <About path="/about" />
 
@@ -218,17 +218,17 @@ export default App;
 function MetaData() {
   return (
     <Helmet>
-      <title>Skills of Reading</title>
-      <meta name="description" content="The Fundamental Skills of Reading" />
-      <link rel="canonical" href={'https://localconnect.app'} />
+      <title>ClubStack</title>
+      <meta name="description" content="User-Generated Communities" />
+      <link rel="canonical" href={'https://clubstack.party'} />
 
-      <meta property="og:site_name" content="Local Connect" />
+      <meta property="og:site_name" content="ClubStack" />
       <meta property="og:type" content="website" />
-      <meta property="og:url" content={'https://localconnect.app'} />
-      <meta property="og:image:secure_url" content="https://localconnect.app" />
+      <meta property="og:url" content={'https://clubstack.party'} />
+      <meta property="og:image:secure_url" content="https://clubstack.party" />
       <meta
         property="og:image"
-        content="https://localconnect.app/logo_share.png"
+        content="https://clubstack.party/logo_share.png"
       />
       <meta property="og:image:type" content="png" />
       <meta property="og:image:height" content="201" />
@@ -236,11 +236,11 @@ function MetaData() {
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@i_dot_e" />
-      <meta name="twitter:title" content="LocalConnect" />
-      <meta name="twitter:description" content="Connect to your Community" />
+      <meta name="twitter:title" content="ClubStack" />
+      <meta name="twitter:description" content="ClubStack" />
       <meta
         name="twitter:image"
-        content="https://localconnect.app/logo_share.png"
+        content="https://clubstack.party/logo_share.png"
       />
     </Helmet>
   );

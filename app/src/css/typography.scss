@@ -2,6 +2,7 @@
 
 // fonts
 @import url('https://fonts.googleapis.com/css2?family=Libre+Baskerville:wght@400&family=Open+Sans:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&display=swap');
 
 body {
   font-family: 'Open Sans', sans-serif;
@@ -25,6 +26,33 @@ h3,
 
 h1 {
   font-size: 2rem;
+  line-height: 2rem;
+}
+
+h1.hero {
+  margin-top: 20vh;
+
+  font-family: 'Anton', sans-serif;
+  text-align: center;
+}
+
+
+h1.hero>span.highlight {
+
+  background: #833ab4;
+  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to right, #fcb045, #fd1d1d, #833ab4);
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+h1.hero>span.sub {
+  font-size: 1.4rem;
 }
 
 @media screen and (min-width: 992px) {
@@ -32,6 +60,25 @@ h1 {
     line-height: 54px;
     font-size: 42px;
   }
+
+  h1.hero {
+
+    margin-top: 20vh;
+
+    font-family: 'Anton', sans-serif;
+    text-align: center;
+
+    line-height: 60px;
+    font-size: 72px;
+  }
+
+
+
+  h1.hero>span.sub {
+    font-size: 48px;
+  }
+
+
 }
 
 p {

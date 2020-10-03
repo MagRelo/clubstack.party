@@ -8,6 +8,7 @@ import { FaRegClock, FaPlay, FaLock } from 'react-icons/fa';
 
 function VideoCard({
   _id,
+  link,
   title,
   category,
   length,
@@ -19,9 +20,13 @@ function VideoCard({
   editing,
 }) {
   // const [menuOpen, setMenuOpen] = useState(false);
+  function createMarkup() {
+    return { __html: description };
+  }
 
   return (
-    <div
+    <a
+      href={link}
       className="recipe-card panel"
       style={{ display: 'grid', gridTemplateRows: 'auto 1fr auto' }}
     >
@@ -45,7 +50,7 @@ function VideoCard({
           </span>
         </div>
 
-        <p>{description}</p>
+        <p dangerouslySetInnerHTML={createMarkup()} />
       </article>
 
       {editing ? (
@@ -62,7 +67,7 @@ function VideoCard({
           </Link>
         </div>
       ) : null}
-    </div>
+    </a>
   );
 }
 

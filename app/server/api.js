@@ -14,7 +14,6 @@ const { convertToJSON } = require('./integrations/xml');
 const UserModel = require('./models').UserModel;
 
 const Content = require('./controllers/content');
-const { GiEel } = require('react-icons/gi');
 
 //
 // CONTENT
@@ -28,10 +27,8 @@ router.delete('/content/:id', authenticate, Content.deleteContentItem);
 
 router.post('/preview', async function(req, res) {
   // get RSS
-
   const url = req.body.url;
   const fullUrl = 'https://' + url + '.substack.com/feed';
-  console.log(fullUrl);
 
   try {
     const response = await fetch(fullUrl)
@@ -43,29 +40,35 @@ router.post('/preview', async function(req, res) {
         }
       })
       .then((xml) => {
+        // console.log(xml);
         return convertToJSON(xml);
       });
 
-    const site = response.rss.channel[0];
+    if (response) {
+      const site = response.rss.channel[0];
 
-    // reformat
-    const previewContent = {
-      title: site.title,
-      description: site.description,
-      copyright: site.copyright,
-      headerImage: site.image,
-      items: site.item.map((item) => {
-        return {
-          title: item.title,
-          description: item.description,
-          length: extractLength(item) + ' min',
-          category: extractCategory(item),
-          image: extractImage(item),
-        };
-      }),
-    };
+      // reformat
+      const previewContent = {
+        title: site.title,
+        description: site.description,
+        copyright: site.copyright,
+        headerImage: site.image,
+        items: site.item.map((item) => {
+          return {
+            title: item.title,
+            description: item.description,
+            link: item.link[0],
+            length: extractLength(item) + ' min',
+            category: extractCategory(item),
+            image: extractImage(item),
+          };
+        }),
+      };
 
-    res.status(200).send(previewContent);
+      res.status(200).send(previewContent);
+    }
+
+    res.status(404).send();
   } catch (error) {
     console.log(error);
     res.status(500).send(error);

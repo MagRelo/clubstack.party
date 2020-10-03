@@ -17,11 +17,11 @@ const strategy = new MagicStrategy(async function(user, done) {
     ],
   });
 
-  if (existingUser.status === 'NewSubscriber') {
+  if (existingUser && existingUser.status === 'NewSubscriber') {
     return newSubscriber(user, userMetadata, done);
   }
 
-  if (existingUser.status === 'Active') {
+  if (existingUser && existingUser.status === 'Active') {
     return login(user, done);
   }
 
@@ -93,5 +93,21 @@ exports.authenticate = function(req, res, next) {
   if (!req.isAuthenticated()) {
     return res.status(401).send({ error: 'Not Authenticated' });
   }
+  next();
+};
+
+exports.getSubdomain = async function(req, res, next) {
+  console.log('subdomains: ', req.subdomains.join());
+
+  req.subdomain = req.subdomains.join();
+
+  next();
+};
+
+exports.requireSubdomain = async function(req, res, next) {
+  if (!req.subdomain) {
+    return res.status(404).send({ error: 'No Subdomain' });
+  }
+
   next();
 };

@@ -8,7 +8,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name: ['reading-skills'],
+  app_name: ['ClubStack'],
   /**
    * Your New Relic license key.
    */

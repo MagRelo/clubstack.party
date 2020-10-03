@@ -23,7 +23,7 @@ body,
 // => header/body/footer
 .page-wrapper {
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: 1fr auto;
 }
 
 .content-wrapper {
@@ -896,8 +896,8 @@ a.panel {
 .hero-grid {
   display: grid;
   gap: 1.5em;
-
   text-align: center;
+  padding-top: 80px;
 }
 
 .lead {
@@ -919,11 +919,10 @@ a.panel {
 
 @media screen and (min-width: 992px) {
   .hero-grid {
-    display: grid;
-    // gap: 3em;
     grid-template-columns: 5fr 3fr;
 
     margin: 3em 0;
+    padding-top: 80px;
   }
 
   .title-container {
@@ -995,4 +994,22 @@ a.panel {
 .box .info p {
   color: $lighterText;
   margin-bottom: 0;
+}
+
+
+.quote {
+  text-align: center;
+}
+
+@media screen and (min-width: 992px) {
+  .quote {
+    text-align: right;
+    border-right: solid 2px $lightGray;
+    padding-right: 1.5rem;
+  }
+}
+
+.logo-box {
+  display: flex;
+  justify-content: space-around;
 }

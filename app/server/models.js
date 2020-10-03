@@ -39,6 +39,10 @@ const UserSchema = new mongoose.Schema(
     stripeCustomerId: String,
     stripeEvents: [Object],
 
+    subdomain: String,
+    productCode: String,
+    subscriptions: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+
     follows: { type: Array, default: [] },
   },
   { timestamps: true }
