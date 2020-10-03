@@ -99,9 +99,9 @@ function extractLength(item) {
     case 'image/jpeg':
       return Math.floor(item['content:encoded'][0].length / magicLengthNumber);
     case 'audio/mpeg':
-      return 'Podcast';
+      return 15;
     case 'video/mpeg':
-      return 'video';
+      return 15;
     default:
       break;
   }

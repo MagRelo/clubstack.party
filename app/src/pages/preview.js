@@ -27,7 +27,7 @@ function Preview() {
     : false;
   const site = subdomain || params.substack;
 
-  console.log('site:', site);
+  // console.log('site:', site);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
