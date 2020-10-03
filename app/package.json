@@ -1,5 +1,5 @@
 {
-  "name": "reading-project",
+  "name": "clubstack",
   "version": "0.1.0",
   "private": true,
   "proxy": "http://localhost:8080",
@@ -57,11 +57,11 @@
     "eject": "react-scripts eject",
     "server": "node server/index.js",
     "dev": "NODE_ENV=development nodemon --inspect server/index.js",
-    "build-prod": "react-app-rewired build && docker build . -t magrelo/reading-project && docker push magrelo/reading-project",
-    "build-staging": "react-app-rewired build && docker build . -t magrelo/reading-project-staging && docker push magrelo/reading-project-staging",
+    "build-prod": "react-app-rewired build && docker build . -t magrelo/clubstack && docker push magrelo/clubstack",
+    "build-staging": "react-app-rewired build && docker build . -t magrelo/clubstack-staging && docker push magrelo/clubstack-staging",
     "ssh": "echo 'not setup'",
-    "dump-db": "mongodump  --db reading-project",
-    "restore-db": "mongorestore --db reading-project dump/reading-project",
+    "dump-db": "mongodump  --db clubstack",
+    "restore-db": "mongorestore --db clubstack dump/clubstack",
     "seed-db": "node server/utils/seedDb.js"
   },
   "devDependencies": {
