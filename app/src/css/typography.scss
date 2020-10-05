@@ -32,6 +32,9 @@ h1 {
 h1.hero {
   margin-top: 20vh;
 
+
+  line-height: 44px;
+  font-size: 52px;
   font-family: 'Anton', sans-serif;
   text-align: center;
 }
@@ -52,7 +55,7 @@ h1.hero>span.highlight {
 }
 
 h1.hero>span.sub {
-  font-size: 1.4rem;
+  font-size: 32px;
 }
 
 @media screen and (min-width: 992px) {
