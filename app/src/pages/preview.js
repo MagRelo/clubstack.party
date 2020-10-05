@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Link, useLocation } from '@reach/router';
+import { useLocation } from '@reach/router';
 
 // headerimage
 import cassette from 'images/cassette_black.jpg';
@@ -37,7 +37,7 @@ function Preview() {
   const [desc, setDesc] = useState(null);
   const [img, setImg] = useState({});
   const [copyright, setCopyright] = useState({});
-  const [podcasts, setPodcasts] = useState({});
+  // const [podcasts, setPodcasts] = useState({});
 
   useEffect(() => {
     const method = 'POST';
@@ -58,11 +58,11 @@ function Preview() {
           setCopyright(body.copyright);
           setContent(body.items);
 
-          setPodcasts(
-            body.items.filter((item) => {
-              return item.category === 'Podcast';
-            })
-          );
+          // setPodcasts(
+          //   body.items.filter((item) => {
+          //     return item.category === 'Podcast';
+          //   })
+          // );
 
           setLoading(false);
         })
@@ -82,11 +82,20 @@ function Preview() {
             <span className="highlight">Club</span>Stack <br />{' '}
             <span className="sub">( dot )</span>{' '}
             <span className="sub">PARTY</span>
-            {error ? <p>{error}</p> : null}
           </h1>
+          {error ? (
+            <p style={{ textAlign: 'center', fontFamily: 'monospace' }}>
+              {error}
+            </p>
+          ) : null}
         </div>
       ) : null}
-      {loading ? <Loading /> : null}
+
+      {loading ? (
+        <div style={{ marginTop: '20vh' }}>
+          <Loading />
+        </div>
+      ) : null}
 
       {content ? (
         <React.Fragment>

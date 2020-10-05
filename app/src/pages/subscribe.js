@@ -8,17 +8,21 @@ import { Bouncing } from 'components/random';
 
 // Stripe setup
 import { loadStripe } from '@stripe/stripe-js';
-const stripePromise = loadStripe('pk_test_dMv1AAldL0wj69FLCG4c8jce00J8jWxWg9');
-const successUrl = 'https://google.com';
-const cancelUrl = 'https://bing.com';
+
+// ENV
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+const successUrl = process.env.REACT_APP_STRIPE_SUCCESS_URL;
+const cancelUrl = process.env.REACT_APP_STRIPE_CANCEL_URL;
+
+// per subdomain
 const priceID = 'price_1HSPMlKDqYLeupJPUCOdWIju';
 
-function SubscribePage({ caption }) {
+function SubscribePage() {
   return (
     <React.Fragment>
       <section>
         <div className="container">
-          <Subscribe />
+          <Subscribe caption={'Subscribe'} />
         </div>
       </section>
     </React.Fragment>
