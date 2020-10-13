@@ -8,7 +8,7 @@ body {
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.5;
   color: $lightText;
   letter-spacing: 1px;
@@ -147,4 +147,9 @@ cite {
 
 cite:before {
   content: '– '
+}
+
+u {
+  text-decoration: none;
+  border-bottom: solid 1px;
 }

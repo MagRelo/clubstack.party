@@ -3,7 +3,6 @@ import { Link } from '@reach/router';
 
 import { Loading } from 'components/random';
 import { AuthContext } from 'App';
-import VideoCard from 'components/videoCard';
 
 import { BiBookAdd, BiChevronRight } from 'react-icons/bi';
 
@@ -12,12 +11,12 @@ function Content() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [content, setContent] = useState(null);
+  const [content, setContent] = useState([]);
 
   useEffect(() => {
     setLoading(true);
     const method = 'GET';
-    const endPoint = '/api/content?userId=' + user._id;
+    const endPoint = '/api/admin/subdomain';
     callApi(method, endPoint)
       .then((body) => {
         setContent(body);
@@ -28,7 +27,7 @@ function Content() {
         setError(error.toString());
         setLoading(false);
       });
-  }, [callApi]);
+  }, [callApi, user]);
 
   return (
     <div className="container">
@@ -38,32 +37,30 @@ function Content() {
       ) : (
         <div>
           <h2>
-            Manage Content
+            Manage Subdomains
             <Link
-              to="/admin/content/add"
+              to="/admin/subdomain/add"
               className="btn btn-theme btn-sm"
               style={{ float: 'right' }}
             >
-              Add Content <BiBookAdd />
+              Add Subdomain <BiBookAdd />
             </Link>
           </h2>
           <p>
             <Link to="/admin">Admin</Link> <BiChevronRight />{' '}
-            <u>Manage Content</u>
+            <u>Manage Subdomains</u>
           </p>
-          <div className="grid grid-3">
-            {content &&
-              content.map((item) => {
-                return (
-                  <VideoCard
-                    {...item}
-                    key={item._id}
-                    active={false}
-                    editing={true}
-                  />
-                );
-              })}
-          </div>
+          <ul>
+            {content.map((item) => {
+              return (
+                <li key={item._id}>
+                  <Link to={'/admin/subdomain/' + item.subdomain}>
+                    {item.subdomain + ' - ' + item.email}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
         </div>
       )}
     </div>

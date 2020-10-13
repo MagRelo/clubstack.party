@@ -1,37 +1,40 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from 'App';
 
+import { Bouncing } from 'components/random';
 import { ImWarning } from 'react-icons/im';
 
 import { magicLogin } from 'api/magic';
-import { Bouncing } from 'components/random';
 
 // Stripe setup
 import { loadStripe } from '@stripe/stripe-js';
-
-// ENV
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
-const successUrl = process.env.REACT_APP_STRIPE_SUCCESS_URL;
-const cancelUrl = process.env.REACT_APP_STRIPE_CANCEL_URL;
+const domain = process.env.REACT_APP_STRIPE_DOMAIN;
 
-// per subdomain
-const priceID = 'price_1HSPMlKDqYLeupJPUCOdWIju';
-
-function SubscribePage() {
+function SubscribePage({ priceId, subdomain, title }) {
   return (
-    <React.Fragment>
-      <section>
-        <div className="container">
-          <Subscribe caption={'Subscribe'} />
-        </div>
-      </section>
-    </React.Fragment>
+    <div>
+      {priceId ? (
+        <Subscribe
+          priceId={priceId}
+          caption={'Join Now'}
+          legend={'Join ' + title}
+          subdomain={subdomain}
+        />
+      ) : (
+        <JoinWaitlist
+          caption={'Join the Waitlist'}
+          legend={'Launching Soon! Join the Waitlist'}
+          subdomain={subdomain}
+        />
+      )}
+    </div>
   );
 }
 
 export default SubscribePage;
 
-export function Subscribe({ caption }) {
+export function Subscribe({ legend, caption, priceId, subdomain }) {
   const { createSession } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
@@ -64,10 +67,10 @@ export function Subscribe({ caption }) {
           // Email not found => User created => redirect them to Stripe to Subscribe
           const stripe = await stripePromise;
           const { error } = await stripe.redirectToCheckout({
-            lineItems: [{ price: priceID, quantity: 1 }],
+            lineItems: [{ price: priceId, quantity: 1 }],
             mode: 'subscription',
-            successUrl: successUrl,
-            cancelUrl: cancelUrl,
+            successUrl: 'https://' + subdomain + '.' + domain + '/signin',
+            cancelUrl: 'https://' + subdomain + '.' + domain + '/',
             customerEmail: formObject.email,
             clientReferenceId: userId,
           });
@@ -105,8 +108,9 @@ export function Subscribe({ caption }) {
   }
 
   return (
-    <div className="form-wrapper panel">
+    <div className="">
       <form name="loginForm" onSubmit={login}>
+        {legend ? <legend>{legend}</legend> : null}
         <div className="form-group">
           <label htmlFor="email">Email Address</label>
           <input
@@ -135,6 +139,88 @@ export function Subscribe({ caption }) {
               <ImWarning />
               <span> Email Not Found</span>
             </div>
+          </div>
+        ) : null}
+      </form>
+    </div>
+  );
+}
+
+export function JoinWaitlist({ legend, caption, subdomain }) {
+  const { callApi } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+
+  async function login(event) {
+    event.preventDefault();
+
+    setLoading(true);
+
+    // get form data
+    const formObject = {};
+    const formData = new FormData(event.target);
+    formData.forEach((value, key) => {
+      formObject[key] = value;
+    });
+
+    // test email
+
+    await callApi('POST', 'api/user/waitlist', {
+      email: formObject.email,
+      subdomain: subdomain,
+    })
+      .then(async (response) => {
+        // confirm susccess
+        setLoading(false);
+        setSuccessMessage(
+          `Done! We'll let you know when the community launches.`
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoading(false);
+        setErrorMessage(error.message);
+      });
+  }
+
+  return (
+    <div className="">
+      <form name="loginForm" onSubmit={login}>
+        {legend ? <legend>{legend}</legend> : null}
+        <div className="form-group">
+          <label htmlFor="email">Email Address</label>
+          <input
+            type="email"
+            name="email"
+            required={true}
+            className="form-control"
+          />
+        </div>
+
+        <hr />
+
+        <button className="btn btn-theme">
+          {loading ? (
+            <span>
+              <Bouncing />
+            </span>
+          ) : (
+            <span>{caption}</span>
+          )}
+        </button>
+
+        {errorMessage ? (
+          <div>
+            <div className="mb-3"></div>
+            <ImWarning /> <span>{errorMessage}</span>
+          </div>
+        ) : null}
+
+        {successMessage ? (
+          <div>
+            <div className="mb-3"></div>
+            <span>{successMessage}</span>
           </div>
         ) : null}
       </form>

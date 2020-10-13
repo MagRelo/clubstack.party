@@ -52,52 +52,53 @@ function buildAreaData(average, stdDev, length) {
 
 function LineChart({ userData, stats }) {
   const [data] = useState(testData || []);
-  const globalLine = buildLineData(stats.global_avg, data.length);
-  const globalArea = buildAreaData(
-    stats.global_avg,
-    stats.global_StdDev,
-    data.length
-  );
+
+  // const globalLine = buildLineData(stats.global_avg, data.length);
+  // const globalArea = buildAreaData(
+  //   stats.global_avg,
+  //   stats.global_StdDev,
+  //   data.length
+  // );
+  const globalLine = buildLineData(1600, data.length);
+  const globalArea = buildAreaData(1600, 125, data.length);
 
   return (
-    stats && (
-      <VictoryChart
-        theme={VictoryTheme.material}
-        height={150}
-        domainPadding={{ x: 0, y: 10 }}
-        padding={{ top: 0, bottom: 0 }}
-      >
-        <VictoryArea
-          data={globalArea}
-          style={{
-            data: {
-              fill: '#dddddd',
-              fillOpacity: 0.4,
-            },
-          }}
-        />
-        <VictoryLine
-          data={globalLine}
-          interpolation="natural"
-          style={{
-            data: {
-              stroke: '#dddddd',
-              strokeWidth: 2,
-            },
-          }}
-        />
-        <VictoryLine
-          data={data}
-          interpolation="natural"
-          style={{
-            data: {
-              stroke: '#00b0ff',
-              strokeWidth: 2,
-            },
-          }}
-        />
-      </VictoryChart>
-    )
+    <VictoryChart
+      theme={VictoryTheme.material}
+      height={150}
+      domainPadding={{ x: 0, y: 10 }}
+      padding={{ top: 0, bottom: 0 }}
+    >
+      <VictoryArea
+        data={globalArea}
+        style={{
+          data: {
+            fill: '#dddddd',
+            fillOpacity: 0.4,
+          },
+        }}
+      />
+      <VictoryLine
+        data={globalLine}
+        interpolation="natural"
+        style={{
+          data: {
+            stroke: '#dddddd',
+            strokeWidth: 2,
+          },
+        }}
+      />
+      <VictoryLine
+        data={data}
+        interpolation="natural"
+        style={{
+          data: {
+            stroke: '#00b0ff',
+            strokeWidth: 2,
+          },
+        }}
+      />
+    </VictoryChart>
   );
 }
 

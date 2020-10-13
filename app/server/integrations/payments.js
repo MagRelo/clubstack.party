@@ -14,12 +14,12 @@
 
 // User
 const UserModel = require('../models').UserModel;
+const { addUserToChannel, removeUserFromChannel } = require('./rocketchat');
 
 // Stripe
 const subscribeEndpointSecret = process.env.STRIPE_SUBSCRIBE_SECRET;
 const subscribeReturnUrl =
   process.env.STRIPE_SUBSCRIBE_RETURN_URL || 'https://example.com/account';
-
 let stripeApiKey = '';
 if (process.env.STRIPE_LIVE_KEY) {
   stripeApiKey = process.env.STRIPE_LIVE_KEY;
@@ -33,7 +33,7 @@ const stripe = require('stripe')(stripeApiKey);
 //
 // Methods
 //
-exports.createStripeCharge = async function (
+exports.createStripeCharge = async function(
   stripeCustomerId,
   stripeToken,
   amount_in_cents,
@@ -59,7 +59,7 @@ exports.createStripeCharge = async function (
 };
 
 // https://stripe.com/docs/api/customers/create
-exports.createStripeCustomer = async function (userData, stripeCustomerId) {
+exports.createStripeCustomer = async function(userData, stripeCustomerId) {
   const userObject = {
     name: userData.firstname + ' ' + userData.lastname,
     email: userData.email,
@@ -78,11 +78,11 @@ exports.createStripeCustomer = async function (userData, stripeCustomerId) {
   }
 };
 
-exports.deleteCustomerPaymentSource = async function (customerId, cardId) {
+exports.deleteCustomerPaymentSource = async function(customerId, cardId) {
   return await stripe.customers.deleteSource(customerId, cardId);
 };
 
-exports.createStripeAccount = async function (userData, ipAddress) {
+exports.createStripeAccount = async function(userData, ipAddress) {
   // // exchange plaid token for stripe token
   // const accessToken = await plaidClient.exchangePublicToken(userData.token);
   // const bankToken = await plaidClient.createStripeToken(
@@ -111,7 +111,7 @@ exports.createStripeAccount = async function (userData, ipAddress) {
       product_description:
         'User refers information and/or applicants to platform customers',
     },
-    external_account: bankToken.stripe_bank_account_token,
+    // external_account: bankToken.stripe_bank_account_token,
     tos_acceptance: {
       date: userData.tos.date,
       ip: ipAddress,
@@ -124,62 +124,75 @@ exports.createStripeAccount = async function (userData, ipAddress) {
 };
 
 // https://stripe.com/docs/api/external_account_bank_accounts/delete
-exports.deleteStripeAccountSource = async function (accountId, sourceId) {
+exports.deleteStripeAccountSource = async function(accountId, sourceId) {
   return await stripe.accounts.deleteExternalAccount(accountId, sourceId);
 };
 
-exports.handleStripeEvent = async function (body, signature) {
+exports.handleStripeEvent = async function(body, signature) {
   // reconstruct event
   let event = stripe.webhooks.constructEvent(
     body,
     signature,
     subscribeEndpointSecret
   );
-
   const session = event.data.object;
-  // console.log('New Event:', event.type, event);
   console.log('New Event:', event);
 
-  // new subscriber
-  if (event.type === 'checkout.session.completed') {
-    return UserModel.updateOne(
-      {
-        $or: [
-          { email: session.customer_email },
-          { userId: session.client_reference_id },
-          { stripeCustomerId: session.customer },
-        ],
-      },
-      {
-        $set: {
-          status: 'NewSubscriber',
-          stripeCustomerId: session.customer,
-        },
-        $push: { stripeEvents: event },
-      }
-    );
+  if (event.type === 'checkout.subscription.created') {
+    // new subscriber
+
+    const productCode = session.items.data[0].price.id;
+
+    // Validate
+    const sourceUser = await UserModel.findOne({
+      email: session.customer_email,
+    });
+    const targetUser = await UserModel.findOne({ productCode: productCode });
+
+    // Update
+
+    // 1) Update source: push target to subscriptions, event to events, set customerId, status?
+    sourceUser.subscriptions.push(targetUser._id);
+    sourceUser.stripeEvents.push(event);
+    // customerId?
+    sourceUser.status = 'NewSubscriber';
+    await sourceUser.save();
+
+    // 2) add source to rocketchat channel
+    await addUserToChannel(sourceUser, targetUser);
+
+    // 3) update target: push source into user.subscribers
+    targetUser.subscribers.push(sourceUser._id);
+    await targetUser.save();
+
+    return true;
   }
 
   // new subscriber
   if (event.type === 'customer.subscription.deleted') {
-    // console.log('Subscribe Deleted:', event.type);
-    console.log('Data:', session);
+    const productCode = session.items.data[0].price.id;
 
-    return UserModel.updateOne(
-      {
-        $or: [
-          { email: session.customer_email },
-          { userId: session.client_reference_id },
-          { stripeCustomerId: session.customer },
-        ],
-      },
-      {
-        $set: {
-          status: 'Closed',
-        },
-        $push: { stripeEvents: event },
-      }
-    );
+    // Validate
+    const sourceUser = await UserModel.findOne({
+      email: session.customer_email,
+    });
+    const targetUser = await UserModel.findOne({ productCode: productCode });
+
+    // Update
+
+    // 1) Update source: push target to subscriptions, event to events, set customerId, status?
+    sourceUser.subscriptions.pull({ _id: targetUser._id });
+    sourceUser.stripeEvents.push(event);
+    // customerId
+    // status
+    await sourceUser.save();
+
+    // 2) add source to rocketchat channel
+    await removeUserFromChannel(sourceUser, targetUser);
+
+    // 3) update target: push source into user.subscribers
+    targetUser.subscribers.pull(sourceUser._id);
+    await targetUser.save();
   }
 
   // shove event into a customer (if found) just in case
@@ -202,7 +215,7 @@ exports.handleStripeEvent = async function (body, signature) {
   );
 };
 
-exports.getSubscriberRedirectURL = async function (stripeCustomerId) {
+exports.getSubscriberRedirectURL = async function(stripeCustomerId) {
   var session = await stripe.billingPortal.sessions.create({
     customer: stripeCustomerId,
     return_url: subscribeReturnUrl,

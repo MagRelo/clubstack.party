@@ -40,8 +40,18 @@ const UserSchema = new mongoose.Schema(
     stripeEvents: [Object],
 
     subdomain: String,
+    subdomainData: Object,
     productCode: String,
-    subscriptions: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    rocketUser: Object,
+    rocketChannel: Object,
+    subscriptions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    subscribers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    waitlist: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
 
     follows: { type: Array, default: [] },
   },

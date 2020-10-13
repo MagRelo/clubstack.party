@@ -33,87 +33,85 @@ function UpdateProfile(props) {
 
   return (
     <div>
-      <div className="form-wrapper">
+      <div className="">
         <form name="updateProfile" onSubmit={submit}>
-          {/* <legend>Update Your Profile</legend> */}
-
-          {/* <hr /> */}
-
-          <div className="mb-4"></div>
-          <UserProfile
-            displayUser={{ _id: 0, displayName, avatar, caption }}
-            showLogout={true}
-            disableLink={true}
-          />
           <div className="mb-4"></div>
 
-          <div className="form-group">
-            <label htmlFor="displayName" className="">
-              Display Name
-            </label>
-            <input
-              type="text"
-              name="displayName"
-              id="displayName"
-              className="form-control"
-              value={displayName}
-              onChange={(e) => setDisplayName(e.target.value)}
+          <div className="grid grid-2">
+            <UserProfile
+              displayUser={{ _id: 0, displayName, avatar, caption }}
+              disableLink={true}
             />
-          </div>
-          <div className="form-group">
-            <label htmlFor="caption" className="">
-              Caption
-            </label>
-            <input
-              type="text"
-              name="caption"
-              id="caption"
-              className="form-control"
-              value={caption}
-              onChange={(e) => setCaption(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="avatar" className="">
-              Avatar URL
-            </label>
-            <input
-              type="text"
-              name="avatar"
-              id="avatar"
-              className="form-control"
-              value={avatar}
-              onChange={(e) => setAvatar(e.target.value)}
-            />
-          </div>
 
-          <div className="form-group">
-            <label htmlFor="email" className="">
-              Email Address
-            </label>
-            <input
-              type="text"
-              name="email"
-              id="email"
-              className="form-control"
-              value={user.email}
-              disabled
-            />
+            <div className="form-group">
+              <label htmlFor="displayName" className="">
+                Display Name
+              </label>
+              <input
+                type="text"
+                name="displayName"
+                id="displayName"
+                className="form-control"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+              />
+            </div>
           </div>
-          <div className="form-group">
-            <label htmlFor="publicAddress" className="">
-              Public Address
-            </label>
-            <input
-              type="text"
-              name="publicAddress"
-              id="publicAddress"
-              className="form-control"
-              value={user.publicAddress}
-              disabled
-            />
-          </div>
+          <div className="grid grid-2">
+            <div>
+              <label htmlFor="caption" className="">
+                Caption
+              </label>
+              <input
+                type="text"
+                name="caption"
+                id="caption"
+                className="form-control"
+                value={caption}
+                onChange={(e) => setCaption(e.target.value)}
+              />
+            </div>
+            <div>
+              <label htmlFor="avatar" className="">
+                Avatar URL
+              </label>
+              <input
+                type="text"
+                name="avatar"
+                id="avatar"
+                className="form-control"
+                value={avatar}
+                onChange={(e) => setAvatar(e.target.value)}
+              />
+            </div>
 
+            <div>
+              <label htmlFor="email" className="">
+                Email Address
+              </label>
+              <input
+                type="text"
+                name="email"
+                id="email"
+                className="form-control"
+                value={user.email}
+                disabled
+              />
+            </div>
+            <div>
+              <label htmlFor="publicAddress" className="">
+                Public Address
+              </label>
+              <input
+                type="text"
+                name="publicAddress"
+                id="publicAddress"
+                className="form-control"
+                value={user.publicAddress}
+                disabled
+              />
+            </div>
+          </div>
           <hr />
           <button className="btn btn-theme">Save</button>
         </form>

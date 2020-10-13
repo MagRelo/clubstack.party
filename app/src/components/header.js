@@ -19,10 +19,6 @@ function Header() {
 
   return (
     <header>
-      {/* <div id="stars"></div>
-      <div id="stars2"></div>
-      <div id="stars3"></div> */}
-
       <div className="header-grid">
         <div className="header-container">
           <button
@@ -36,78 +32,71 @@ function Header() {
 
           <Link to="/">
             <span>
-              {/* <span className="header-title">The Skills of Reading</span> */}
+              <span className="header-title">ClubStack</span>
             </span>
           </Link>
         </div>
 
         <div className="header-container">
-          {/* <span className="header-tagline">User-Generated Communities</span> */}
+          <span className="header-tagline">User-Generated Communities</span>
         </div>
 
         <div className="header-container desktop-menu">
-          <ul className="nav-list">
-            {/* <li>
-              <NavLink to="/leaderboard">Front Page</NavLink>
-            </li> */}
-
-            {!activeSession ? (
-              <li style={{ float: 'right' }}>
-                <NavLink to="/login">Sign In</NavLink>
-              </li>
-            ) : null}
-
-            {activeSession && user.type === 'Admin' ? (
-              <li style={{ float: 'right' }}>
-                <NavLink to="/admin">Admin</NavLink>
-              </li>
-            ) : null}
-
-            {activeSession && user.type === 'Standard' ? (
-              <li style={{ float: 'right' }}>
-                <NavLink to="/account">Account</NavLink>
-              </li>
-            ) : null}
-
-            {activeSession ? (
-              <li style={{ float: 'right' }}>
-                <NavLink to="/dashboard">Home</NavLink>
-              </li>
-            ) : null}
-          </ul>
+          <NavList
+            activeSession={activeSession}
+            userType={user.type}
+            subdomainActive={!!user.subdomain}
+          />
         </div>
 
         <div className="header-container mobile-menu">
           {menuOpen ? (
-            <ul className="nav-list">
-              {!activeSession ? (
-                <li>
-                  <NavLink to="/login">Sign In</NavLink>
-                </li>
-              ) : null}
-
-              {activeSession ? (
-                <li>
-                  <NavLink to="/dashboard">Home</NavLink>
-                </li>
-              ) : null}
-
-              {activeSession && user.type === 'Admin' ? (
-                <li>
-                  <NavLink to="/admin">Admin</NavLink>
-                </li>
-              ) : null}
-
-              {activeSession && user.type === 'Standard' ? (
-                <li>
-                  <NavLink to="/account">Account</NavLink>
-                </li>
-              ) : null}
-            </ul>
+            <NavList
+              activeSession={activeSession}
+              userType={user.type}
+              subdomainActive={!!user.subdomain}
+            />
           ) : null}
         </div>
       </div>
     </header>
+  );
+}
+
+function NavList({ activeSession, userType, subdomainActive }) {
+  // console.log((activeSession, userType));
+  return (
+    <ul className="nav-list">
+      {!activeSession ? (
+        <li>
+          <NavLink to="/login">Sign In</NavLink>
+        </li>
+      ) : null}
+
+      {activeSession && userType === 'Admin' ? (
+        <li>
+          <NavLink to="/admin">Admin</NavLink>
+        </li>
+      ) : null}
+
+      {activeSession && userType === 'Standard' ? (
+        <li>
+          <NavLink to="/account">Account</NavLink>
+        </li>
+      ) : null}
+
+      {activeSession && subdomainActive ? (
+        <li>
+          <NavLink to="/account">Account</NavLink>
+        </li>
+      ) : null}
+
+      {activeSession ? (
+        <li>
+          <NavLink to="/clubs">Communities</NavLink>
+        </li>
+      ) : null}
+    </ul>
   );
 }
 

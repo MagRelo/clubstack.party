@@ -5,15 +5,16 @@ import { useLocation } from '@reach/router';
 import cassette from 'images/cassette_black.jpg';
 
 // resources
-import GoogleDriveLogo from 'images/google-drive.svg';
-import ZoomLogo from 'images/zoom-communications-logo.svg';
-import Slack from 'images/slack-2.svg';
+import { BsFillChatDotsFill } from 'react-icons/bs';
+import { GoFileSubmodule } from 'react-icons/go';
+import { CgFeed } from 'react-icons/cg';
+import { MdEmail } from 'react-icons/md';
 
 import { getParams, Loading } from 'components/random';
 import VideoCard from 'components/videoCard';
 
 import { UserProfile } from 'pages/account/userProfile';
-import { Subscribe } from 'pages/subscribe';
+import SubscribePage from 'pages/subscribe';
 
 import { AuthContext } from 'App';
 
@@ -22,10 +23,10 @@ function Preview() {
 
   const { callApi } = useContext(AuthContext);
   const params = getParams(useLocation());
-  const subdomain = window.location.host.split('.')[2]
+  const urlSubdomain = window.location.host.split('.')[2]
     ? window.location.host.split('.')[0]
     : false;
-  const site = subdomain || params.substack;
+  const subdomain = urlSubdomain || params.substack;
 
   // console.log('site:', site);
 
@@ -37,32 +38,27 @@ function Preview() {
   const [desc, setDesc] = useState(null);
   const [img, setImg] = useState({});
   const [copyright, setCopyright] = useState({});
-  // const [podcasts, setPodcasts] = useState({});
+  const [productCode, setProductCode] = useState(null);
 
   useEffect(() => {
     const method = 'POST';
     const endPoint = '/api/preview/';
 
-    if (site) {
+    if (subdomain) {
       setLoading(true);
 
       // reset state
       setError(null);
       setContent(null);
 
-      callApi(method, endPoint, { url: site })
+      callApi(method, endPoint, { url: subdomain })
         .then((body) => {
           setTitle(body.title);
           setDesc(body.description);
           setImg(body.headerImage[0]);
           setCopyright(body.copyright);
           setContent(body.items);
-
-          // setPodcasts(
-          //   body.items.filter((item) => {
-          //     return item.category === 'Podcast';
-          //   })
-          // );
+          setProductCode(body.productCode);
 
           setLoading(false);
         })
@@ -72,11 +68,12 @@ function Preview() {
           setLoading(false);
         });
     }
-  }, [callApi, site]);
+  }, [callApi, subdomain]);
 
   return (
     <React.Fragment>
-      {(!loading && !content && !site) || (!loading && !content && error) ? (
+      {(!loading && !content && !subdomain) ||
+      (!loading && !content && error) ? (
         <div className="container">
           <h1 className="hero">
             <span className="highlight">Club</span>Stack <br />{' '}
@@ -144,22 +141,33 @@ function Preview() {
               <h3 className="background">
                 <span>Community Tools</span>
               </h3>
-
-              <div className="mb-4"></div>
-
-              <div className="grid grid-3" style={{ margin: '40px 0' }}>
-                <div className="logo-box">
-                  <img src={ZoomLogo} alt="zoom" height="28px" />
-                </div>
-
-                <div className="logo-box">
-                  <img src={Slack} alt="google" height="28px" />{' '}
-                </div>
-                <div className="logo-box">
-                  <div>
-                    <img src={GoogleDriveLogo} alt="google" height="28px" />{' '}
-                    <b>Google Drive</b>
+              <div
+                className="grid grid-4"
+                style={{ padding: '20px 0', textAlign: 'center' }}
+              >
+                <div>
+                  <div className="icon-large">
+                    <BsFillChatDotsFill />
                   </div>
+                  Private Chat Room
+                </div>
+                <div>
+                  <div className="icon-large">
+                    <GoFileSubmodule />
+                  </div>
+                  File Sharing
+                </div>
+                <div>
+                  <div className="icon-large">
+                    <CgFeed />
+                  </div>
+                  Activity Feed
+                </div>
+                <div>
+                  <div className="icon-large">
+                    <MdEmail />
+                  </div>
+                  Weekly Newsletter
                 </div>
               </div>
 
@@ -201,7 +209,12 @@ function Preview() {
                     Join <b>242</b> other people connecting around <br />
                     <b>{title}</b>
                   </p> */}
-                  <Subscribe caption="Join Free for 7 Days" />
+                  <SubscribePage
+                    caption="Join Free for 7 Days"
+                    title={title}
+                    priceId={productCode}
+                    subdomain={subdomain}
+                  />
                 </div>
               </div>
             </div>

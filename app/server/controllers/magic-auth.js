@@ -1,10 +1,8 @@
 const UserModel = require('../models').UserModel;
 
-/* 1️⃣ Setup Magic Admin SDK */
+// Magic Auth
 const { Magic } = require('@magic-sdk/admin');
 const magic = new Magic(process.env.MAGIC_SECRET_KEY);
-
-/* 2️⃣ Implement Auth Strategy */
 const passport = require('passport');
 const MagicStrategy = require('passport-magic').Strategy;
 
@@ -61,13 +59,18 @@ const login = async (user, done) => {
     });
   }
 
-  const updatedUser = await UserModel.findOneAndUpdate(
-    { issuer: user.issuer },
-    { $set: { lastLoginAt: user.claim.iat } },
-    { new: true }
-  );
+  try {
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { issuer: user.issuer },
+      { $set: { lastLoginAt: user.claim.iat } },
+      { new: true }
+    );
 
-  return done(null, updatedUser);
+    return done(null, updatedUser);
+  } catch (error) {
+    console.log(error);
+    done(error, null);
+  }
 };
 
 exports.logout = async function(issuer) {
@@ -89,9 +92,19 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
+//
+// Middleware
+//
 exports.authenticate = function(req, res, next) {
   if (!req.isAuthenticated()) {
     return res.status(401).send({ error: 'Not Authenticated' });
+  }
+  next();
+};
+
+exports.adminOnly = function(req, res, next) {
+  if (!req.user.type === 'Admin') {
+    return res.status(401).send({ error: 'Admin Only' });
   }
   next();
 };

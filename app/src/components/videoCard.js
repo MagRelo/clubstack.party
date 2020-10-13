@@ -56,7 +56,7 @@ function VideoCard({
       {editing ? (
         <div>
           <Link
-            to={'/admin/content/' + _id}
+            to={'/account/content/' + _id}
             className="btn btn-sm btn-unstyled"
             style={{ float: 'right' }}
           >

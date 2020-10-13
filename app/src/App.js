@@ -8,7 +8,7 @@ import Helmet from 'react-helmet';
 import { Loading } from './components/random';
 
 // Header
-// import Header from 'components/header';
+import Header from 'components/header';
 import Footer from 'components/footer';
 
 // Routes
@@ -21,14 +21,22 @@ import Terms from 'pages/legal';
 import About from 'pages/about';
 import NotFound from 'pages/404';
 
-import Dashboard from 'pages/account/dashboard';
-import Account from 'pages/account/account';
+import Group from 'pages/groups/singleGroup';
+import GroupList from 'pages/groups/allGroups';
+// import Account from 'pages/account/account';
+
 import Admin from 'pages/admin/admin';
-import Subscribers from 'pages/admin/subscribers';
-import Resources from 'pages/admin/resources';
-import Content from 'pages/admin/content';
-import AddContent from 'pages/admin/editContent';
-import EditContent from 'pages/admin/editContent';
+import Subdomain from 'pages/admin/subdomain';
+import AddSubdomain from 'pages/admin/adminSubdomain';
+import EditSubdomain from 'pages/admin/adminSubdomain';
+
+import Account from 'pages/account/account';
+import Subscribers from 'pages/account/subscribers';
+import Resources from 'pages/account/resources';
+import Content from 'pages/account/content';
+import AddContent from 'pages/account/editContent';
+import EditContent from 'pages/account/editContent';
+import { AccountPage as AccountSubdomain } from 'pages/account/editSubdomain';
 
 // Setup Auth context
 export const AuthContext = React.createContext({});
@@ -84,7 +92,11 @@ function App() {
       body: JSON.stringify(body),
     }).then((response) => {
       // success (201's?)
-      if (response.status === 200 || response.status === 201) {
+      if (
+        response.status === 200 ||
+        response.status === 201 ||
+        response.status === 204
+      ) {
         return response.json();
       }
 
@@ -110,7 +122,7 @@ function App() {
       // } else if (!user.displayName) {
       //   navigate('/profile');
     } else {
-      navigate('/dashboard');
+      navigate('/account');
     }
   }
 
@@ -164,7 +176,7 @@ function App() {
       {MetaData()}
 
       <div className="page-wrapper">
-        {/* <Header /> */}
+        {activeSession ? <Header /> : null}
 
         {loadingSession ? (
           <Loading />
@@ -174,26 +186,38 @@ function App() {
               <Preview path="/" />
               <Terms path="/terms" />
               <About path="/about" />
-
               <Preview path="/preview" />
-
               <Login path="/login" />
               <Subscribe path="/subscribe" />
-              {/* Auth required */}
+
+              {/* Account required */}
               {activeSession ? (
                 <React.Fragment>
-                  <Dashboard path="/dashboard" />
+                  <Group path="/clubs/:group" />
+                  <GroupList path="/clubs" />
+                </React.Fragment>
+              ) : null}
+
+              {/* Owner Account required */}
+              {activeSession ? (
+                <React.Fragment>
                   <Account path="/account" />
+                  <Subscribers path="/account/subscribers" />
+                  <Resources path="/account/resources" />
+                  <Content path="/account/content" />
+                  <AddContent path="/account/content/add" />
+                  <EditContent path="/account/content/:contentId" />
+                  <AccountSubdomain path="/account/subdomain" />
+                </React.Fragment>
+              ) : null}
 
-                  {/* Admin */}
-                  <Subscribers path="/admin/subscribers" />
-                  <Resources path="/admin/resources" />
-                  <Content path="/admin/content" />
-
-                  <AddContent path="/admin/content/add" />
-                  <EditContent path="/admin/content/:contentId" />
-
+              {/* Admin Account required */}
+              {activeSession && user.type === 'Admin' ? (
+                <React.Fragment>
                   <Admin path="/admin" />
+                  <Subdomain path="/admin/subdomain" />
+                  <AddSubdomain path="/admin/subdomain/add" />
+                  <EditSubdomain path="/admin/subdomain/:subdomain" />
                 </React.Fragment>
               ) : null}
 

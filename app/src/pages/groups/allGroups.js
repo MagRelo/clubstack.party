@@ -1,25 +1,32 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Link } from '@reach/router';
+// import { Link } from '@reach/router';
 
 import { Loading } from 'components/random';
-import { AuthContext } from 'App';
-import VideoCard from 'components/videoCard';
-import UserTable from 'components/userTable';
 
-function Content() {
+import Dashboard from 'components/dashboard';
+
+import { AuthContext } from 'App';
+
+function User({ userId }) {
   const { callApi, user } = useContext(AuthContext);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [content, setContent] = useState(null);
+  const [displayUser, setDisplayUser] = useState(false);
+  const [stats, setStats] = useState(false);
+
+  // if not userId => we're on /account
+  const isMe = !userId;
+  const apiUserId = userId ? userId : user._id;
 
   useEffect(() => {
     setLoading(true);
     const method = 'GET';
-    const endPoint = '/api/content/';
+    const endPoint = '/api/user/' + apiUserId;
     callApi(method, endPoint)
       .then((body) => {
-        setContent(body);
+        setDisplayUser(body.user);
+        setStats(body.stats);
         setLoading(false);
       })
       .catch((error) => {
@@ -27,24 +34,15 @@ function Content() {
         setError(error.toString());
         setLoading(false);
       });
-  }, [callApi]);
+  }, [apiUserId, callApi]);
 
   return (
     <div className="container">
+      <h1>Communities</h1>
       {error ? <p>{error}</p> : null}
-      {loading ? (
-        <Loading />
-      ) : (
-        <div className="container">
-          <h2>Manage Subscribers</h2>
-          <p>
-            <Link to="/admin">Admin</Link> - Subscribers
-          </p>
-          <UserTable />
-        </div>
-      )}
+      {loading ? <Loading /> : null}
     </div>
   );
 }
 
-export default Content;
+export default User;

@@ -74,7 +74,8 @@ a.nav-link.active:hover {
   color: $secondaryColor;
 }
 
-.desktop-menu {
+.desktop-menu,
+.header-tagline {
   display: none;
 }
 
@@ -109,10 +110,6 @@ a.nav-link.active:hover {
     color: $darkText;
   }
 
-  .header-tagline {
-    // display: none;
-  }
-
   .nav-list {
     margin-top: 0;
     margin-bottom: 0;
@@ -120,8 +117,8 @@ a.nav-link.active:hover {
   }
 
   .nav-list>li {
-    display: inline-block;
     margin-bottom: 0;
+    float: right;
   }
 
   .nav-list>li+li {
@@ -131,6 +128,12 @@ a.nav-link.active:hover {
   .mobile-menu {
     display: none
   }
+
+
+  .header-tagline {
+    display: initial;
+  }
+
 
   .btn.button-unstyled.menu-button {
     display: none;
