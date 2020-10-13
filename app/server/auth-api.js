@@ -3,6 +3,7 @@ var router = express.Router();
 
 const passport = require('passport');
 const magicLogout = require('./controllers/magic-auth').logout;
+const { createUser } = require('./controllers/user');
 const payments = require('./integrations/payments');
 
 const UserModel = require('./models').UserModel;
@@ -31,24 +32,21 @@ router.get('/status', (req, res) => {
 });
 
 router.post('/email', async (req, res) => {
-  // console.log(req.body.email);
-  const user = await UserModel.findOne({ email: req.body.email });
-  if (user) {
-    // Return User
-    return res
-      .status(200)
-      .send({ email: user.email, userId: user.userId, status: user.status });
-  } else {
-    // Create User
-    let newUser = new UserModel({
-      email: req.body.email,
-    });
-    await newUser.save();
-    return res.status(201).send({
-      email: newUser.email,
-      userId: newUser.userId,
-      status: newUser.status,
-    });
+  try {
+    const user = await UserModel.findOne({ email: req.body.email });
+    if (user) {
+      // Return User
+      return res
+        .status(200)
+        .send({ email: user.email, userId: user.userId, status: user.status });
+    } else {
+      // Create User
+      const { email, userId, status } = await createUser(req.body.emailemail);
+      return res.status(201).send({ email, userId, status });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).end(`Server Error`);
   }
 });
 

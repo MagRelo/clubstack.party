@@ -228,3 +228,43 @@ exports.userFollow = async function(req, res) {
     res.status(500).send({ error: error.message });
   }
 };
+
+// createUser (from /email)
+//
+
+exports.createUser = async function(email) {
+  let newUser = new UserModel({
+    email: email,
+  });
+  await newUser.save();
+  return {
+    email: newUser.email,
+    userId: newUser.userId,
+    status: newUser.status,
+  };
+};
+
+exports.activateUser = async function(user, userMetadata) {
+  return UserModel.findOneAndUpdate(
+    { email: userMetadata.email },
+    {
+      $set: {
+        issuer: user.issuer,
+        email: userMetadata.email,
+        lastLoginAt: user.claim.iat,
+        publicAddress: user.publicAddress,
+        status: 'Active',
+      },
+    },
+    { new: true }
+  );
+};
+//
+
+exports.updateLatestLogin = async function(user) {
+  return UserModel.findOneAndUpdate(
+    { issuer: user.issuer },
+    { $set: { lastLoginAt: user.claim.iat } },
+    { new: true }
+  );
+};

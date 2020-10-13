@@ -4,8 +4,6 @@ import { AuthContext } from 'App';
 import { Bouncing } from 'components/random';
 import { ImWarning } from 'react-icons/im';
 
-import { magicLogin } from 'api/magic';
-
 // Stripe setup
 import { loadStripe } from '@stripe/stripe-js';
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
@@ -35,7 +33,6 @@ function SubscribePage({ priceId, subdomain, title }) {
 export default SubscribePage;
 
 export function Subscribe({ legend, caption, priceId, subdomain }) {
-  const { createSession } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -60,45 +57,20 @@ export function Subscribe({ legend, caption, priceId, subdomain }) {
       body: JSON.stringify({ email: formObject.email }),
     })
       .then(async (response) => {
-        const { userId, status } = await response.json();
+        const { userId } = await response.json();
 
-        // Subscribe
-        if (status === 'Pending') {
-          // Email not found => User created => redirect them to Stripe to Subscribe
-          const stripe = await stripePromise;
-          const { error } = await stripe.redirectToCheckout({
-            lineItems: [{ price: priceId, quantity: 1 }],
-            mode: 'subscription',
-            successUrl: 'https://' + subdomain + '.' + domain + '/signin',
-            cancelUrl: 'https://' + subdomain + '.' + domain + '/',
-            customerEmail: formObject.email,
-            clientReferenceId: userId,
-          });
+        const stripe = await stripePromise;
+        const { error } = await stripe.redirectToCheckout({
+          lineItems: [{ price: priceId, quantity: 1 }],
+          mode: 'subscription',
+          successUrl: 'https://' + subdomain + '.' + domain + '/login',
+          cancelUrl: 'https://' + subdomain + '.' + domain + '/',
+          customerEmail: formObject.email,
+          clientReferenceId: userId,
+        });
 
-          if (error) throw new Error(error);
-          return;
-        }
-
-        // Login
-        if (status === 'NewSubscriber' || status === 'Active') {
-          // do magic thing
-          const didToken = await magicLogin(formObject.email);
-
-          // send to server
-          return await fetch(`/auth/login`, {
-            headers: new Headers({
-              Authorization: 'Bearer ' + didToken,
-            }),
-            withCredentials: true,
-            credentials: 'same-origin',
-            method: 'POST',
-          }).then(async (response) => {
-            const user = await response.json();
-            return createSession(user);
-          });
-        }
-
-        console.error('TEST - Unhandled User Status');
+        if (error) throw new Error(error);
+        return;
       })
       .catch((error) => {
         console.log(error);

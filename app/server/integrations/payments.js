@@ -177,7 +177,6 @@ exports.handleStripeEvent = async function(body, signature) {
     sourceUser.subscriptions.push(targetUser._id);
     sourceUser.stripeEvents.push(event);
     // customerId?
-    sourceUser.status = 'NewSubscriber';
     await sourceUser.save();
 
     return true;
