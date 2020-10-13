@@ -1,85 +1,40 @@
 const UserModel = require('../models').UserModel;
-const {
-  createUser,
-  createChannel,
-  addChannelOwner,
-} = require('../integrations/rocketchat');
-
-// get user
-
-exports.addSubdomain = async function(req, res) {
-  try {
-    // form
-    const email = req.body.email;
-    const subdomain = req.body.subdomain;
-    const productCode = req.body.productCode; // TODO: get a new product code from Stripe
-
-    // get/create target user
-    let targetUser = UserModel.findOne({ email: email });
-    if (!targetUser) {
-      targetUser = new UserModel({
-        email: email,
-        subdomain: subdomain,
-        productCode: productCode,
-      });
-      await targetUser.save();
-    } else {
-      targetUser = await UserModel.updateOne(
-        { email: email },
-        {
-          $set: {
-            email: email,
-            subdomain: subdomain,
-            productCode: productCode,
-          },
-        },
-        { new: true }
-      );
-    }
-
-    const newUser = await createUser(targetUser);
-    const newChannel = await createChannel(targetUser);
-    await addChannelOwner(targetUser);
-    // console.log('add user');
-
-    // Update user
-    const result = await UserModel.updateOne(
-      { email: email },
-      {
-        $set: {
-          rocketUser: newUser,
-          rocketChannel: newChannel,
-        },
-      },
-      { new: true }
-    );
-
-    res.status(200).send(result);
-  } catch (error) {
-    console.log(req.path, error);
-    res.status(500).send(error);
-  }
-};
+const { addUser, addGroup } = require('../integrations/rocketchat');
 
 exports.activateSubdomain = async function(req, res) {
   try {
-    // look for Email; dont overwrite?
+    // Create of Update User
     let owner = await UserModel.findOne({ email: req.body.email });
     if (owner) {
       // update
       owner.subdomain = req.body.subdomain;
+      owner.productCode = req.body.productCode;
       owner.subdomainData = req.body;
+      owner.status = 'Active';
     } else {
       // create
       owner = new UserModel({
         email: req.body.email,
-        status: 'Active',
+        productCode: req.body.productCode,
         subdomain: req.body.subdomain,
+        status: 'Active',
         subdomainData: req.body,
       });
     }
-
     await owner.save();
+
+    // Create RocketChat User
+    const userResponse = await addUser(owner);
+    owner.rocketUser = userResponse.user;
+    await owner.save();
+
+    // Create RocketChat Group
+    const groupResponse = await addGroup(owner.subdomain, [
+      owner.rocketUser.username,
+    ]);
+    owner.rocketGroup = groupResponse.group;
+    await owner.save();
+
     res.status(200).send(owner);
   } catch (error) {
     console.log({ error: error.message });

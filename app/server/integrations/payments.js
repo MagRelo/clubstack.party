@@ -12,9 +12,11 @@
 // );
 // console.log('Plaid mode:' + process.env.PLAID_ENV);
 
+//
+
 // User
 const UserModel = require('../models').UserModel;
-const { addUserToChannel, removeUserFromChannel } = require('./rocketchat');
+const { addUserToGroup, removeUserFromGroup } = require('./rocketchat');
 
 // Stripe
 const subscribeEndpointSecret = process.env.STRIPE_SUBSCRIBE_SECRET;
@@ -138,61 +140,83 @@ exports.handleStripeEvent = async function(body, signature) {
   const session = event.data.object;
   console.log('New Event:', event);
 
+  // New Subscriber
   if (event.type === 'checkout.subscription.created') {
-    // new subscriber
-
-    const productCode = session.items.data[0].price.id;
-
-    // Validate
+    // Get Source User (subscriber)
     const sourceUser = await UserModel.findOne({
       email: session.customer_email,
     });
+    if (!sourceUser) {
+      throw new Error('No sourceUser: ' + session.customer_email);
+    }
+
+    // Get Target User
+    const productCode = session.items.data[0].price.id;
     const targetUser = await UserModel.findOne({ productCode: productCode });
+    if (!targetUser) {
+      throw new Error('No targetUser: ' + productCode);
+    }
 
-    // Update
+    //
+    // Add source to target channel
+    //
+    await addUserToGroup(
+      targetUser.rocketChannel._id,
+      sourceUser.rocketUser._id
+    );
 
-    // 1) Update source: push target to subscriptions, event to events, set customerId, status?
+    //
+    // Update target user
+    //
+    targetUser.subscribers.push(sourceUser._id);
+    await targetUser.save();
+
+    //
+    // Update source user
+    //
     sourceUser.subscriptions.push(targetUser._id);
     sourceUser.stripeEvents.push(event);
     // customerId?
     sourceUser.status = 'NewSubscriber';
     await sourceUser.save();
 
-    // 2) add source to rocketchat channel
-    await addUserToChannel(sourceUser, targetUser);
-
-    // 3) update target: push source into user.subscribers
-    targetUser.subscribers.push(sourceUser._id);
-    await targetUser.save();
-
     return true;
   }
 
-  // new subscriber
+  // Cancel Subscriber
   if (event.type === 'customer.subscription.deleted') {
-    const productCode = session.items.data[0].price.id;
-
-    // Validate
+    // Source User
     const sourceUser = await UserModel.findOne({
       email: session.customer_email,
     });
+    if (!sourceUser) {
+      throw new Error('No sourceUser: ' + session.customer_email);
+    }
+
+    // Target User
+    const productCode = session.items.data[0].price.id;
     const targetUser = await UserModel.findOne({ productCode: productCode });
+    if (!targetUser) {
+      throw new Error('No targetUser: ' + productCode);
+    }
 
-    // Update
+    //
+    // Update Group
+    //
+    await removeUserFromGroup(
+      targetUser.rocketChannel._id,
+      sourceUser.rocketUser._id
+    );
 
-    // 1) Update source: push target to subscriptions, event to events, set customerId, status?
-    sourceUser.subscriptions.pull({ _id: targetUser._id });
-    sourceUser.stripeEvents.push(event);
-    // customerId
-    // status
-    await sourceUser.save();
-
-    // 2) add source to rocketchat channel
-    await removeUserFromChannel(sourceUser, targetUser);
-
-    // 3) update target: push source into user.subscribers
+    //
+    // Update target user
+    //
     targetUser.subscribers.pull(sourceUser._id);
     await targetUser.save();
+
+    sourceUser.subscriptions.pull({ _id: targetUser._id });
+    sourceUser.stripeEvents.push(event);
+    await sourceUser.save();
   }
 
   // shove event into a customer (if found) just in case

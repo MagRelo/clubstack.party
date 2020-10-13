@@ -23,7 +23,7 @@ router.get('/user/:userId', User.getUser);
 router.get('/user/subdomain/:subdomain', User.getUserBySubdomain);
 router.post('/user/waitlist/', User.joinWaitlist);
 
-// USER AUTH
+// USER + AUTH
 router.put('/user', authenticate, User.updateProfile);
 router.put('/user/subdomain/', authenticate, User.updateSubdomain);
 router.put('/user/follow', authenticate, User.userFollow);
@@ -34,21 +34,26 @@ router.post('/user/subscription', authenticate, User.manageSubscriptionLink);
 // ADMIN
 //
 const Admin = require('./controllers/admin');
+router.get('/admin/subdomain/', authenticate, adminOnly, Admin.listSubdomains);
 router.put(
   '/admin/subdomain/',
   authenticate,
   adminOnly,
   Admin.activateSubdomain
 );
-router.get('/admin/subdomain/', authenticate, adminOnly, Admin.listSubdomains);
 // router.post('/user/subscription', authenticate, User.manageSubscriptionLink);
 // router.put('/user', authenticate, User.updateProfile);
 // router.put('/user/follow', authenticate, User.userFollow);
 // router.get('/user/network', authenticate, User.getUserNetwork);
 
+// ------------------------------
+// ------------------------------
+// ------------------------------
+
 //
 // TEMP
 //
+
 const fetch = require('node-fetch');
 const { convertToJSON } = require('./integrations/xml');
 router.post('/preview', async function(req, res) {

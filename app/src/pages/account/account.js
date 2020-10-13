@@ -199,7 +199,7 @@ function User({ userId }) {
 
           <section>
             <div className="section-title">
-              <h2>Your Account</h2>
+              <h2>Account</h2>
             </div>
 
             {/* Profile */}

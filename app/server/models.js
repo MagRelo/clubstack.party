@@ -42,8 +42,10 @@ const UserSchema = new mongoose.Schema(
     subdomain: String,
     subdomainData: Object,
     productCode: String,
+
     rocketUser: Object,
-    rocketChannel: Object,
+    rocketGroup: Object,
+
     subscriptions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     subscribers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     waitlist: [

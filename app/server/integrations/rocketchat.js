@@ -1,8 +1,6 @@
 const fetch = require('node-fetch');
 
-// init client with
-// process.env.ROCKETCHAT_APP_PASS
-// process.env.ROCKETCHAT_APP_USER
+// Init Rocketchat
 let authCode = '';
 let userId = '';
 fetch(process.env.ROCKETCHAT_BASE_URL + '/api/v1/login', {
@@ -26,7 +24,9 @@ fetch(process.env.ROCKETCHAT_BASE_URL + '/api/v1/login', {
     //get values for API calls
     authCode = data.authToken;
     userId = data.userId;
-    console.log('RocketChat API Ready');
+    console.log(
+      'RocketChat API Ready (' + process.env.ROCKETCHAT_BASE_URL + ')'
+    );
   })
   .catch((error) => {
     console.log(error);
@@ -44,12 +44,12 @@ async function callApi(method, endpoint, body) {
     headers: headers,
     body: JSON.stringify(body),
   });
-
   if (!response.ok) {
-    throw new Error(response.statusText);
+    console.log(await response.json());
+    throw new Error(endpoint + ': ' + response.statusText);
   }
 
-  return response.ok;
+  return response.json();
 }
 
 //
@@ -57,16 +57,22 @@ async function callApi(method, endpoint, body) {
 //
 
 exports.addUser = async function(user, roles = []) {
+  // bail if user exists
+  if (user.rocketUser) {
+    console.log('user already exists:', user.email);
+    return { user: user.rocketUser };
+  }
+
   const method = 'POST';
   const endpoint = '/api/v1/users.create';
   const body = {
     email: user.email,
-    username: user.email,
-    name: user.email,
-    password: user.UserId,
+    username: user.subdomain,
+    name: user.subdomain,
+    password: user.userId,
 
     // roles: roles,
-    // joinDefaultChannels: true,
+    joinDefaultChannels: false,
     // requirePasswordChange: true,
     // sendWelcomeEmail: false,
     // verified: false,
@@ -76,7 +82,52 @@ exports.addUser = async function(user, roles = []) {
   return callApi(method, endpoint, body);
 };
 
-exports.addChannel = async function({ name, memberArray }) {
+//
+// Groups
+//
+exports.addGroup = async function(name, memberArray = []) {
+  const method = 'POST';
+  const endpoint = '/api/v1/groups.create';
+  const body = {
+    name: name,
+    members: memberArray,
+    readOnly: false,
+  };
+
+  return callApi(method, endpoint, body);
+};
+
+exports.addUserToGroup = async function(roomId, userId) {
+  const method = 'POST';
+  const endpoint = '/api/v1/groups.invite';
+  const body = {
+    roomId: roomId,
+    userId: userId,
+  };
+
+  return callApi(method, endpoint, body);
+
+  // return console.log('Add user to channel - not implemented!');
+};
+
+exports.removeUserFromGroup = async function(roomId, userId) {
+  const method = 'POST';
+  const endpoint = '/api/v1/groups.kick';
+  const body = {
+    roomId: roomId,
+    userId: userId,
+  };
+
+  return callApi(method, endpoint, body);
+
+  // return console.log('Add user to channel - not implemented!');
+};
+
+//
+// Channels
+//
+
+exports.addChannel = async function(name, memberArray = []) {
   const method = 'POST';
   const endpoint = '/api/v1/channels.create';
   const body = {
@@ -88,18 +139,30 @@ exports.addChannel = async function({ name, memberArray }) {
   return callApi(method, endpoint, body);
 };
 
-exports.addUserToChannel = async function({ name, memberArray }) {
-  // const method = 'POST';
-  // const endpoint = '/api/v1/channels.create';
-  // const body = {
-  //   name: name,
-  //   members: memberArray,
-  //   readOnly: false,
-  // };
+exports.addChannelOwner = async function(roomId, userId) {
+  const method = 'POST';
+  const endpoint = '/api/v1/channels.addOwner';
+  const body = {
+    roomId: roomId,
+    userId: userId,
+  };
 
-  // return callApi(method, endpoint, body);
+  return callApi(method, endpoint, body);
 
-  return console.log('Add user to channel - not implemented!');
+  // return console.log('Add user to channel - not implemented!');
+};
+
+exports.inviteUserToChannel = async function(roomId, userId) {
+  const method = 'POST';
+  const endpoint = '/api/v1/channels.invite';
+  const body = {
+    roomId: roomId,
+    userId: userId,
+  };
+
+  return callApi(method, endpoint, body);
+
+  // return console.log('Add user to channel - not implemented!');
 };
 
 exports.removeUserFromChannel = async function({ name, memberArray }) {
