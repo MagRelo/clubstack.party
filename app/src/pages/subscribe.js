@@ -145,9 +145,7 @@ export function JoinWaitlist({ legend, caption, subdomain }) {
       .then(async (response) => {
         // confirm susccess
         setLoading(false);
-        setSuccessMessage(
-          `Done! We'll let you know when the community launches.`
-        );
+        setSuccessMessage(`Done! You're on the list.`);
       })
       .catch((error) => {
         console.log(error);

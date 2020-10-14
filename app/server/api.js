@@ -35,6 +35,12 @@ router.post('/user/subscription', authenticate, User.manageSubscriptionLink);
 //
 const Admin = require('./controllers/admin');
 router.get('/admin/subdomain/', authenticate, adminOnly, Admin.listSubdomains);
+router.get(
+  '/admin/subdomain/:subdomain',
+  authenticate,
+  adminOnly,
+  User.getUserBySubdomain_Admin
+);
 router.put(
   '/admin/subdomain/',
   authenticate,

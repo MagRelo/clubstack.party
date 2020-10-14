@@ -29,7 +29,7 @@ exports.activateSubdomain = async function(req, res) {
     await owner.save();
 
     // Create RocketChat Group
-    const groupResponse = await addGroup(owner.subdomain, [
+    const groupResponse = await addGroup(owner, owner.subdomain, [
       owner.rocketUser.username,
     ]);
     owner.rocketGroup = groupResponse.group;

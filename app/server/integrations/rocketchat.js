@@ -85,7 +85,13 @@ exports.addUser = async function(user, roles = []) {
 //
 // Groups
 //
-exports.addGroup = async function(name, memberArray = []) {
+exports.addGroup = async function(user, name, memberArray = []) {
+  // bail if user exists
+  if (user.rocketGroup) {
+    console.log('group already exists:', user.rocketGroup.name);
+    return { group: user.rocketGroup };
+  }
+
   const method = 'POST';
   const endpoint = '/api/v1/groups.create';
   const body = {

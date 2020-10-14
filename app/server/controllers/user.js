@@ -85,6 +85,23 @@ exports.getUserBySubdomain = async function(req, res) {
   }
 };
 
+exports.getUserBySubdomain_Admin = async function(req, res) {
+  try {
+    const user = await UserModel.findOne({
+      subdomain: req.params.subdomain,
+    }).lean();
+    if (user) {
+      res.status(200).send(user);
+    } else {
+      console.log('subdomain 204');
+      res.status(204).send();
+    }
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).send({ error: error.message });
+  }
+};
+
 exports.updateSubdomain = async function(req, res) {
   try {
     // get latest

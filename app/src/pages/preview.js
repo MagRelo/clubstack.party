@@ -149,25 +149,26 @@ function Preview() {
                   <div className="icon-large">
                     <BsFillChatDotsFill />
                   </div>
-                  Private Chat Room
-                </div>
-                <div>
-                  <div className="icon-large">
-                    <GoFileSubmodule />
-                  </div>
-                  File Sharing
-                </div>
-                <div>
-                  <div className="icon-large">
-                    <CgFeed />
-                  </div>
-                  Activity Feed
+                  Private Chat
                 </div>
                 <div>
                   <div className="icon-large">
                     <MdEmail />
                   </div>
                   Weekly Newsletter
+                </div>
+
+                <div>
+                  <div className="icon-large">
+                    <CgFeed />
+                  </div>
+                  News Feed
+                </div>
+                <div>
+                  <div className="icon-large">
+                    <GoFileSubmodule />
+                  </div>
+                  File Sharing
                 </div>
               </div>
 
@@ -209,12 +210,14 @@ function Preview() {
                     Join <b>242</b> other people connecting around <br />
                     <b>{title}</b>
                   </p> */}
-                  <SubscribePage
-                    caption="Join Free for 7 Days"
-                    title={title}
-                    priceId={productCode}
-                    subdomain={subdomain}
-                  />
+                  <div className="panel">
+                    <SubscribePage
+                      caption="Join Free for 7 Days"
+                      title={title}
+                      priceId={productCode}
+                      subdomain={subdomain}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

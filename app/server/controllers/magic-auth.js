@@ -29,7 +29,7 @@ const strategy = new MagicStrategy(async function(user, done) {
       });
     }
 
-    const updatedUser = await updateLatestLogin(existingUser);
+    const updatedUser = await updateLatestLogin(user);
     return done(null, updatedUser);
   }
 

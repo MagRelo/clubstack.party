@@ -13,13 +13,14 @@ export default function AdminPage({ subdomain }) {
 
   const [site, setSubdomain] = useState(subdomain);
   const [subdomainData, setSubdomainData] = useState(null);
+  const [ownerEmail, setOwnerEmail] = useState('');
 
   const [loading, setLoading] = useState(editingContent);
   const [error, setError] = useState(false);
 
   useEffect(() => {
     const method = 'GET';
-    const endPoint = '/api/user/subdomain/' + site;
+    const endPoint = '/api/admin/subdomain/' + site;
 
     if (editingContent) {
       setLoading(true);
@@ -27,6 +28,7 @@ export default function AdminPage({ subdomain }) {
         .then((body) => {
           setSubdomain(body.subdomain);
           setSubdomainData(body.subdomainData);
+          setOwnerEmail(body.email);
           setLoading(false);
         })
         .catch((error) => {
@@ -53,6 +55,7 @@ export default function AdminPage({ subdomain }) {
           {/* <UpdateSubdomain /> */}
 
           <UpdateSubdomainData
+            ownerEmail={ownerEmail}
             incomingSubdomain={site}
             subdomainData={subdomainData}
           />
@@ -62,8 +65,18 @@ export default function AdminPage({ subdomain }) {
   );
 }
 
-export function UpdateSubdomainData({ incomingSubdomain, subdomainData }) {
+export function UpdateSubdomainData({
+  ownerEmail,
+  incomingSubdomain,
+  subdomainData,
+}) {
   const { callApi } = useContext(AuthContext);
+
+  const [email, setEmail] = useState(ownerEmail || undefined);
+
+  const [productCode, setProductCode] = useState(
+    subdomainData?.productCode || undefined
+  );
 
   const [title, setTitle] = useState(subdomainData?.title || undefined);
   const [description, setDescription] = useState(
@@ -74,14 +87,10 @@ export function UpdateSubdomainData({ incomingSubdomain, subdomainData }) {
   const [copyright, setCopyright] = useState(
     subdomainData?.copyright || undefined
   );
-  const [email, setEmail] = useState(subdomainData?.email || undefined);
-  const [productCode, setProductCode] = useState(
-    subdomainData?.productCode || undefined
-  );
+
   const [pullSubstack, setPullSubstack] = useState(
     subdomainData?.pullSubstack || true
   );
-
   const [status, setStatus] = useState(
     !!incomingSubdomain ? 'Active' : 'Type to search...'
   );
@@ -159,6 +168,25 @@ export function UpdateSubdomainData({ incomingSubdomain, subdomainData }) {
         <form name="updateContent" onSubmit={submit}>
           <div className="grid grid-2">
             <div className="form-group">
+              <label htmlFor="email" className="">
+                Owner Email
+              </label>
+              <input
+                type="text"
+                name="email"
+                id="email"
+                className="form-control"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                }}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-2">
+            <div className="form-group">
               <label htmlFor="subdomain" className="">
                 Website URL
               </label>
@@ -178,42 +206,11 @@ export function UpdateSubdomainData({ incomingSubdomain, subdomainData }) {
                 <div className="input-group-append">
                   <div className="input-group-text">.clubstack.party</div>
                 </div>
-              </div>
-            </div>
 
-            <div className="form-group">
-              <label htmlFor="status" className="">
-                Status
-              </label>
-              <div className="input-group">
-                <input
-                  type="text"
-                  name="status"
-                  id="status"
-                  className="form-control"
-                  value={status}
-                  disabled
-                />
+                <div className="input-group-append">
+                  <div className="input-group-text">{status}</div>
+                </div>
               </div>
-            </div>
-          </div>
-
-          <div className="grid grid-2">
-            <div className="form-group">
-              <label htmlFor="email" className="">
-                Owner Email
-              </label>
-              <input
-                type="text"
-                name="email"
-                id="email"
-                className="form-control"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-                required
-              />
             </div>
 
             <div className="form-group">
@@ -332,7 +329,6 @@ export function UpdateSubdomainData({ incomingSubdomain, subdomainData }) {
           <code>{JSON.stringify({ isEditing })}</code> */}
 
           <hr />
-          <button className="btn btn-theme">Save</button>
 
           <button className="btn btn-theme">
             {loading ? (
