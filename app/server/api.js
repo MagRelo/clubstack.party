@@ -64,7 +64,12 @@ router.post('/preview', async function(req, res) {
     title: 'Party',
     description: `Surfin' USA`,
     copyright: 'Matt Lovan',
-    headerImage: '',
+    headerImage: [
+      {
+        url: 'https://picsum.photos/id/1/200/300',
+        title: `Surfin' USA`,
+      },
+    ],
     items: [],
   };
   let clubStackContent;

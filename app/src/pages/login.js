@@ -24,24 +24,21 @@ function Login(props) {
       formObject[key] = value;
     });
 
-    // test email
-    await fetch(`/auth/email`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email: formObject.email }),
-    })
-      .then(async (response) => {
-        if (response.status !== 200) {
-          throw new Error(response.status);
-        }
+    try {
+      // test email
+      const { status } = await fetch(`/auth/email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email: formObject.email }),
+      });
 
+      if (status === 200 || status === 201) {
         // do magic thing
         const didToken = await magicLogin(formObject.email);
 
-        // send to server
-        await fetch(`/auth/login`, {
+        return fetch(`/auth/login`, {
           headers: new Headers({
             Authorization: 'Bearer ' + didToken,
           }),
@@ -52,12 +49,12 @@ function Login(props) {
           const user = await response.json();
           return createSession(user);
         });
-      })
-      .catch((error) => {
-        console.log(error);
-        setLoading(false);
-        setErrorMessage(error.message);
-      });
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      setErrorMessage(error.message);
+    }
   }
 
   return (
@@ -97,10 +94,7 @@ function Login(props) {
               {errorMessage ? (
                 <div>
                   <ImWarning />{' '}
-                  <span>
-                    Email Not Found.{' '}
-                    <Link to="/subscribe">Click here to Subscribe</Link>
-                  </span>
+                  <span>{errorMessage ? errorMessage : null}</span>
                 </div>
               ) : null}
             </form>

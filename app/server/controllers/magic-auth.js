@@ -8,13 +8,14 @@ const passport = require('passport');
 const MagicStrategy = require('passport-magic').Strategy;
 
 const strategy = new MagicStrategy(async function(user, done) {
+  // get user from Magic
   const userMetadata = await magic.users.getMetadataByIssuer(user.issuer);
-  const existingUser = await UserModel.findOne({
-    $and: [{ email: userMetadata.email }],
-  });
+  const existingUser = await UserModel.findOne({ email: userMetadata.email });
+
+  // console.log(userMetadata, existingUser, user);
 
   // First login
-  if (existingUser && !user.claim) {
+  if (existingUser && !existingUser.lastLoginAt) {
     const updatedUser = await activateUser(user, userMetadata);
     return done(null, updatedUser);
   }
@@ -22,13 +23,13 @@ const strategy = new MagicStrategy(async function(user, done) {
   // next logins...
   if (existingUser) {
     /* Replay attack protection (https://go.magic.link/replay-attack) */
-    if (user.claim.iat <= user.lastLoginAt) {
+    if (user.claim.iat <= existingUser.lastLoginAt) {
       return done(null, false, {
         message: `Replay attack detected for user ${user.issuer}}.`,
       });
     }
 
-    const updatedUser = await updateLatestLogin(user);
+    const updatedUser = await updateLatestLogin(existingUser);
     return done(null, updatedUser);
   }
 

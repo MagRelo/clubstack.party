@@ -4,10 +4,10 @@ import { Link, navigate } from '@reach/router';
 import { BiChevronRight } from 'react-icons/bi';
 
 import { AuthContext } from 'App';
-import { Loading, useDebounce } from 'components/random';
+import { Bouncing, useDebounce } from 'components/random';
 
 export default function AdminPage({ subdomain }) {
-  const { callApi, user } = useContext(AuthContext);
+  const { callApi } = useContext(AuthContext);
 
   const editingContent = !!subdomain;
 
@@ -41,7 +41,7 @@ export default function AdminPage({ subdomain }) {
     <div className="container">
       {error ? <p>{error}</p> : null}
       {loading ? (
-        <Loading />
+        <Bouncing />
       ) : (
         <div>
           <h2>{editingContent ? 'Update' : 'Activate'} Subdomain</h2>
@@ -63,27 +63,24 @@ export default function AdminPage({ subdomain }) {
 }
 
 export function UpdateSubdomainData({ incomingSubdomain, subdomainData }) {
-  const { callApi, user, updateUser } = useContext(AuthContext);
+  const { callApi } = useContext(AuthContext);
 
-  // set editing vs adding
-  // const [isEditing, setIsEditing] = useState(!!subdomainData);
-
-  const [title, setTitle] = useState(subdomainData?.title || '');
+  const [title, setTitle] = useState(subdomainData?.title || undefined);
   const [description, setDescription] = useState(
-    subdomainData?.description || ''
+    subdomainData?.description || undefined
   );
-  const [image, setImage] = useState(subdomainData?.image || '');
-  const [alt, setAlt] = useState(subdomainData?.alt || '');
-  const [copyright, setCopyright] = useState(subdomainData?.copyright || '');
-  const [email, setEmail] = useState(subdomainData?.email || '');
+  const [image, setImage] = useState(subdomainData?.image || undefined);
+  const [alt, setAlt] = useState(subdomainData?.alt || undefined);
+  const [copyright, setCopyright] = useState(
+    subdomainData?.copyright || undefined
+  );
+  const [email, setEmail] = useState(subdomainData?.email || undefined);
   const [productCode, setProductCode] = useState(
-    subdomainData?.productCode || ''
+    subdomainData?.productCode || undefined
   );
   const [pullSubstack, setPullSubstack] = useState(
     subdomainData?.pullSubstack || true
   );
-
-  const [available, setAvailable] = useState(false);
 
   const [status, setStatus] = useState(
     !!incomingSubdomain ? 'Active' : 'Type to search...'
@@ -92,6 +89,10 @@ export function UpdateSubdomainData({ incomingSubdomain, subdomainData }) {
   const [subdomain, setSubdomain] = useState(incomingSubdomain || '');
   const debouncedSearchTerm = useDebounce(subdomain, 500);
   const [searching, setIsSearching] = useState(false);
+  const [available, setAvailable] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   // searching available subdomains
   useEffect(() => {
@@ -132,16 +133,24 @@ export function UpdateSubdomainData({ incomingSubdomain, subdomainData }) {
       formObject[key] = value;
     });
 
-    // send to server
-    let method = 'PUT';
-    let endpoint = '/api/admin/subdomain';
-    await callApi(method, endpoint, formObject)
-      .then(async (user) => {
-        navigate('/admin/subdomain');
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    try {
+      setLoading(true);
+
+      // send to server
+      let method = 'PUT';
+      let endpoint = '/api/admin/subdomain';
+      await callApi(method, endpoint, formObject)
+        .then(async (user) => {
+          navigate('/admin/subdomain');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+      setErrorMessage(error.message);
+    }
   }
 
   return (
@@ -324,6 +333,23 @@ export function UpdateSubdomainData({ incomingSubdomain, subdomainData }) {
 
           <hr />
           <button className="btn btn-theme">Save</button>
+
+          <button className="btn btn-theme">
+            {loading ? (
+              <span>
+                <Bouncing />
+              </span>
+            ) : (
+              <span>Save</span>
+            )}
+          </button>
+
+          {errorMessage ? (
+            <div>
+              <div className="mb-4"></div>
+              <code>{errorMessage}</code>
+            </div>
+          ) : null}
         </form>
       </div>
     </div>

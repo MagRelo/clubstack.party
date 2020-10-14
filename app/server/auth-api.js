@@ -41,7 +41,7 @@ router.post('/email', async (req, res) => {
         .send({ email: user.email, userId: user.userId, status: user.status });
     } else {
       // Create User
-      const { email, userId, status } = await createUser(req.body.emailemail);
+      const { email, userId, status } = await createUser(req.body.email);
       return res.status(201).send({ email, userId, status });
     }
   } catch (error) {
