@@ -79,22 +79,18 @@ function NavList({ activeSession, userType, subdomainActive }) {
         </li>
       ) : null}
 
-      {activeSession && userType === 'Standard' ? (
-        <li>
-          <NavLink to="/account">Account</NavLink>
-        </li>
-      ) : null}
-
-      {activeSession && subdomainActive ? (
-        <li>
-          <NavLink to="/account">Account</NavLink>
-        </li>
-      ) : null}
-
       {activeSession ? (
-        <li>
-          <NavLink to="/clubs">Communities</NavLink>
-        </li>
+        <React.Fragment>
+          <li>
+            <NavLink to="/account">Account</NavLink>
+          </li>
+          <li>
+            <NavLink to="/website">Website</NavLink>
+          </li>
+          <li>
+            <NavLink to="/clubs">Communities</NavLink>
+          </li>
+        </React.Fragment>
       ) : null}
     </ul>
   );

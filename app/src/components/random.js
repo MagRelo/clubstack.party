@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
+import { AuthContext } from 'App';
 // import { getBalance } from 'magic';
 
 // import Img from 'react-image';
-import { getBalance } from 'api/magic';
+// import { getBalance } from 'api/magic';
 // import { dydxGetBalance } from 'api/dydx';
 
 import { Link } from '@reach/router';
@@ -229,6 +230,39 @@ export const NavLink = (props) => (
     }}
   />
 );
+
+export function SubscriptionLink() {
+  const [stripeLink, setStripeLink] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+  const { callApi, user } = React.useContext(AuthContext);
+
+  const hasSubscriptions = !!user?.subscriptions.length || false;
+
+  useEffect(() => {
+    if (hasSubscriptions) {
+      setLoading(true);
+      callApi('POST', '/api/user/subscription', {})
+        .then((response) => {
+          setStripeLink(response.url);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.log(error);
+          setLoading(false);
+        });
+    }
+  }, [callApi, hasSubscriptions]);
+
+  return (
+    <Link
+      to={stripeLink}
+      disabled={loading && !hasSubscriptions}
+      className="btn btn-theme"
+    >
+      {loading ? <Bouncing /> : <span>Manage Subscriptions</span>}
+    </Link>
+  );
+}
 
 // export function EthereumAccount({ user }) {
 //   const [loading, setLoading] = useState(false);

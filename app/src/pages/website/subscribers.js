@@ -39,7 +39,7 @@ function Content() {
         <div className="container">
           <h2>Manage Community</h2>
           <p>
-            <Link to="/account">Account</Link> <BiChevronRight />{' '}
+            <Link to="/website">Website</Link> <BiChevronRight />{' '}
             <u>Community</u>
           </p>
 

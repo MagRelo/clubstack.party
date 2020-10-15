@@ -1,16 +1,13 @@
 const stream = require('getstream');
 
 const UserModel = require('../models').UserModel;
-const PositionModel = require('../models').PositionModel;
 
-const apiKey = process.env.STREAM_API_KEY || 'hdm568bfbafw';
-const apiKeySecret =
-  process.env.STREAM_API_SECRET ||
-  'egqcazdzd8ws8zue6srrvdbeypzfghxgm6hv99pbfgyzp5nauesb86qru69gjuxk';
-
-// Instantiate a new client (server side)
+// Init getStream
+const apiKey = process.env.STREAM_API_KEY;
+const apiKeySecret = process.env.STREAM_API_SECRET;
 const streamClient = stream.connect(apiKey, apiKeySecret);
 
+// => create User(?)
 exports.addUser = async function(user) {
   const newUser = await streamClient.feed('User', user._id.toString());
   await newUser.addActivity({
@@ -21,21 +18,23 @@ exports.addUser = async function(user) {
   });
 };
 
-exports.addPosition = async function(user, position) {
-  // Subscribe user to the position's feed
-  const userFeed = await streamClient.feed('User', user._id);
-  await userFeed.follow('Position', position._id, { limit: 0 });
+// => activate subdomain
+exports.addGroup = async function(sourceUser) {
+  // Subscribe user to the group's feed
+  const userFeed = await streamClient.feed('User', sourceUser._id);
+  await userFeed.follow('Group', sourceUser._id, { limit: 0 });
 
-  // Add to the position's feed
-  const positionFeed = await streamClient.feed('Position', position._id);
-  await positionFeed.addActivity({
-    actor: user._id,
-    verb: 'addPosition',
-    object: position._id,
-    time: position.createdAt,
+  // Add event the group's feed
+  const groupFeed = await streamClient.feed('Group', sourceUser._id);
+  await groupFeed.addActivity({
+    actor: sourceUser._id,
+    verb: 'addGroup',
+    object: sourceUser._id,
+    time: sourceUser.createdAt,
   });
 };
 
+// => subscribe
 exports.follow = async function(userId, feedType, targetId) {
   // console.log(userId, feedType, targetId);
 
@@ -55,12 +54,16 @@ exports.follow = async function(userId, feedType, targetId) {
   });
 };
 
+// => unsubscribe
 exports.unFollow = async function(userId, feedType, targetId) {
   // console.log(userId, feedType, targetId);
   const userFeed = await streamClient.feed('User', userId);
   return await userFeed.unfollow(feedType, targetId);
 };
 
+//
+// Get Feed
+//
 exports.getFeed = async function(feedType, id, userId) {
   const streamUser = await streamClient.feed(feedType, id);
   const userFeed = await streamUser.get({ limit: 15 });
@@ -80,15 +83,6 @@ async function hydrateStreamFeed(inputArray = [], userId) {
             return item;
           });
 
-      case 'addPosition':
-        return PositionModel.findOne({ _id: item.object })
-          .populate('user')
-          .lean()
-          .then((data) => {
-            item.data = data;
-            return item;
-          });
-
       case 'addFollow:User':
         return UserModel.findOne({ _id: item.object })
           .lean()
@@ -97,9 +91,8 @@ async function hydrateStreamFeed(inputArray = [], userId) {
             return item;
           });
 
-      case 'addFollow:Position':
-        return PositionModel.findOne({ _id: item.object })
-          .populate('user')
+      case 'addFollow:Group':
+        return UserModel.findOne({ _id: item.object })
           .lean()
           .then((data) => {
             item.data = data;

@@ -31,12 +31,14 @@ import AddSubdomain from 'pages/admin/adminSubdomain';
 import EditSubdomain from 'pages/admin/adminSubdomain';
 
 import Account from 'pages/account/account';
-import Subscribers from 'pages/account/subscribers';
-import Resources from 'pages/account/resources';
-import Content from 'pages/account/content';
-import AddContent from 'pages/account/editContent';
-import EditContent from 'pages/account/editContent';
-import { AccountPage as AccountSubdomain } from 'pages/account/editSubdomain';
+
+import Website from 'pages/website/website';
+import Subscribers from 'pages/website/subscribers';
+import Resources from 'pages/website/resources';
+import Content from 'pages/website/content';
+import AddContent from 'pages/website/editContent';
+import EditContent from 'pages/website/editContent';
+import { AccountPage as AccountSubdomain } from 'pages/website/editSubdomain';
 
 // Setup Auth context
 export const AuthContext = React.createContext({});
@@ -201,13 +203,16 @@ function App() {
               {/* Owner Account required */}
               {activeSession ? (
                 <React.Fragment>
+                  <Website path="/website" />
+                  <Content path="/website/content" />
+                  <AddContent path="/website/content/add" />
+                  <EditContent path="/website/content/:contentId" />
+                  <Subscribers path="/website/subscribers" />
+
                   <Account path="/account" />
-                  <Subscribers path="/account/subscribers" />
                   <Resources path="/account/resources" />
-                  <Content path="/account/content" />
-                  <AddContent path="/account/content/add" />
-                  <EditContent path="/account/content/:contentId" />
-                  <AccountSubdomain path="/account/subdomain" />
+
+                  {/* <AccountSubdomain path="/account/subdomain" /> */}
                 </React.Fragment>
               ) : null}
 

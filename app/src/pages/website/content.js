@@ -7,7 +7,7 @@ import VideoCard from 'components/videoCard';
 import {
   UpdateSubdomainData,
   UpdateSubdomain,
-} from 'pages/account/editSubdomain';
+} from 'pages/website/editSubdomain';
 
 import { BiBookAdd, BiChevronRight } from 'react-icons/bi';
 
@@ -39,7 +39,7 @@ function Content() {
       <div>
         <h2>Manage Website</h2>
         <p>
-          <Link to="/account">Account</Link> <BiChevronRight />{' '}
+          <Link to="/website">Website</Link> <BiChevronRight />{' '}
           <u>Manage Website</u>
         </p>
 

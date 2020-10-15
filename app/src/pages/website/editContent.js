@@ -1,15 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from '@reach/router';
 
-import { BiBookAdd, BiChevronRight } from 'react-icons/bi';
-
-import { AuthContext } from 'App';
-
-import { Loading } from 'components/random';
+import { BiChevronRight } from 'react-icons/bi';
 // import { BiBookAdd, BiChevronRight } from 'react-icons/bi';
 
+import { AuthContext } from 'App';
+import { Loading } from 'components/random';
+
 function Content({ contentId }) {
-  const { callApi, user } = useContext(AuthContext);
+  const { callApi } = useContext(AuthContext);
 
   const editingContent = !!contentId;
   // console.log('editing', editingContent);
@@ -60,7 +59,7 @@ function Content({ contentId }) {
 export default Content;
 
 function UpdateContent({ editingContent, content }) {
-  const { callApi, user } = useContext(AuthContext);
+  const { callApi } = useContext(AuthContext);
 
   const [title, setTitle] = useState(content?.title || '');
   const [description, setDescription] = useState(content?.description || '');
