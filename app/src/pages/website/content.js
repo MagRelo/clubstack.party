@@ -61,7 +61,7 @@ function Content() {
         </h3>
 
         <Link
-          to="/account/content/add"
+          to="/website/content/add"
           className="btn btn-theme btn-sm"
           style={{ float: 'right' }}
         >

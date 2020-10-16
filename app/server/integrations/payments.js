@@ -16,6 +16,7 @@
 
 // User
 const UserModel = require('../models').UserModel;
+const EventModel = require('../models').EventModel;
 const { addUserToGroup, removeUserFromGroup } = require('./rocketchat');
 
 // Stripe
@@ -138,13 +139,38 @@ exports.handleStripeEvent = async function(body, signature) {
     subscribeEndpointSecret
   );
   const session = event.data.object;
-  console.log('New Event:', event);
 
   // New Subscriber
-  if (event.type === 'checkout.subscription.created') {
+  if (event.type === 'customer.created') {
     // Get Source User (subscriber)
     const sourceUser = await UserModel.findOne({
+      email: session.email,
+    });
+    if (!sourceUser) {
+      throw new Error('No sourceUser: ' + session.email);
+    }
+
+    sourceUser.stripeCustomerId = session.id;
+    await sourceUser.save();
+
+    console.log('customer updated', sourceUser.email);
+    return true;
+  }
+
+  // New Subscriber
+  if (
+    event.type === 'customer.subscription.created' ||
+    event.type === 'customer.subscription.updated'
+  ) {
+    console.log(event.type, {
       email: session.customer_email,
+      userId: session.client_reference_id,
+      stripeCustomerId: session.customer,
+    });
+
+    // Get Source User (subscriber)
+    const sourceUser = await UserModel.findOne({
+      stripeCustomerId: session.customer,
     });
     if (!sourceUser) {
       throw new Error('No sourceUser: ' + session.customer_email);
@@ -160,21 +186,18 @@ exports.handleStripeEvent = async function(body, signature) {
     //
     // Add source to target channel
     //
-    await addUserToGroup(
-      targetUser.rocketChannel._id,
-      sourceUser.rocketUser._id
-    );
+    await addUserToGroup(targetUser.rocketGroupId, sourceUser.rocketUserId);
 
     //
     // Update target user
     //
-    targetUser.subscribers.push(sourceUser._id);
+    targetUser.subscribers.addToSet(sourceUser._id);
     await targetUser.save();
 
     //
     // Update source user
     //
-    sourceUser.subscriptions.push(targetUser._id);
+    sourceUser.subscriptions.addToSet(targetUser._id);
     sourceUser.stripeEvents.push(event);
     // customerId?
     await sourceUser.save();
@@ -186,7 +209,7 @@ exports.handleStripeEvent = async function(body, signature) {
   if (event.type === 'customer.subscription.deleted') {
     // Source User
     const sourceUser = await UserModel.findOne({
-      email: session.customer_email,
+      stripeCustomerId: session.customer,
     });
     if (!sourceUser) {
       throw new Error('No sourceUser: ' + session.customer_email);
@@ -203,8 +226,8 @@ exports.handleStripeEvent = async function(body, signature) {
     // Update Group
     //
     await removeUserFromGroup(
-      targetUser.rocketChannel._id,
-      sourceUser.rocketUser._id
+      targetUser.rocketGroupId,
+      sourceUser.rocketUserId
     );
 
     //
@@ -218,24 +241,28 @@ exports.handleStripeEvent = async function(body, signature) {
     await sourceUser.save();
   }
 
+  //save all events
+  const newEvent = new EventModel({ event: event });
+  await newEvent.save();
+
   // shove event into a customer (if found) just in case
-  return UserModel.updateOne(
-    {
-      $or: [
-        { email: session.customer_email },
-        { userId: session.client_reference_id },
-        { stripeCustomerId: session.customer },
-      ],
-    },
-    {
-      $set: {
-        stripeCustomerId: session.customer,
-      },
-      $push: {
-        stripeEvents: event,
-      },
-    }
-  );
+  // return UserModel.updateOne(
+  //   {
+  //     $or: [
+  //       { email: session.customer_email },
+  //       { userId: session.client_reference_id },
+  //       { stripeCustomerId: session.customer },
+  //     ],
+  //   },
+  //   {
+  //     $set: {
+  //       stripeCustomerId: session.customer,
+  //     },
+  //     $push: {
+  //       stripeEvents: event,
+  //     },
+  //   }
+  // );
 };
 
 exports.getSubscriberRedirectURL = async function(stripeCustomerId) {

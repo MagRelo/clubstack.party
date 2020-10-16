@@ -6,15 +6,13 @@ const nanoid = require('nanoid');
 //
 const UserSchema = new mongoose.Schema(
   {
-    firstname: String,
-    lastname: String,
-    avatar: String,
     userId: {
       type: String,
       default: () => nanoid(),
     },
     displayName: String,
     caption: String,
+    avatar: String,
     type: {
       type: String,
       enum: ['Standard', 'Admin', 'Closed'],
@@ -43,7 +41,9 @@ const UserSchema = new mongoose.Schema(
     subdomainData: Object,
     productCode: String,
 
+    rocketUserId: String,
     rocketUser: Object,
+    rocketGroupId: String,
     rocketGroup: Object,
 
     subscriptions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
@@ -66,7 +66,10 @@ exports.UserModel = mongoose.model('User', UserSchema);
 // Events
 //
 
-const EventSchema = new mongoose.Schema({}, { timestamps: true });
+const EventSchema = new mongoose.Schema(
+  { event: Object },
+  { timestamps: true }
+);
 exports.EventModel = mongoose.model('Event', EventSchema);
 
 //

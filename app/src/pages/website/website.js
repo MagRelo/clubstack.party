@@ -1,212 +1,187 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { Link } from '@reach/router';
 
-import { Bouncing } from 'components/random';
+// import { Bouncing } from 'components/random';
 import LineChart from 'components/lineChart';
 
 import { AuthContext } from 'App';
-function User({ userId }) {
-  const { callApi, user } = useContext(AuthContext);
-
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-
-  const apiUserId = userId ? userId : user._id;
-
-  useEffect(() => {
-    setLoading(true);
-    const method = 'GET';
-    const endPoint = '/api/user/' + apiUserId;
-    callApi(method, endPoint)
-      .then((body) => {
-        // setDisplayUser(body.user);
-        // setStats(body.stats);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setError(error.toString());
-        setLoading(false);
-      });
-  }, [apiUserId, callApi]);
+function Website() {
+  const { user } = useContext(AuthContext);
 
   return (
     <div className="container">
-      {error ? <p>{error}</p> : null}
-      {loading ? (
-        <Bouncing />
-      ) : (
-        <div className="container">
-          <section>
-            <div className="section-title">
-              <h2> Website</h2>
-              <p>Activate your website and start building your community</p>
-            </div>
-
-            <div className="mb-4"></div>
-
-            {/* Website */}
-            <h3 className="background">
-              <span>Website Activity</span>
-            </h3>
-
-            <div className="mb-4"></div>
-
-            <div className="grid grid-5-3">
-              <div>
-                <div className="h5 text-center">
-                  <b>Website:</b>{' '}
-                  {user.subdomain ? (
-                    <a
-                      href={'https://' + user.subdomain + '.clubstack.party'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {'https://' + user.subdomain + '.clubstack.party'}
-                    </a>
-                  ) : null}
-                </div>
-
-                <div className="mb-4"></div>
-
-                <LineChart />
-              </div>
-
-              <div className="">
-                <div className="panel">
-                  <div className="box">
-                    <i className="fa fa-users fa-fw danger red"></i>
-                    <div className="info">
-                      <h3>7,209</h3>
-                      <span> Visitors</span>
-                      <p>this month</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="mb-3"></div>
-                <div className="panel">
-                  <div className="box">
-                    <i className="fa fa-video fa-fw danger blue"></i>
-                    <div className="info">
-                      <h3>+29%</h3>
-                      <span> Growth</span>
-                      <p>this month</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="mb-3"></div>
-                <div className="panel">
-                  <div className="box">
-                    <i className="fa fa-eye fa-fw danger blue"></i>
-                    <div className="info">
-                      <h3>19</h3>
-                      <span> Minutes</span>
-                      <p>time spent on site</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="mb-3"></div>
-                <div>
-                  <Link to="content" className="btn btn-sm btn-theme">
-                    Manage Website
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            <div className="mb-4"></div>
-
-            {/* Email */}
-            <h3 className="background">
-              <span>Content</span>
-            </h3>
-            <div className="mb-4"></div>
-            <div className="grid grid-5-3">
-              <div>
-                <LineChart />
-              </div>
-
-              <div className="">
-                <div className="panel">
-                  <div className="box">
-                    <i className="fa fa-video fa-fw danger blue"></i>
-                    <div className="info">
-                      <h3>24</h3>
-                      <span> Videos</span>
-                      <p>Active</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="mb-3"></div>
-                <div className="panel">
-                  <div className="box">
-                    <i className="fa fa-eye fa-fw danger blue"></i>
-                    <div className="info">
-                      <h3>24,234</h3>
-                      <span> Views</span>
-                      <p>this month</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="mb-3"></div>
-                <div>
-                  <Link to="subscribers" className="btn btn-sm btn-theme">
-                    Manage Community
-                  </Link>
-                </div>
-              </div>
-            </div>
-
-            <div className="mb-4"></div>
-
-            {/* Email */}
-            <h3 className="background">
-              <span>Subscribers</span>
-            </h3>
-            <div className="mb-4"></div>
-            <div className="grid grid-5-3">
-              <div>
-                <LineChart />
-              </div>
-
-              <div className="">
-                <div className="panel">
-                  <div className="box">
-                    <i className="fa fa-users fa-fw success red"></i>
-                    <div className="info">
-                      <h3>242</h3>
-                      <span> Subscribers</span>
-                      <p>this month</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="mb-3"></div>
-                <div className="panel">
-                  <div className="box">
-                    <i className="fa fa-file-invoice-dollar fa-fw green"></i>
-                    <div className="info">
-                      <h3>$5,965</h3>
-                      <span> per month</span>
-                      <p>Recurring Revenue</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="mb-3"></div>
-                <div>
-                  <Link to="subscribers" className="btn btn-sm btn-theme">
-                    Manage Community
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </section>
+      <section>
+        <div className="section-title">
+          <h2> Website</h2>
+          <p>Activate your website and start building your community</p>
         </div>
-      )}
+
+        <div className="mb-4"></div>
+
+        {/* Website */}
+        <h3 className="background">
+          <span>Website Activity</span>
+        </h3>
+
+        <div className="mb-4"></div>
+
+        <div className="grid grid-5-3">
+          <div>
+            <div className="h5 text-center">
+              <b>Website:</b>{' '}
+              {user.subdomain ? (
+                <a
+                  href={'https://' + user.subdomain + '.clubstack.party'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {'https://' + user.subdomain + '.clubstack.party'}
+                </a>
+              ) : null}
+            </div>
+
+            <div className="mb-4"></div>
+
+            <LineChart />
+          </div>
+
+          <div className="">
+            <div className="panel">
+              <div className="box">
+                <i className="fa fa-users fa-fw danger red"></i>
+                <div className="info">
+                  <h3>7,209</h3>
+                  <span> Visitors</span>
+                  <p>this month</p>
+                </div>
+              </div>
+            </div>
+            <div className="mb-3"></div>
+            <div className="panel">
+              <div className="box">
+                <i className="fa fa-video fa-fw danger blue"></i>
+                <div className="info">
+                  <h3>+29%</h3>
+                  <span> Growth</span>
+                  <p>this month</p>
+                </div>
+              </div>
+            </div>
+            <div className="mb-3"></div>
+            <div className="panel">
+              <div className="box">
+                <i className="fa fa-eye fa-fw danger blue"></i>
+                <div className="info">
+                  <h3>19</h3>
+                  <span> Minutes</span>
+                  <p>time spent on site</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-4"></div>
+
+        {/* Email */}
+        <h3 className="background">
+          <span>Content</span>
+        </h3>
+        <div className="mb-4"></div>
+        <div className="grid grid-5-3">
+          <div>
+            <LineChart />
+          </div>
+
+          <div className="">
+            <div className="panel">
+              <div className="box">
+                <i className="fa fa-video fa-fw danger blue"></i>
+                <div className="info">
+                  <h3>{user.content.length}</h3>
+                  <span> Content Items</span>
+                  <p>Active</p>
+                </div>
+              </div>
+            </div>
+            <div className="mb-3"></div>
+            <div className="panel">
+              <div className="box">
+                <i className="fa fa-eye fa-fw danger blue"></i>
+                <div className="info">
+                  <h3>24,234</h3>
+                  <span> Views</span>
+                  <p>this month</p>
+                </div>
+              </div>
+            </div>
+            <div className="mb-3"></div>
+            <div>
+              <Link to="content" className="btn btn-sm btn-theme">
+                Manage Website
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        <div className="mb-4"></div>
+
+        {/* Email */}
+        <h3 className="background">
+          <span>Subscribers</span>
+        </h3>
+        <div className="mb-4"></div>
+        <div className="grid grid-5-3">
+          <div>
+            <LineChart />
+          </div>
+
+          <div className="">
+            <div className="panel">
+              <div className="box">
+                <i className="fa fa-users fa-fw success red"></i>
+                <div className="info">
+                  <h3>{user.subscribers.length}</h3>
+                  <span> New Subscribers</span>
+                  <p>this month</p>
+                </div>
+              </div>
+            </div>
+            <div className="panel">
+              <div className="box">
+                <i className="fa fa-users fa-fw success red"></i>
+                <div className="info">
+                  <h3>{user.subscribers.length}</h3>
+                  <span> Total Subscribers</span>
+                  <p>active </p>
+                </div>
+              </div>
+            </div>
+            <div className="mb-3"></div>
+            <div className="panel">
+              <div className="box">
+                <i className="fa fa-file-invoice-dollar fa-fw green"></i>
+                <div className="info">
+                  <h3>$5,965</h3>
+                  <span> per month</span>
+                  <p>Recurring Revenue</p>
+                </div>
+              </div>
+            </div>
+            <div className="mb-3"></div>
+            <div>
+              <Link to="subscribers" className="btn btn-sm btn-theme">
+                Manage Community
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
 
-export default User;
+export default Website;
 
 // <div className="mb-4"></div>
 // {/* Resources */}

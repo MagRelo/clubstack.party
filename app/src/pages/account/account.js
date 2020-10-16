@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React from 'react';
 // import { Link } from '@reach/router';
+// ,{ useState, useEffect, useContext }
 
-import { Bouncing, SubscriptionLink } from 'components/random';
+import { SubscriptionLink } from 'components/random';
 import UpdateProfile from 'pages/account/updateProfile';
 
 // import LineChart from 'components/lineChart';
@@ -10,65 +11,58 @@ import UpdateProfile from 'pages/account/updateProfile';
 // import { CgFeed } from 'react-icons/cg';
 // import { MdEmail } from 'react-icons/md';
 
-import { AuthContext } from 'App';
+// import { AuthContext } from 'App';
 function User({ userId }) {
-  const { callApi, user } = useContext(AuthContext);
+  // const { callApi, user } = useContext(AuthContext);
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  // const [loading, setLoading] = useState(false);
+  // const [error, setError] = useState(false);
 
-  const apiUserId = userId ? userId : user._id;
+  // const apiUserId = userId ? userId : user._id;
 
-  useEffect(() => {
-    setLoading(true);
-    const method = 'GET';
-    const endPoint = '/api/user/' + apiUserId;
-    callApi(method, endPoint)
-      .then((body) => {
-        // setDisplayUser(body.user);
-        // setStats(body.stats);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        setError(error.toString());
-        setLoading(false);
-      });
-  }, [apiUserId, callApi]);
+  // useEffect(() => {
+  //   setLoading(true);
+  //   const method = 'GET';
+  //   const endPoint = '/api/user/' + apiUserId;
+  //   callApi(method, endPoint)
+  //     .then((body) => {
+  //       // setDisplayUser(body.user);
+  //       // setStats(body.stats);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       setError(error.toString());
+  //       setLoading(false);
+  //     });
+  // }, [apiUserId, callApi]);
 
   return (
     <div className="container">
-      {error ? <p>{error}</p> : null}
-      {loading ? (
-        <Bouncing />
-      ) : (
-        <div className="container">
-          <section>
-            <div className="section-title">
-              <h2>Account</h2>
-            </div>
-
-            {/* Profile */}
-            <h3 className="background">
-              <span>Manage Profile</span>
-            </h3>
-
-            <div className="panel">
-              <UpdateProfile />
-            </div>
-
-            <div className="mb-4"></div>
-
-            {/* Profile */}
-            <h3 className="background">
-              <span>Manage Subscriptions</span>
-            </h3>
-            <div className="mb-4"></div>
-
-            <SubscriptionLink />
-          </section>
+      <section>
+        <div className="section-title">
+          <h2>Account</h2>
         </div>
-      )}
+
+        {/* Profile */}
+        <h3 className="background">
+          <span>Manage Profile</span>
+        </h3>
+
+        <div className="panel">
+          <UpdateProfile />
+        </div>
+
+        <div className="mb-4"></div>
+
+        {/* Profile */}
+        <h3 className="background">
+          <span>Manage Subscriptions</span>
+        </h3>
+        <div className="mb-4"></div>
+
+        <SubscriptionLink />
+      </section>
     </div>
   );
 }

@@ -6,10 +6,15 @@ const { getSubscriberRedirectURL } = require('../integrations/payments');
 exports.populateUser = async function(req, res) {
   try {
     const user = await UserModel.findOne({ _id: req.user.id })
-      .select(
-        `firstname lastname avatar displayName description location email linkedInProfile 
-        jobBoardUrl jobBoardId stripeAccountLabel stripeCustomerLabel stripeCustomerBrand`
-      )
+      .populate({
+        path: 'subscribers',
+        select: 'avatar displayName caption subdomain',
+      })
+      .populate({
+        path: 'subscriptions',
+        select: 'avatar displayName caption subdomain',
+      })
+      .select(`avatar displayName caption subdomain email publicAddress type`)
       .lean();
 
     if (!user) {
@@ -18,11 +23,8 @@ exports.populateUser = async function(req, res) {
 
     // get queries and links
     const userObject = {
-      user: {
-        hasAccount: !!user.stripeAccountLabel,
-        hasPaymentSource: !!user.stripeCustomerLabel,
-        ...user,
-      },
+      content: [],
+      ...user,
     };
 
     res.status(200).send(userObject);
@@ -102,16 +104,14 @@ exports.getUserBySubdomain_Admin = async function(req, res) {
   }
 };
 
-exports.updateSubdomain = async function(req, res) {
+exports.updateSubdomain = async function(req, res, next) {
   try {
     // get latest
-    const updatedUser = await UserModel.findByIdAndUpdate(
-      { _id: req.user._id },
-      req.body,
-      { new: true }
-    );
+    await UserModel.findByIdAndUpdate({ _id: req.user._id }, req.body, {
+      new: true,
+    });
 
-    res.status(200).send(updatedUser);
+    next();
   } catch (error) {
     console.log({ error: error.message });
     res.status(500).send({ error: error.message });
@@ -147,10 +147,10 @@ exports.manageSubscriptionLink = async function(req, res) {
   }
 };
 
-exports.updateProfile = async function(req, res) {
+exports.updateProfile = async function(req, res, next) {
   try {
     // get latest
-    const updatedUser = await UserModel.findByIdAndUpdate(
+    await UserModel.findByIdAndUpdate(
       { _id: req.user._id },
       {
         displayName: req.body.displayName,
@@ -159,10 +159,7 @@ exports.updateProfile = async function(req, res) {
       },
       { new: true }
     );
-
-    // console.log(updatedUser);
-
-    res.status(200).send(updatedUser);
+    next();
   } catch (error) {
     console.log({ error: error.message });
     res.status(500).send({ error: error.message });
@@ -246,9 +243,11 @@ exports.userFollow = async function(req, res) {
   }
 };
 
-// createUser (from /email)
+//
+// Login Methods
 //
 
+// from 'email' API
 exports.createUser = async function(email) {
   let newUser = new UserModel({
     email: email,
@@ -261,6 +260,7 @@ exports.createUser = async function(email) {
   };
 };
 
+// From Magic-Auth
 exports.activateUser = async function(user, userMetadata) {
   return UserModel.findOneAndUpdate(
     { email: userMetadata.email },
@@ -278,6 +278,7 @@ exports.activateUser = async function(user, userMetadata) {
 };
 //
 
+// From Magic-Auth
 exports.updateLatestLogin = async function(user) {
   return UserModel.findOneAndUpdate(
     { issuer: user.issuer },

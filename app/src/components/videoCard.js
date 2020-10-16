@@ -3,7 +3,7 @@ import { Link } from '@reach/router';
 
 import 'css/videoCard.scss';
 
-import { BiBookAdd, BiChevronRight } from 'react-icons/bi';
+import { BiChevronRight } from 'react-icons/bi';
 import { FaRegClock, FaPlay, FaLock } from 'react-icons/fa';
 
 function VideoCard({
@@ -56,7 +56,7 @@ function VideoCard({
       {editing ? (
         <div>
           <Link
-            to={'/account/content/' + _id}
+            to={'/website/content/' + _id}
             className="btn btn-sm btn-unstyled"
             style={{ float: 'right' }}
           >

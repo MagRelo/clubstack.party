@@ -19,13 +19,18 @@ router.delete('/content/:id', authenticate, Content.deleteContentItem);
 // USER
 //
 const User = require('./controllers/user');
-router.get('/user/:userId', User.getUser);
+router.get('/user/:userId', User.populateUser);
 router.get('/user/subdomain/:subdomain', User.getUserBySubdomain);
 router.post('/user/waitlist/', User.joinWaitlist);
 
 // USER + AUTH
-router.put('/user', authenticate, User.updateProfile);
-router.put('/user/subdomain/', authenticate, User.updateSubdomain);
+router.put('/user', authenticate, User.updateProfile, User.populateUser);
+router.put(
+  '/user/subdomain/',
+  authenticate,
+  User.updateSubdomain,
+  User.populateUser
+);
 router.put('/user/follow', authenticate, User.userFollow);
 router.post('/user/subscription', authenticate, User.manageSubscriptionLink);
 // router.get('/user/network', authenticate, User.getUserNetwork);

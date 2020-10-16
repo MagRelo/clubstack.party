@@ -13,7 +13,7 @@ export default function AdminPage({ subdomain }) {
 
   const [site, setSubdomain] = useState(subdomain);
   const [subdomainData, setSubdomainData] = useState(null);
-  const [ownerEmail, setOwnerEmail] = useState('');
+  const [ownerEmail, setOwnerEmail] = useState(undefined);
 
   const [loading, setLoading] = useState(editingContent);
   const [error, setError] = useState(false);

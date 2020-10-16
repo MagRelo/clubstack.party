@@ -45,8 +45,8 @@ function Content({ contentId }) {
         <div>
           <h2>{editingContent ? 'Update' : 'Add'} Content</h2>
           <p>
-            <Link to="/account">Account</Link> <BiChevronRight />{' '}
-            <Link to="/account/content">Content</Link> <BiChevronRight />{' '}
+            <Link to="/website">Website</Link> <BiChevronRight />{' '}
+            <Link to="/website/content">Content</Link> <BiChevronRight />{' '}
             <u>{editingContent ? 'Update' : 'Add'}</u>
           </p>
           <UpdateContent editingContent={editingContent} content={content} />

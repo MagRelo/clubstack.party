@@ -3,17 +3,18 @@ var router = express.Router();
 
 const passport = require('passport');
 const magicLogout = require('./controllers/magic-auth').logout;
-const { createUser } = require('./controllers/user');
+
+const { createUser, populateUser } = require('./controllers/user');
+const { authenticate } = require('./controllers/magic-auth');
+
 const payments = require('./integrations/payments');
 
 const UserModel = require('./models').UserModel;
 
 //
 // AUTH
-router.post('/login', passport.authenticate('magic'), (req, res) => {
-  return res.status(200).send(req.user);
-});
-
+router.get('/status', authenticate, populateUser);
+router.post('/login', passport.authenticate('magic'), populateUser);
 router.post('/logout', async (req, res) => {
   if (req.isAuthenticated()) {
     await magicLogout(req.user.issuer);
@@ -22,13 +23,6 @@ router.post('/logout', async (req, res) => {
   } else {
     return res.status(401).end(`User is not logged in.`);
   }
-});
-
-router.get('/status', (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.status(401).send({ error: 'Not Authenticated' });
-  }
-  return res.status(200).send(req.user);
 });
 
 router.post('/email', async (req, res) => {

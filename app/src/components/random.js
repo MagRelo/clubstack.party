@@ -254,13 +254,13 @@ export function SubscriptionLink() {
   }, [callApi, hasSubscriptions]);
 
   return (
-    <Link
-      to={stripeLink}
+    <a
+      href={stripeLink}
       disabled={loading && !hasSubscriptions}
       className="btn btn-theme"
     >
       {loading ? <Bouncing /> : <span>Manage Subscriptions</span>}
-    </Link>
+    </a>
   );
 }
 
