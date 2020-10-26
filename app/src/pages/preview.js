@@ -33,11 +33,8 @@ function Preview() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
 
+  const [hero, setHero] = useState(null);
   const [content, setContent] = useState(null);
-  const [title, setTitle] = useState(null);
-  const [desc, setDesc] = useState(null);
-  const [img, setImg] = useState({});
-  const [copyright, setCopyright] = useState({});
   const [productCode, setProductCode] = useState(null);
 
   useEffect(() => {
@@ -53,10 +50,13 @@ function Preview() {
 
       callApi(method, endPoint, { url: subdomain })
         .then((body) => {
-          setTitle(body.title);
-          setDesc(body.description);
-          setImg(body.headerImage[0]);
-          setCopyright(body.copyright);
+          setHero({
+            title: body.title,
+            description: body.description,
+            img: body.headerImage,
+            copyright: body.copyright,
+          });
+
           setContent(body.items);
           setProductCode(body.productCode);
 
@@ -72,21 +72,7 @@ function Preview() {
 
   return (
     <React.Fragment>
-      {(!loading && !content && !subdomain) ||
-      (!loading && !content && error) ? (
-        <div className="container">
-          <h1 className="hero">
-            <span className="highlight">Club</span>Stack <br />{' '}
-            <span className="sub">( dot )</span>{' '}
-            <span className="sub">PARTY</span>
-          </h1>
-          {error ? (
-            <p style={{ textAlign: 'center', fontFamily: 'monospace' }}>
-              {error}
-            </p>
-          ) : null}
-        </div>
-      ) : null}
+      {!subdomain ? <Hero /> : null}
 
       {loading ? (
         <div style={{ marginTop: '20vh' }}>
@@ -94,40 +80,14 @@ function Preview() {
         </div>
       ) : null}
 
+      {error ? (
+        <p style={{ textAlign: 'center', fontFamily: 'monospace' }}>{error}</p>
+      ) : null}
+
       {content ? (
         <React.Fragment>
           {/* Hero */}
-          <div className="container">
-            <section className="hero-grid">
-              <div className="swap-order">
-                <img className="hero-pic" src={img.url} alt={img.title} />
-              </div>
-
-              <div className="title-container">
-                <div>
-                  {/* <span className="highlight">
-                    Welcome to Position&#8201;Paper!
-                  </span> */}
-                </div>
-
-                <h1>{title}</h1>
-
-                <p>{desc}</p>
-
-                <div style={{ margin: '0 auto', maxWidth: '26em' }}>
-                  <UserProfile
-                    displayUser={{
-                      _id: 0,
-                      displayName: copyright,
-                      avatar: img.url,
-                      caption: title,
-                    }}
-                    disableLink={true}
-                  />
-                </div>
-              </div>
-            </section>
-          </div>
+          <ContentHero {...hero} />
 
           {/* Join Now */}
           <section>
@@ -135,36 +95,35 @@ function Preview() {
               <div className="section-title">
                 <h2>Join The Community</h2>
               </div>
-
               <div className="mb-4"></div>
 
               <h3 className="background">
                 <span>Community Tools</span>
               </h3>
-              <div
-                className="grid grid-4"
-                style={{ padding: '20px 0', textAlign: 'center' }}
-              >
-                <div>
+
+              <div className="grid  tool-grid">
+                <div className="tool-grid-item">
                   <div className="icon-large">
                     <BsFillChatDotsFill />
                   </div>
                   Private Chat
                 </div>
-                <div>
+
+                <div className="tool-grid-item">
+                  <div className="icon-large">
+                    <CgFeed />
+                  </div>
+                  Community News
+                </div>
+
+                <div className="tool-grid-item">
                   <div className="icon-large">
                     <MdEmail />
                   </div>
                   Weekly Newsletter
                 </div>
 
-                <div>
-                  <div className="icon-large">
-                    <CgFeed />
-                  </div>
-                  News Feed
-                </div>
-                <div>
+                <div className="tool-grid-item">
                   <div className="icon-large">
                     <GoFileSubmodule />
                   </div>
@@ -190,30 +149,16 @@ function Preview() {
                       we will find a way to make this community great.”
                     </i>
                   </p>
-
-                  <div className="mb-2"></div>
-                  <div style={{ maxWidth: '26em', marginLeft: 'auto' }}>
-                    <UserProfile
-                      displayUser={{
-                        _id: 0,
-                        displayName: copyright,
-                        avatar: img.url,
-                        caption: title,
-                      }}
-                      disableLink={true}
-                    />
-                  </div>
+                  <p>
+                    <i>~ Jim Collins</i>
+                  </p>
                 </div>
 
                 <div>
-                  {/* <p>
-                    Join <b>242</b> other people connecting around <br />
-                    <b>{title}</b>
-                  </p> */}
                   <div className="panel">
                     <SubscribePage
                       caption="Join Free for 7 Days"
-                      title={title}
+                      title={hero.title}
                       priceId={productCode}
                       subdomain={subdomain}
                     />
@@ -223,20 +168,14 @@ function Preview() {
             </div>
           </section>
 
-          {/* Frontpage */}
+          {/* Content */}
           <section>
             <div className="container">
               <div className="section-title">
                 <h2>Latest Content</h2>
-                <p>{desc}</p>
               </div>
 
               <div className="skill-section">
-                {/* <h3 className="background">
-                  <span>{'section title'}</span>
-                </h3>
-                <p className="sectionDescription">{'section desc'}</p> */}
-
                 <div className="grid grid-3">
                   {content &&
                     content.map((item, index) => {
@@ -269,106 +208,52 @@ function Preview() {
 
 export default Preview;
 
-// const contentData = [
-//   {
-//     sectionTitle: 'Introduction',
-//     sectionDescription: "In this section we'll introduce concepts for things.",
-//     sectionData: [
-//       {
-//         title: 'Phonetic Awareness',
-//         category: 'Introduction',
-//         length: '15 min',
-//         description:
-//           'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, reprehenderit velit odio ea consequuntur autem obcaecati aspernatur enim reiciendis voluptate.',
-//         image: 'https://picsum.photos/533/300?blur=1&random=33',
-//         alt: 'video1',
-//       },
-//       {
-//         title: 'Decoding',
-//         category: 'Introduction',
-//         length: '15 min',
-//         description:
-//           'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, reprehenderit velit odio ea consequuntur autem obcaecati aspernatur enim reiciendis voluptate.',
-//         image: 'https://picsum.photos/533/300?blur=1&random=32',
-//         alt: 'video1',
-//       },
-//       {
-//         title: 'No Guessing',
-//         category: 'Letter Sounds',
-//         length: '15 min',
-//         description:
-//           'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, reprehenderit velit odio ea consequuntur autem obcaecati aspernatur enim reiciendis voluptate.',
-//         image: 'https://picsum.photos/533/300?blur=1&random=31',
-//         alt: 'video1',
-//       },
-//     ],
-//   },
-//   {
-//     sectionTitle: 'M, A, S, D',
-//     sectionDescription:
-//       'The first letters should be easy to see and easy to say.',
-//     sectionData: [
-//       {
-//         title: 'First Letters',
-//         category: 'M, A, S, D',
-//         length: '15 min',
-//         description:
-//           'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, reprehenderit velit odio ea consequuntur autem obcaecati aspernatur enim reiciendis voluptate.',
-//         image: 'https://picsum.photos/533/300?blur=1&random=33',
-//         alt: 'video1',
-//       },
-//       {
-//         title: 'Blending Sounds',
-//         category: 'M, A, S, D',
-//         length: '15 min',
-//         description:
-//           'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, reprehenderit velit odio ea consequuntur autem obcaecati aspernatur enim reiciendis voluptate.',
-//         image: 'https://picsum.photos/533/300?blur=1&random=32',
-//         alt: 'video1',
-//       },
-//       {
-//         title: 'Vowel-First Blending',
-//         category: 'M, A, S, D',
-//         length: '15 min',
-//         description:
-//           'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, reprehenderit velit odio ea consequuntur autem obcaecati aspernatur enim reiciendis voluptate.',
-//         image: 'https://picsum.photos/533/300?blur=1&random=31',
-//         alt: 'video1',
-//       },
-//     ],
-//   },
-//   {
-//     sectionTitle: 'P, B, F, R, T',
-//     sectionDescription:
-//       "In this section we'll add more letters, and do sound blending with compound words.",
-//     sectionData: [
-//       {
-//         title: 'Video 1',
-//         category: 'P, B, F, R, T',
-//         length: '15 min',
-//         description:
-//           'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, reprehenderit velit odio ea consequuntur autem obcaecati aspernatur enim reiciendis voluptate.',
-//         image: 'https://picsum.photos/533/300?blur=1&random=1',
-//         alt: 'video1',
-//       },
-//       {
-//         title: 'Video 2',
-//         category: 'P, B, F, R, T',
-//         length: '15 min',
-//         description:
-//           'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, reprehenderit velit odio ea consequuntur autem obcaecati aspernatur enim reiciendis voluptate.',
-//         image: 'https://picsum.photos/533/300?blur=1&random=2',
-//         alt: 'video1',
-//       },
-//       {
-//         title: 'Video 3',
-//         category: 'P, B, F, R, T',
-//         length: '15 min',
-//         description:
-//           'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellendus, reprehenderit velit odio ea consequuntur autem obcaecati aspernatur enim reiciendis voluptate.',
-//         image: 'https://picsum.photos/533/300?blur=1&random=3',
-//         alt: 'video1',
-//       },
-//     ],
-//   },
-// ];
+function Hero() {
+  return (
+    <div className="container">
+      <h1 className="hero">
+        <span className="">Club</span>Stack <br />{' '}
+        <span className="sub">( dot )</span> <span className="sub">PARTY</span>
+      </h1>
+      <p class="" style={{ textAlign: 'center' }}>
+        User-Generated Communities
+      </p>
+    </div>
+  );
+}
+
+function ContentHero({ img, title, desc, copyright }) {
+  return (
+    <div className="container">
+      <section className="hero-grid">
+        <div className="swap-order">
+          <img className="hero-pic" src={img.url} alt={img.title} />
+        </div>
+
+        <div className="title-container">
+          <div>
+            {/* <span className="highlight">
+                    Welcome to Position&#8201;Paper!
+                  </span> */}
+          </div>
+
+          <h1>{title}</h1>
+
+          <p>{desc}</p>
+
+          <div style={{ margin: '0 auto', maxWidth: '26em' }}>
+            <UserProfile
+              displayUser={{
+                _id: 0,
+                displayName: copyright,
+                avatar: img.url,
+                caption: title,
+              }}
+              disableLink={true}
+            />
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}

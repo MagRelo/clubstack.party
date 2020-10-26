@@ -27,7 +27,7 @@ function VideoCard({
   return (
     <a
       href={link}
-      className="recipe-card panel"
+      className="content-card panel"
       style={{ display: 'grid', gridTemplateRows: 'auto 1fr auto' }}
     >
       <aside>

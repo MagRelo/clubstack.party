@@ -4,6 +4,7 @@ var router = express.Router();
 // Middleware
 const { authenticate, adminOnly } = require('./controllers/magic-auth');
 const UserModel = require('./models').UserModel;
+const { getSubstackContent } = require('./integrations/substack');
 
 //
 // CONTENT
@@ -65,132 +66,38 @@ router.put(
 // TEMP
 //
 
-const fetch = require('node-fetch');
-const { convertToJSON } = require('./integrations/xml');
 router.post('/preview', async function(req, res) {
-  const subdomain = req.body.url;
-
   // reformat
-  const previewContent = {
-    title: 'Party',
-    description: `Surfin' USA`,
+  const previewDefaults = {
+    title: 'Default Title',
+    description: 'Default Description',
     copyright: 'Matt Lovan',
-    headerImage: [
-      {
-        url: 'https://picsum.photos/id/1/200/300',
-        title: `Surfin' USA`,
-      },
-    ],
+    headerImage: {
+      url: 'https://picsum.photos/id/1/200/300',
+      title: 'Default Image',
+    },
     items: [],
   };
-  let clubStackContent;
-  let subStackContent;
 
   try {
-    // get Clubstack
-    clubStackContent = await UserModel.findOne({ subdomain: subdomain }).lean();
-    // clubStackContent = {};
+    // get Clubstack content
+    const clubStackContent = await UserModel.findOne({
+      subdomain: req.body.url,
+    }).lean();
+    const clubdata = clubStackContent ? clubStackContent.subdomainData : null;
 
-    // get RSS
-    const url = req.body.url;
-    const fullUrl = 'https://' + url + '.substack.com/feed';
-    const substack = await fetch(fullUrl)
-      .then((response) => {
-        if (response.status !== 200) {
-          throw new Error('failed to fetch from substack');
-        }
-        return response.text();
-      })
-      .then((xml) => convertToJSON(xml));
-
-    if (substack) {
-      const site = substack.rss.channel[0];
-
-      // reformat
-      subStackContent = {
-        title: site.title,
-        description: site.description,
-        copyright: site.copyright,
-        headerImage: site.image,
-        items: site.item.map((item) => {
-          return {
-            title: item.title,
-            description: item.description,
-            link: item.link[0],
-            length: extractLength(item) + ' min',
-            category: extractCategory(item),
-            image: extractImage(item),
-          };
-        }),
-      };
-    }
+    // get SubStack
+    const subStackContent = await getSubstackContent(req.body.url);
 
     res.status(200).send({
-      ...previewContent,
+      ...previewDefaults,
       ...subStackContent,
-      ...clubStackContent.subdomainData,
+      ...clubdata,
     });
   } catch (error) {
     console.log(error);
     res.status(500).send(error);
   }
 });
-
-function extractCategory(item) {
-  if (item.enclosure && item.enclosure[0]) {
-    const type = item.enclosure[0].$.type;
-
-    switch (type) {
-      case 'image/jpeg':
-        return 'Blog Post';
-      case 'audio/mpeg':
-        return 'Podcast';
-      case 'video/mpeg':
-        return 'video';
-      default:
-        break;
-    }
-  }
-
-  return 'General';
-}
-
-function extractLength(item) {
-  if (item.enclosure && item.enclosure[0]) {
-    const type = item.enclosure[0].$.type;
-    const magicLengthNumber = 2100;
-
-    switch (type) {
-      case 'image/jpeg':
-        return Math.floor(
-          item['content:encoded'][0].length / magicLengthNumber
-        );
-      case 'audio/mpeg':
-        return 15;
-      case 'video/mpeg':
-        return 15;
-      default:
-        break;
-    }
-  }
-  return 15;
-}
-
-function extractImage(item) {
-  if (item.enclosure && item.enclosure[0]) {
-    const type = item.enclosure[0].$.type;
-
-    switch (type) {
-      case 'image/jpeg':
-        return item.enclosure[0].$.url;
-      case 'audio/mpeg':
-        return 'https://via.placeholder.com/500x200?text=►';
-      case 'video/mpeg':
-        return 'https://via.placeholder.com/500x200?text=Video';
-      default:
-        break;
-    }
-  }
-}
 
 module.exports = router;

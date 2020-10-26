@@ -1,12 +1,12 @@
 @import 'variables.scss';
 
-.recipe-card img {
+.content-card img {
   max-width: 100%;
   // height: auto;
   vertical-align: bottom;
 }
 
-.recipe-card {
+.content-card {
   // background: #fff;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
@@ -14,17 +14,17 @@
   border-bottom-right-radius: 5px;
 }
 
-.recipe-card aside {
+.content-card aside {
   position: relative;
   text-align: center;
 }
 
-.recipe-card aside img {
+.content-card aside img {
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
 }
 
-.recipe-card aside .button {
+.content-card aside .button {
   background: $primaryLight;
   display: inline-block;
   position: absolute;
@@ -41,45 +41,45 @@
   transition: all 200ms;
 }
 
-.recipe-card aside .button:hover {
+.content-card aside .button:hover {
   font-size: large;
 }
 
-.recipe-card aside .button .icon {
+.content-card aside .button .icon {
   vertical-align: middle;
 
   top: 5px;
   left: -5px;
 }
 
-.recipe-card article {
+.content-card article {
   padding: 2.5em 0 0;
 }
 
 
-.recipe-card article .title {
+.content-card article .title {
   font-size: 1.5rem;
 }
 
 
-.recipe-card article h2,
-.recipe-card article h3 {
+.content-card article h2,
+.content-card article h3 {
   margin: 0;
   font-weight: 300;
 }
 
-.recipe-card article h2 {
+.content-card article h2 {
   font-size: 1.75em;
   color: #222222;
 }
 
-.recipe-card article h3 {
+.content-card article h3 {
   font-size: 0.9375em;
   color: #838689;
 }
 
 
-.recipe-card article .category {
+.content-card article .category {
   font-size: small;
   color: $lighterText;
   border-top: solid 1px $lightGray;
@@ -87,14 +87,14 @@
   padding: 3px 0 4px 0;
 }
 
-.recipe-card article p {
+.content-card article p {
   margin: 1.25em 0 0;
   font-size: 0.8125em;
   font-weight: 400;
   color: #222222;
 }
 
-.recipe-card article p span {
+.content-card article p span {
   font-weight: 700;
   color: #000000;
 }

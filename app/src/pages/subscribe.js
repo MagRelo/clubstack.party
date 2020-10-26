@@ -16,13 +16,13 @@ function SubscribePage({ priceId, subdomain, title }) {
         <Subscribe
           priceId={priceId}
           caption={'Join Now'}
-          legend={'Join ' + title}
+          // legend={'Join ' + title}
           subdomain={subdomain}
         />
       ) : (
         <JoinWaitlist
           caption={'Join the Waitlist'}
-          legend={'Launching Soon! Join the Waitlist'}
+          // legend={'Launching Soon! Join the Waitlist'}
           subdomain={subdomain}
         />
       )}

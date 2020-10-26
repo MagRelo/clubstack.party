@@ -921,7 +921,7 @@ a.panel {
   .hero-grid {
     grid-template-columns: 5fr 3fr;
 
-    margin: 3em 0;
+    // margin: 3em 0;
     padding-top: 80px;
   }
 
@@ -936,14 +936,6 @@ a.panel {
   .hero-pic {
     padding: 0 1.5em;
     height: 300px;
-  }
-}
-
-.feature-list {
-  color: $darkText;
-
-  li {
-    margin-bottom: 8px;
   }
 }
 
@@ -967,41 +959,76 @@ a.panel {
 }
 
 
-.box>i.blue {
+.blue {
   background: $primaryLight;
 }
 
-.box>i.green {
-  background: #4DBA62;
+.green {
+  background: $green;
 }
 
-.box>i.red {
-  background: #FF7579;
+.red {
+  background: $red;
 }
 
 .box .info {
-  // float: left;
   width: auto;
-  // margin-left: 10px;
   padding-left: 74px;
+
+  h3 {
+    margin: 5px 0 0;
+    display: inline-block;
+  }
+
+  p {
+    color: $lighterText;
+    margin-bottom: 0;
+  }
 }
 
-.box .info h3 {
-  margin: 5px 0 0;
-  display: inline-block;
+// 
+// JOIN NOW
+// 
+
+
+.icon-large {
+  font-size: 3rem;
 }
 
-.box .info p {
-  color: $lighterText;
-  margin-bottom: 0;
-}
+.tool-grid {
+  text-align: center;
+  padding: 20px 0;
 
+  grid-template-columns: 1fr 1fr;
+
+  .tool-grid-item:nth-child(1) {
+    color: $red;
+  }
+
+  .tool-grid-item:nth-child(2) {
+    color: $primaryLight;
+  }
+
+  .tool-grid-item:nth-child(3) {
+    color: $green;
+  }
+
+  .tool-grid-item:nth-child(4) {
+    color: $lighterText;
+  }
+
+}
 
 .quote {
   text-align: center;
 }
 
 @media screen and (min-width: 992px) {
+
+  .tool-grid {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+
   .quote {
     text-align: right;
     border-right: solid 2px $lightGray;
@@ -1013,9 +1040,4 @@ a.panel {
   display: flex;
   justify-content: space-around;
   padding: 10px 0;
-}
-
-.icon-large {
-  font-size: 3rem;
-  color: $lighterText;
 }
