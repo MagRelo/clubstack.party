@@ -106,14 +106,14 @@ function Preview() {
                   <div className="icon-large">
                     <BsFillChatDotsFill />
                   </div>
-                  Private Chat
+                  Live Chat
                 </div>
 
                 <div className="tool-grid-item">
                   <div className="icon-large">
                     <CgFeed />
                   </div>
-                  Community News
+                  Activity Feed
                 </div>
 
                 <div className="tool-grid-item">

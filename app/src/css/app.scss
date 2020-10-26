@@ -1001,19 +1001,19 @@ a.panel {
 
   grid-template-columns: 1fr 1fr;
 
-  .tool-grid-item:nth-child(1) {
+  .tool-grid-item:nth-child(1) .icon-large {
     color: $red;
   }
 
-  .tool-grid-item:nth-child(2) {
+  .tool-grid-item:nth-child(2) .icon-large {
     color: $primaryLight;
   }
 
-  .tool-grid-item:nth-child(3) {
+  .tool-grid-item:nth-child(3) .icon-large {
     color: $green;
   }
 
-  .tool-grid-item:nth-child(4) {
+  .tool-grid-item:nth-child(4) .icon-large {
     color: $lighterText;
   }
 
