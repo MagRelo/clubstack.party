@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
-import { Link } from '@reach/router';
+// import { Link } from '@reach/router';
 
 import { AuthContext } from 'App';
-import { UserProfile } from 'pages/account/userProfile';
+import { UserDisplay } from 'pages/account/userProfile';
+
 function User() {
   const { user } = useContext(AuthContext);
 
@@ -21,13 +22,12 @@ function User() {
           {user.subscriptions.map((item, index) => {
             return (
               <div key={item._id}>
-                <UserProfile
-                  displayUser={(item) => {
-                    return { _id: index, ...item };
-                  }}
+                <UserDisplay
+                  subdomain={item.subdomain}
+                  avatar={item.avatar}
+                  displayName={item.displayName}
+                  caption={item.caption}
                 />
-
-                <Link to={'/'}>{item.subdomain}</Link>
               </div>
             );
           })}

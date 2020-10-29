@@ -5,7 +5,7 @@ import { OnRouteChange } from 'routingHack.js';
 
 import Helmet from 'react-helmet';
 // import Cookies from 'js-cookie';
-import { Loading } from './components/random';
+import { Bouncing } from './components/random';
 
 // Header
 import Header from 'components/header';
@@ -182,7 +182,7 @@ function App() {
         {activeSession ? <Header /> : null}
 
         {loadingSession ? (
-          <Loading />
+          <Bouncing />
         ) : (
           <div className="content-wrapper">
             <Router>
@@ -196,7 +196,7 @@ function App() {
               {/* Owner Account required */}
               {activeSession ? (
                 <React.Fragment>
-                  <Group path="/clubs/:group" />
+                  <Group path="/clubs/:subdomain" />
                   <GroupList path="/clubs" />
 
                   <Website path="/website" />

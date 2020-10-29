@@ -19,10 +19,21 @@ exports.populateUser = async function(req, res) {
         `avatar displayName caption subdomain subdomainData email publicAddress type`
       )
       .lean();
-
     if (!user) {
       return res.status(401).send({ error: 'no user' });
     }
+
+    // add user to subscriptions
+    user.subscriptions = [
+      {
+        _id: user._id,
+        displayName: user.subdomainData.title,
+        avatar: user.subdomainData.image,
+        subdomain: user.subdomain,
+        caption: user.subdomainData.description,
+      },
+      ...user.subscriptions,
+    ];
 
     const content = await ContentModel.find({ user: req.user.id })
       .sort({ createdAt: 1 })

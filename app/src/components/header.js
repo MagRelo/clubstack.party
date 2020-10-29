@@ -94,7 +94,7 @@ function NavList({ activeSession, userType, subdomainActive }) {
             <NavLink to="/community">Community</NavLink>
           </li>
           <li>
-            <NavLink to="/website">Website</NavLink>
+            <NavLink to="/website">Publishing</NavLink>
           </li>
         </React.Fragment>
       ) : null}

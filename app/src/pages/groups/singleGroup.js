@@ -1,32 +1,25 @@
 import React, { useState, useEffect, useContext } from 'react';
 // import { Link } from '@reach/router';
 
-import { Loading } from 'components/random';
-
-import Dashboard from 'components/dashboard';
+import { Bouncing } from 'components/random';
 
 import { AuthContext } from 'App';
 
-function User({ userId }) {
-  const { callApi, user } = useContext(AuthContext);
+function Group({ subdomain }) {
+  const { callApi } = useContext(AuthContext);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const [displayUser, setDisplayUser] = useState(false);
-  const [stats, setStats] = useState(false);
 
-  // if not userId => we're on /account
-  const isMe = !userId;
-  const apiUserId = userId ? userId : user._id;
+  const [group, setGroup] = useState(false);
 
   useEffect(() => {
     setLoading(true);
     const method = 'GET';
-    const endPoint = '/api/user/' + apiUserId;
+    const endPoint = '/api/user/subdomain/' + subdomain;
     callApi(method, endPoint)
       .then((body) => {
-        setDisplayUser(body.user);
-        setStats(body.stats);
+        setGroup(body);
         setLoading(false);
       })
       .catch((error) => {
@@ -34,17 +27,52 @@ function User({ userId }) {
         setError(error.toString());
         setLoading(false);
       });
-  }, [apiUserId, callApi]);
+  }, [subdomain, callApi]);
 
   return (
     <div className="container">
       {error ? <p>{error}</p> : null}
-      {loading ? <Loading /> : null}
-      {displayUser ? (
-        <Dashboard isMe={isMe} user={displayUser} stats={stats} />
+      {loading ? <Bouncing /> : null}
+      {group ? (
+        <div className="grid grid-5-3">
+          <div>
+            <h1>{'title'}</h1>
+
+            <div className="grid-left">
+              <div className="grid-label">Website Address</div>
+              <div>https://clubstack.com</div>
+              <div className="grid-label">Chat Room</div>
+              <div>'Automatic'</div>
+            </div>
+          </div>
+
+          <div>
+            <h3 className="background">
+              <span>Events</span>
+            </h3>
+            <p>
+              <i>No Upcoming Events</i>
+            </p>
+
+            <h3 className="background">
+              <span>Activity</span>
+            </h3>
+
+            <div className="panel">asdf</div>
+            <div className="panel">asd</div>
+            <div className="panel">sdf</div>
+            <div className="panel">asdf</div>
+            <div className="panel">adf</div>
+          </div>
+        </div>
       ) : null}
+
+      {/* 
+      <hr />
+      <code>{JSON.stringify(group)}</code>
+       */}
     </div>
   );
 }
 
-export default User;
+export default Group;

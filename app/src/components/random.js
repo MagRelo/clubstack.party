@@ -4,10 +4,9 @@ import { Link } from '@reach/router';
 import { AuthContext } from 'App';
 
 // resources
-import { BsFillChatDotsFill } from 'react-icons/bs';
+import { FaRocketchat, FaRegKeyboard } from 'react-icons/fa';
 import { GoFileSubmodule } from 'react-icons/go';
-import { MdEmail } from 'react-icons/md';
-import { IoIosGlobe } from 'react-icons/io';
+import { IoIosMail } from 'react-icons/io';
 import { ImNewspaper } from 'react-icons/im';
 import { MdOndemandVideo } from 'react-icons/md';
 
@@ -268,7 +267,7 @@ export function ToolGrid() {
     <div className="grid tool-grid">
       <div className="tool-grid-item">
         <div className="icon-large">
-          <BsFillChatDotsFill />
+          <FaRocketchat />
         </div>
         Live Chat
       </div>
@@ -295,23 +294,23 @@ export function SiteGrid() {
     <div className="grid tool-grid">
       <div className="tool-grid-item">
         <div className="icon-large">
-          <IoIosGlobe />
+          <ImNewspaper />
         </div>
         Website
       </div>
 
       <div className="tool-grid-item">
         <div className="icon-large">
-          <ImNewspaper />
+          <FaRegKeyboard />
         </div>
         Blog
       </div>
 
       <div className="tool-grid-item">
         <div className="icon-large">
-          <MdEmail />
+          <IoIosMail />
         </div>
-        Weekly Newsletter
+        Newsletter
       </div>
     </div>
   );

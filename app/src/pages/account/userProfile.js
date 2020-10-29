@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import Img from 'react-image';
 import { Link } from '@reach/router';
-import { AiOutlineUser } from 'react-icons/ai';
+import { GiHouse } from 'react-icons/gi';
 // import { MdEmail } from 'react-icons/md';
 // import { IoIosWallet } from 'react-icons/io';
 
@@ -86,7 +86,7 @@ export function ProfilePic({ avatarUrl }) {
     return (
       <div className="user-avatar">
         <div className="user-avatar-pic" alt="avatar">
-          <AiOutlineUser />
+          <GiHouse />
         </div>
       </div>
     );
@@ -99,6 +99,32 @@ export function ProfilePic({ avatarUrl }) {
       loader={defaultPic()}
       unloader={defaultPic()}
     />
+  );
+}
+
+export function UserDisplay({ subdomain, avatar, displayName, caption }) {
+  return (
+    <Link to={'/clubs/' + subdomain}>
+      <div className="user-info">
+        <div>
+          <ProfilePic avatarUrl={avatar} />
+        </div>
+
+        <div className="user-text">
+          <div className="user-name">{displayName}</div>
+          <div className="user-caption">{caption}</div>
+          {/* 
+          {displayUser.units ? (
+            <div>
+              <div className="mb-1"></div>
+              <div className="user-caption">
+                <span className="highlight">{displayUser.units}</span>
+              </div>
+            </div>
+          ) : null} */}
+        </div>
+      </div>
+    </Link>
   );
 }
 

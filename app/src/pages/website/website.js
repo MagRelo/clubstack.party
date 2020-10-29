@@ -14,7 +14,7 @@ function Website() {
     <div className="container">
       <section>
         <div className="section-title">
-          <h2>Website</h2>
+          <h2>Publishing</h2>
           <p>Find Your People · Build Your Audience</p>
 
           <div className="form-wrapper">
@@ -80,6 +80,10 @@ function Website() {
             <div>{`https://${user.subdomain}.clubstack.party`}</div>
             <div className="grid-label">Start Date</div>
             <div>12/21/2019</div>
+            <div className="grid-label">Email Schedule</div>
+            <div>'Sunday 7PM'</div>
+            <div className="grid-label">Email Send</div>
+            <div>'Automatic'</div>
           </div>
 
           <div className="grid-left">
@@ -89,6 +93,10 @@ function Website() {
             <div>{trimString(user?.subdomainData.description)}</div>
             <div className="grid-label">Copyright</div>
             <div>{user?.subdomainData.copyright}</div>
+            <div className="grid-label">Email Schedule</div>
+            <div>'Sunday 7PM'</div>
+            <div className="grid-label">Email Send</div>
+            <div>'Automatic'</div>
           </div>
         </div>
 
