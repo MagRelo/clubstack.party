@@ -3,7 +3,7 @@ const { addUser, addGroup } = require('../integrations/rocketchat');
 
 exports.activateSubdomain = async function(req, res) {
   try {
-    // Create of Update User
+    // Create or Update User
     let owner = await UserModel.findOne({ email: req.body.email });
     if (owner) {
       // update

@@ -23,11 +23,13 @@ const UserSchema = new mongoose.Schema(
       enum: ['Pending', 'NewSubscriber', 'Active', 'Closed'],
       default: 'Pending',
     },
+
     needsOnboarding: {
       type: Boolean,
       default: true,
     },
-    welcomeEmail: Object,
+
+    group: { type: mongoose.Schema.Types.ObjectId, ref: 'Group' },
 
     issuer: Object,
     email: String,
@@ -37,23 +39,10 @@ const UserSchema = new mongoose.Schema(
     stripeCustomerId: String,
     stripeEvents: [Object],
 
-    subdomain: String,
-    subdomainData: Object,
-    productCode: String,
-
     rocketUserId: String,
     rocketUser: Object,
-    rocketGroupId: String,
-    rocketGroup: Object,
 
     subscriptions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    subscribers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    waitlist: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-      },
-    ],
 
     follows: { type: Array, default: [] },
   },
@@ -65,12 +54,36 @@ exports.UserModel = mongoose.model('User', UserSchema);
 //
 // Events
 //
-
 const EventSchema = new mongoose.Schema(
   { event: Object },
   { timestamps: true }
 );
 exports.EventModel = mongoose.model('Event', EventSchema);
+
+//
+// Group
+//
+const GroupSchema = new mongoose.Schema(
+  {
+    owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    subdomain: String,
+    productCode: String,
+
+    subdomainData: Object,
+
+    rocketGroupId: String,
+    rocketGroup: Object,
+    subscribers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    waitlist: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+      },
+    ],
+  },
+  { timestamps: true }
+);
+exports.GroupModel = mongoose.model('Group', GroupSchema);
 
 //
 // Content

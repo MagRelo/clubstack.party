@@ -32,7 +32,7 @@ function Header() {
 
           <Link to="/">
             <span>
-              <span className="header-title">ClubStack</span>
+              <span className="header-title">Incentive Exchange</span>
             </span>
           </Link>
         </div>
@@ -40,7 +40,7 @@ function Header() {
         <div className="header-container">
           {activeSession ? (
             <NavLink to="/clubs">
-              <BiSearch /> Clubs
+              <BiSearch /> Houses
             </NavLink>
           ) : (
             <span className="header-tagline">User-Generated Communities</span>

@@ -33,7 +33,7 @@ try {
   console.error('MongoDB connection error: ' + error);
 }
 
-mongoose.connection.on('error', function (error) {
+mongoose.connection.on('error', function(error) {
   console.error('MongoDB error: ' + error);
   process.exit(-1);
 });
@@ -65,7 +65,7 @@ app.use(cookieParser());
 app.use(helmet());
 app.use(
   morgan('dev', {
-    skip: function (req, res) {
+    skip: function(req, res) {
       // remove the frontend dev server's 'json' calls from the console output
       return req.originalUrl.indexOf('json') > 0;
     },
@@ -82,12 +82,12 @@ var store = new MongoDBStore({
   uri: process.env.MONGODB_URL_INT,
   collection: 'sessions',
 });
-store.on('error', function (error) {
+store.on('error', function(error) {
   console.log('MongoStore Error', error);
 });
 
 const cookieSettings = {
-  maxAge: 60 * 60 * 1000, // 1 hour
+  maxAge: 60 * 60 * 1000 * 24, // 24 hours
 };
 if (process.env.NODE_ENV === 'production') {
   cookieSettings.secure = true;

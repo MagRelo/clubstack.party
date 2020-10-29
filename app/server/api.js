@@ -21,20 +21,17 @@ router.delete('/content/:id', authenticate, Content.deleteContentItem);
 //
 const User = require('./controllers/user');
 router.get('/user/:userId', User.populateUser);
-router.get('/user/subdomain/:subdomain', User.getUserBySubdomain);
 router.post('/user/waitlist/', User.joinWaitlist);
 
 // USER + AUTH
 router.put('/user', authenticate, User.updateProfile, User.populateUser);
-router.put(
-  '/user/subdomain/',
-  authenticate,
-  User.updateSubdomain,
-  User.populateUser
-);
-router.put('/user/follow', authenticate, User.userFollow);
 router.post('/user/subscription', authenticate, User.manageSubscriptionLink);
+router.put('/user/follow', authenticate, User.userFollow);
 // router.get('/user/network', authenticate, User.getUserNetwork);
+
+// groups
+router.get('/group/:subdomain', User.getUserBySubdomain);
+router.put('/group/', authenticate, User.updateSubdomain, User.populateUser);
 
 //
 // ADMIN

@@ -118,7 +118,7 @@ export function UpdateSubdomain() {
 
   async function checkAvailable(subdomain) {
     // fetch api
-    return fetch('/api/user/subdomain/' + subdomain)
+    return fetch('/api/group/' + subdomain)
       .then((response) => {
         if (response.status === 204) {
           return true;

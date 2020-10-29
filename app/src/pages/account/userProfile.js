@@ -1,14 +1,13 @@
 import React, { useContext } from 'react';
 import Img from 'react-image';
-import { Link } from '@reach/router';
 import { GiHouse } from 'react-icons/gi';
+import { Link } from '@reach/router';
 // import { MdEmail } from 'react-icons/md';
 // import { IoIosWallet } from 'react-icons/io';
+// import { Bouncing } from 'components/random';
 
 import { AuthContext } from 'App';
-
 import FollowButton from 'components/followButton';
-// import { Bouncing } from 'components/random';
 
 export function UserProfile({
   displayUser,
@@ -99,32 +98,6 @@ export function ProfilePic({ avatarUrl }) {
       loader={defaultPic()}
       unloader={defaultPic()}
     />
-  );
-}
-
-export function UserDisplay({ subdomain, avatar, displayName, caption }) {
-  return (
-    <Link to={'/clubs/' + subdomain}>
-      <div className="user-info">
-        <div>
-          <ProfilePic avatarUrl={avatar} />
-        </div>
-
-        <div className="user-text">
-          <div className="user-name">{displayName}</div>
-          <div className="user-caption">{caption}</div>
-          {/* 
-          {displayUser.units ? (
-            <div>
-              <div className="mb-1"></div>
-              <div className="user-caption">
-                <span className="highlight">{displayUser.units}</span>
-              </div>
-            </div>
-          ) : null} */}
-        </div>
-      </div>
-    </Link>
   );
 }
 
