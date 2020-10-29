@@ -23,22 +23,23 @@ import NotFound from 'pages/404';
 
 import Group from 'pages/groups/singleGroup';
 import GroupList from 'pages/groups/allGroups';
-// import Account from 'pages/account/account';
+
+import Website from 'pages/website/website';
+import Resources from 'pages/website/resources';
+import Content from 'pages/website/content';
+import AddContent from 'pages/website/editContent';
+import EditContent from 'pages/website/editContent';
+import { AccountPage as WebsiteSettings } from 'pages/website/editSubdomain';
+
+import Community from 'pages/community/community';
+import Subscribers from 'pages/community/subscribers';
+
+import Account from 'pages/account/account';
 
 import Admin from 'pages/admin/admin';
 import Subdomain from 'pages/admin/subdomain';
 import AddSubdomain from 'pages/admin/adminSubdomain';
 import EditSubdomain from 'pages/admin/adminSubdomain';
-
-import Account from 'pages/account/account';
-
-import Website from 'pages/website/website';
-import Subscribers from 'pages/website/subscribers';
-import Resources from 'pages/website/resources';
-import Content from 'pages/website/content';
-import AddContent from 'pages/website/editContent';
-import EditContent from 'pages/website/editContent';
-import { AccountPage as AccountSubdomain } from 'pages/website/editSubdomain';
 
 // Setup Auth context
 export const AuthContext = React.createContext({});
@@ -192,27 +193,23 @@ function App() {
               <Login path="/login" />
               <Subscribe path="/subscribe" />
 
-              {/* Account required */}
+              {/* Owner Account required */}
               {activeSession ? (
                 <React.Fragment>
                   <Group path="/clubs/:group" />
                   <GroupList path="/clubs" />
-                </React.Fragment>
-              ) : null}
 
-              {/* Owner Account required */}
-              {activeSession ? (
-                <React.Fragment>
                   <Website path="/website" />
                   <Content path="/website/content" />
                   <AddContent path="/website/content/add" />
                   <EditContent path="/website/content/:contentId" />
-                  <Subscribers path="/website/subscribers" />
+                  <WebsiteSettings path="/website/settings" />
+
+                  <Community path="/community" />
+                  <Subscribers path="/community/subscribers" />
 
                   <Account path="/account" />
                   <Resources path="/account/resources" />
-
-                  {/* <AccountSubdomain path="/account/subdomain" /> */}
                 </React.Fragment>
               ) : null}
 

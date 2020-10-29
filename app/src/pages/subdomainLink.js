@@ -28,7 +28,7 @@ export function SubdomainForm() {
 
   return (
     <div className="form-wrapper panel">
-      <form name="loginForm">
+      <form name="substackForm">
         <div className="form-group">
           <label htmlFor="substack">Substack</label>
           <input

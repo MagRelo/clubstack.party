@@ -90,6 +90,8 @@ const ContentSchema = new mongoose.Schema(
     image: String,
     alt: String,
     category: String,
+    renderedHtml: String,
+    rawState: Object,
   },
   { timestamps: true }
 );

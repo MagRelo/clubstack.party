@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from '@reach/router';
 
 import { AuthContext } from 'App';
-// import { getBalance } from 'magic';
 
-// import Img from 'react-image';
-// import { getBalance } from 'api/magic';
-// import { dydxGetBalance } from 'api/dydx';
-
-import { Link } from '@reach/router';
-// import { FaBuilding } from 'react-icons/fa';
-// import { MdMyLocation, MdLocationOn } from 'react-icons/md';
-// import { AiOutlineUser } from 'react-icons/ai';
+// resources
+import { BsFillChatDotsFill } from 'react-icons/bs';
+import { GoFileSubmodule } from 'react-icons/go';
+import { MdEmail } from 'react-icons/md';
+import { IoIosGlobe } from 'react-icons/io';
+import { ImNewspaper } from 'react-icons/im';
+import { MdOndemandVideo } from 'react-icons/md';
 
 var SI_SYMBOL = ['', 'k', 'M', 'G', 'T', 'P', 'E'];
 
@@ -264,169 +263,146 @@ export function SubscriptionLink() {
   );
 }
 
-// export function EthereumAccount({ user }) {
-//   const [loading, setLoading] = useState(false);
-//   const [network, setNetwork] = useState('');
-//   const [balance, setBalance] = useState(0);
+export function ToolGrid() {
+  return (
+    <div className="grid tool-grid">
+      <div className="tool-grid-item">
+        <div className="icon-large">
+          <BsFillChatDotsFill />
+        </div>
+        Live Chat
+      </div>
 
-//   useEffect(() => {
-//     setLoading(true);
-//     getBalance(user.publicAddress).then(({ network, balance }) => {
-//       setNetwork(network.name);
-//       setBalance(balance);
-//       setLoading(false);
-//     });
-//   }, [user.publicAddress]);
+      <div className="tool-grid-item">
+        <div className="icon-large">
+          <MdOndemandVideo />
+        </div>
+        Video Conferencing
+      </div>
 
-//   return (
-//     <div>
-//       <div>
-//         <Link
-//           className="btn btn-sm btn-unstyled"
-//           style={{ float: 'right' }}
-//           to="/deposit"
-//         >
-//           Deposit
-//         </Link>
-//         <b>Ethereum</b>
-//         <div className="mb-3"></div>
-//       </div>
+      <div className="tool-grid-item">
+        <div className="icon-large">
+          <GoFileSubmodule />
+        </div>
+        File Sharing
+      </div>
+    </div>
+  );
+}
 
-//       {/* Balance */}
-//       <div className="line-item">
-//         <div>Balance</div>
-//         <div className="line-item-filler"></div>
-//         <div>
-//           {loading ? (
-//             <span>
-//               <Bouncing />
-//             </span>
-//           ) : (
-//             <span>{balance}Ξ</span>
-//           )}
-//         </div>
-//       </div>
+export function SiteGrid() {
+  return (
+    <div className="grid tool-grid">
+      <div className="tool-grid-item">
+        <div className="icon-large">
+          <IoIosGlobe />
+        </div>
+        Website
+      </div>
 
-//       {/* Balance */}
-//       <div className="line-item">
-//         <div>Network</div>
-//         <div className="line-item-filler"></div>
-//         <div>
-//           {loading ? (
-//             <span>
-//               <Bouncing />
-//             </span>
-//           ) : (
-//             <span>{network}</span>
-//           )}
-//         </div>
-//       </div>
+      <div className="tool-grid-item">
+        <div className="icon-large">
+          <ImNewspaper />
+        </div>
+        Blog
+      </div>
 
-//       {/* Address */}
-//       <div className="line-item">
-//         <div>Address</div>
-//         <div className="line-item-filler"></div>
-//         <div>
-//           {user.publicAddress.substring(0, 10)}
+      <div className="tool-grid-item">
+        <div className="icon-large">
+          <MdEmail />
+        </div>
+        Weekly Newsletter
+      </div>
+    </div>
+  );
+}
 
-//           <button
-//             className="btn btn-sm btn-unstyled"
-//             style={{ marginLeft: '0.5rem' }}
-//             onClick={() => {
-//               copyTextToClipboard(user.publicAddress);
-//             }}
-//           >
-//             Copy
-//           </button>
-//         </div>
-//       </div>
-//     </div>
-//   );
+export function FormStatusButtons({
+  saveFunction,
+  resetFunction,
+  isDirty,
+  isLoading,
+  errorMessage,
+  successMessage,
+}) {
+  return (
+    <React.Fragment>
+      {/* Save */}
+      <button
+        className="btn btn-theme"
+        disabled={!isDirty || isLoading || errorMessage}
+        onClick={saveFunction}
+      >
+        <span>Save</span>
+      </button>
+
+      {/* Cancel */}
+      <button
+        className="btn btn-sm"
+        onClick={resetFunction}
+        disabled={!isDirty || isLoading || errorMessage}
+      >
+        <span>Cancel</span>
+      </button>
+
+      {/* loading */}
+      {isLoading ? <Bouncing /> : null}
+
+      <span style={{ marginLeft: '1rem' }}>
+        {/* Success */}
+        {successMessage ? <span>{successMessage}</span> : null}
+
+        {/* Error */}
+        {errorMessage ? (
+          <span>
+            <code>{errorMessage}</code>
+            <button
+              className="btn btn-sm"
+              style={{ marginLeft: '1rem' }}
+              onClick={resetFunction}
+            >
+              <span>Reset</span>
+            </button>
+          </span>
+        ) : null}
+      </span>
+      {/* 
+      <hr />
+      {JSON.stringify({
+        saveFunction,
+        resetFunction,
+        isDirty,
+        isLoading,
+        errorMessage,
+        successMessage,
+      })} */}
+    </React.Fragment>
+  );
+}
+
+// function withLogger(dispatch) {
+//   return function(action) {
+//     console.groupCollapsed('Action Type:', action.type);
+//     return dispatch(action);
+//   };
 // }
 
-// export function DYdX({ user }) {
-//   const [loading, setLoading] = useState(false);
+// function useReducerWithLogger(...args) {
+//   let prevState = useRef(initialState);
+//   const [state, dispatch] = useReducer(...args);
 
-//   const [weth, setWeth] = useState(0);
-//   const [dai, setDai] = useState(0);
-//   const [usdc, setUsdc] = useState(0);
+//   const dispatchWithLogger = useMemo(() => {
+//     return withLogger(dispatch);
+//   }, [dispatch]);
 
 //   useEffect(() => {
-//     setLoading(true);
-//     dydxGetBalance().then(([weth, dai, usdc]) => {
-//       setWeth(weth);
-//       setDai(dai);
-//       setUsdc(usdc);
+//     if (state !== initialState) {
+//       console.log('Prev state: ', prevState.current);
+//       console.log('Next state: ', state);
+//       console.groupEnd();
+//     }
+//     prevState.current = state;
+//   }, [state]);
 
-//       setLoading(false);
-//     });
-//   }, []);
-
-//   return (
-//     <div>
-//       <div>
-//         <Link
-//           className="btn btn-sm btn-unstyled"
-//           style={{ float: 'right' }}
-//           to="/dydx"
-//         >
-//           Manage
-//         </Link>
-//         <b>dYdX</b>
-//         <p className="small">
-//           Deposits held on dydx{' '}
-//           <a
-//             href="https://docs.dydx.exchange/#/protocol?id=interest"
-//             target="_blank"
-//             rel="noopener noreferrer"
-//           >
-//             {' '}
-//             earn or pay interest
-//           </a>
-//         </p>
-//         <div className="mb-3"></div>
-//       </div>
-
-//       <div className="line-item">
-//         <div>{weth.name}</div>
-//         <div className="line-item-filler"></div>
-//         <div>
-//           {loading ? (
-//             <span>
-//               <Bouncing />
-//             </span>
-//           ) : (
-//             <span>{weth.eth}Ξ</span>
-//           )}
-//         </div>
-//       </div>
-//       <div className="line-item">
-//         <div>{dai.name}</div>
-//         <div className="line-item-filler"></div>
-
-//         <div>
-//           {loading ? (
-//             <span>
-//               <Bouncing />
-//             </span>
-//           ) : (
-//             <span>${dai.eth}</span>
-//           )}
-//         </div>
-//       </div>
-//       <div className="line-item">
-//         <div>{usdc.name}</div>
-//         <div className="line-item-filler"></div>
-//         <div>
-//           {loading ? (
-//             <span>
-//               <Bouncing />
-//             </span>
-//           ) : (
-//             <span>${usdc.eth}</span>
-//           )}
-//         </div>
-//       </div>
-//     </div>
-//   );
+//   return [state, dispatchWithLogger];
 // }

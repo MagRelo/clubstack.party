@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Link, globalHistory } from '@reach/router';
 
-// import { GiHeartPlus } from 'react-icons/gi';
+import { BiSearch } from 'react-icons/bi';
 import { FaBars } from 'react-icons/fa';
 
 import { AuthContext } from '../App';
@@ -38,7 +38,13 @@ function Header() {
         </div>
 
         <div className="header-container">
-          <span className="header-tagline">User-Generated Communities</span>
+          {activeSession ? (
+            <NavLink to="/clubs">
+              <BiSearch /> Clubs
+            </NavLink>
+          ) : (
+            <span className="header-tagline">User-Generated Communities</span>
+          )}
         </div>
 
         <div className="header-container desktop-menu">
@@ -85,10 +91,10 @@ function NavList({ activeSession, userType, subdomainActive }) {
             <NavLink to="/account">Account</NavLink>
           </li>
           <li>
-            <NavLink to="/website">Website</NavLink>
+            <NavLink to="/community">Community</NavLink>
           </li>
           <li>
-            <NavLink to="/clubs">Communities</NavLink>
+            <NavLink to="/website">Website</NavLink>
           </li>
         </React.Fragment>
       ) : null}

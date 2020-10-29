@@ -1,11 +1,16 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from '@reach/router';
 
+import { createEditorState, Editor } from 'medium-draft';
+import mediumDraftExporter from 'medium-draft/lib/exporter';
+import 'medium-draft/lib/index.css';
+import { convertToRaw } from 'draft-js';
+
 import { BiChevronRight } from 'react-icons/bi';
-// import { BiBookAdd, BiChevronRight } from 'react-icons/bi';
 
 import { AuthContext } from 'App';
 import { Loading } from 'components/random';
+import { FormStatusButtons } from 'components/random';
 
 function Content({ contentId }) {
   const { callApi } = useContext(AuthContext);
@@ -49,7 +54,9 @@ function Content({ contentId }) {
             <Link to="/website/content">Content</Link> <BiChevronRight />{' '}
             <u>{editingContent ? 'Update' : 'Add'}</u>
           </p>
-          <UpdateContent editingContent={editingContent} content={content} />
+          <div className="panel">
+            <UpdateContent editingContent={editingContent} content={content} />
+          </div>
         </div>
       )}
     </div>
@@ -61,21 +68,53 @@ export default Content;
 function UpdateContent({ editingContent, content }) {
   const { callApi } = useContext(AuthContext);
 
-  const [title, setTitle] = useState(content?.title || '');
-  const [description, setDescription] = useState(content?.description || '');
-  const [image, setImage] = useState(content?.image || '');
-  const [alt, setAlt] = useState(content?.alt || '');
-  const [category, setCategory] = useState(content?.category || '');
+  // form state
+  const [formDirty, setFormDirty] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null);
+
+  // post content
+  const [editorState, setEditorState] = useState(
+    createEditorState(content?.rawState)
+  );
+  const refsEditor = React.createRef();
+
+  const [{ title, description, image, alt, category }, setState] = useState(
+    content || {
+      title: '',
+      description: '',
+      category: '',
+      image: '',
+      alt: '',
+    }
+  );
+
+  const editorChange = (e) => {
+    setFormDirty(true);
+    setEditorState(e);
+  };
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setFormDirty(true);
+    setState((prevState) => ({ ...prevState, [name]: value }));
+  };
 
   async function submit(event) {
     event.preventDefault();
+    setLoading(true);
 
     // get form data
-    const formObject = {};
-    const formData = new FormData(event.target);
-    formData.forEach((value, key) => {
-      formObject[key] = value;
-    });
+    const formObject = {
+      title,
+      description,
+      image,
+      alt,
+      category,
+      rawState: convertToRaw(editorState.getCurrentContent()),
+      renderedHtml: mediumDraftExporter(editorState.getCurrentContent()),
+    };
     // console.log(formObject);
 
     // send to server
@@ -92,17 +131,95 @@ function UpdateContent({ editingContent, content }) {
 
     await callApi(method, endpoint, formObject)
       .then(async (user) => {
-        // createSession(user);
+        // navigate('/website');
+        setLoading(false);
+        setFormDirty(false);
+        setSuccessMessage('Saved!');
       })
       .catch((error) => {
         console.log(error);
+        setLoading(false);
+        setFormDirty(false);
+        setErrorMessage(error.toString());
       });
   }
 
+  // Reset/Cancel => set form data to user data, reset all indicators
+  function reset(event) {
+    event.preventDefault();
+
+    // set form data
+    setState({ ...content });
+
+    // reset indicators
+    setLoading(false);
+    setErrorMessage(null);
+    setSuccessMessage(null);
+    setFormDirty(false);
+  }
+
   return (
-    <div>
-      <div className="form-wrapper">
-        <form name="updateContent" onSubmit={submit}>
+    <form name="updateContent" onSubmit={submit}>
+      <div>
+        <label htmlFor="displayName" className="">
+          Content Web Address
+        </label>
+        <input
+          type="text"
+          name="title"
+          id="title"
+          className="form-control"
+          value={title}
+          onChange={onChange}
+          placeholder="https://google.com/cats"
+        />
+      </div>
+
+      <hr />
+      <div className="grid grid-5-3">
+        <div>
+          <label htmlFor="editor" className="sr-only">
+            Post Content
+          </label>
+          <Editor
+            name="editor"
+            ref={refsEditor}
+            editorState={editorState}
+            onChange={editorChange}
+            sideButtons={[]}
+            placeholder="Add content here! (highlight text to format)"
+          />
+        </div>
+
+        <div>
+          <div className="form-group">
+            <label htmlFor="image" className="">
+              Image
+            </label>
+            <input
+              type="text"
+              name="image"
+              id="image"
+              className="form-control"
+              value={image}
+              onChange={onChange}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="alt" className="">
+              Image Alt Text
+            </label>
+            <input
+              type="text"
+              name="alt"
+              id="alt"
+              className="form-control"
+              value={alt}
+              onChange={onChange}
+            />
+          </div>
+
           <div className="form-group">
             <label htmlFor="displayName" className="">
               Title
@@ -113,7 +230,7 @@ function UpdateContent({ editingContent, content }) {
               id="title"
               className="form-control"
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
+              onChange={onChange}
             />
           </div>
           <div className="form-group">
@@ -126,36 +243,7 @@ function UpdateContent({ editingContent, content }) {
               id="description"
               className="form-control"
               value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="avatar" className="">
-              Image
-            </label>
-            <input
-              type="text"
-              name="image"
-              id="image"
-              className="form-control"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="email" className="">
-              Image Alt Text
-            </label>
-            <input
-              type="text"
-              name="alt"
-              id="alt"
-              className="form-control"
-              value={alt}
-              onChange={(e) => {
-                setAlt(e.target.value);
-              }}
+              onChange={onChange}
             />
           </div>
           <div className="form-group">
@@ -168,16 +256,22 @@ function UpdateContent({ editingContent, content }) {
               id="category"
               className="form-control"
               value={category}
-              onChange={(e) => {
-                setCategory(e.target.value);
-              }}
+              onChange={onChange}
             />
           </div>
-
-          <hr />
-          <button className="btn btn-theme">Save</button>
-        </form>
+        </div>
       </div>
-    </div>
+
+      <hr />
+
+      <FormStatusButtons
+        saveFunction={submit}
+        resetFunction={reset}
+        isDirty={formDirty}
+        isLoading={loading}
+        errorMessage={errorMessage}
+        successMessage={successMessage}
+      />
+    </form>
   );
 }

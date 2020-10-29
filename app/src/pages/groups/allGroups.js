@@ -10,13 +10,17 @@ function User() {
     <div className="container">
       <section>
         <div className="section-title">
-          <h2>Communities</h2>
+          <h2>Clubs</h2>
         </div>
 
-        <ul>
+        <h3 className="background">
+          <span>My Clubs</span>
+        </h3>
+        {!user.subscriptions.length ? <p>No Clubs</p> : null}
+        <div className="grid grid-3">
           {user.subscriptions.map((item, index) => {
             return (
-              <li key={item._id}>
+              <div key={item._id}>
                 <UserProfile
                   displayUser={(item) => {
                     return { _id: index, ...item };
@@ -24,10 +28,10 @@ function User() {
                 />
 
                 <Link to={'/'}>{item.subdomain}</Link>
-              </li>
+              </div>
             );
           })}
-        </ul>
+        </div>
       </section>
     </div>
   );

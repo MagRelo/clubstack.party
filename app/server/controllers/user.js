@@ -1,4 +1,5 @@
 const UserModel = require('../models').UserModel;
+const ContentModel = require('../models').ContentModel;
 const getStream = require('../integrations/getstream');
 const { getSubscriberRedirectURL } = require('../integrations/payments');
 
@@ -14,16 +15,22 @@ exports.populateUser = async function(req, res) {
         path: 'subscriptions',
         select: 'avatar displayName caption subdomain',
       })
-      .select(`avatar displayName caption subdomain email publicAddress type`)
+      .select(
+        `avatar displayName caption subdomain subdomainData email publicAddress type`
+      )
       .lean();
 
     if (!user) {
       return res.status(401).send({ error: 'no user' });
     }
 
+    const content = await ContentModel.find({ user: req.user.id })
+      .sort({ createdAt: 1 })
+      .limit(5);
+
     // get queries and links
     const userObject = {
-      content: [],
+      content: content,
       ...user,
     };
 

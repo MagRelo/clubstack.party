@@ -4,13 +4,7 @@ import { useLocation } from '@reach/router';
 // headerimage
 import cassette from 'images/cassette_black.jpg';
 
-// resources
-import { BsFillChatDotsFill } from 'react-icons/bs';
-import { GoFileSubmodule } from 'react-icons/go';
-import { CgFeed } from 'react-icons/cg';
-import { MdEmail } from 'react-icons/md';
-
-import { getParams, Loading } from 'components/random';
+import { getParams, Loading, ToolGrid } from 'components/random';
 import VideoCard from 'components/videoCard';
 
 import { UserProfile } from 'pages/account/userProfile';
@@ -101,35 +95,7 @@ function Preview() {
                 <span>Community Tools</span>
               </h3>
 
-              <div className="grid  tool-grid">
-                <div className="tool-grid-item">
-                  <div className="icon-large">
-                    <BsFillChatDotsFill />
-                  </div>
-                  Live Chat
-                </div>
-
-                <div className="tool-grid-item">
-                  <div className="icon-large">
-                    <CgFeed />
-                  </div>
-                  Activity Feed
-                </div>
-
-                <div className="tool-grid-item">
-                  <div className="icon-large">
-                    <MdEmail />
-                  </div>
-                  Weekly Newsletter
-                </div>
-
-                <div className="tool-grid-item">
-                  <div className="icon-large">
-                    <GoFileSubmodule />
-                  </div>
-                  File Sharing
-                </div>
-              </div>
+              <ToolGrid />
 
               <div className="mb-4"></div>
 
@@ -215,9 +181,7 @@ function Hero() {
         <span className="">Club</span>Stack <br />{' '}
         <span className="sub">( dot )</span> <span className="sub">PARTY</span>
       </h1>
-      <p class="" style={{ textAlign: 'center' }}>
-        User-Generated Communities
-      </p>
+      <p style={{ textAlign: 'center' }}>User-Generated Communities</p>
     </div>
   );
 }

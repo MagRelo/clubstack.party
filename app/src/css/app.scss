@@ -20,6 +20,35 @@ body,
   box-sizing: border-box;
 }
 
+
+
+a {
+  color: $primaryLight;
+  text-decoration: none;
+  transition: none;
+  transition: all 0.25s ease;
+  // border-bottom: solid 1px $white;
+}
+
+a:hover {
+  color: $primaryLight;
+  text-decoration: none;
+  border-bottom: none;
+}
+
+svg {
+  fill: currentColor;
+  // margin: 0 1px 3px;
+}
+
+table {
+  text-align: center;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: $lighterGray;
+}
+
 // => header/body/footer
 .page-wrapper {
   display: grid;
@@ -44,7 +73,6 @@ section {
 .section-title {
   text-align: center;
   margin-bottom: 30px;
-  // font-family: 'Nunito Sans', sans-serif;
 }
 
 .section-title h2 {
@@ -70,12 +98,17 @@ section {
   align-items: center;
 }
 
+
+// Section Header
+// Section Header
+// Section Header
+
 h3.background {
   font-size: 1.5em;
   text-align: center;
   color: $lightText;
 
-  margin-bottom: 1rem;
+  margin: 30px 0 14px;
 
   position: relative;
   z-index: 1;
@@ -110,76 +143,15 @@ h3.background {
   }
 }
 
-// section.section-dark {
-//   padding: 60px 0 70px;
+// Section Header
+// Section Header
+// Section Header
 
-//   background-color: $primaryColor;
-//   border-top: solid 1px $primaryLight;
-//   border-bottom: solid 1px $primaryLight;
 
-//   // for the stars animation...
-//   overflow: hidden;
-// }
 
-// section.section-dark .panel {
-//   background: $white;
-//   border-color: $primaryLight;
-//   color: $darkText;
-
-//   // for the stars animation...
-//   position: relative;
-//   z-index: 1;
-// }
-
-// section.section-dark .panel h4,
-// section.section-dark .panel a {
-//   color: $darkText;
-// }
-
-// section.section-dark h2 span {
-//   color: $white;
-//   background-color: $primaryColor;
-
-//   // for the stars animation...
-//   position: relative;
-//   z-index: 1;
-// }
-
-// section.section-dark p span {
-//   color: $secondaryColor;
-//   background-color: $primaryColor;
-
-//   // for the stars animation...
-//   position: relative;
-//   z-index: 1;
-// }
-
-a {
-  color: $primaryLight;
-  text-decoration: none;
-  transition: none;
-  transition: all 0.25s ease;
-  // border-bottom: solid 1px $white;
-}
-
-a:hover {
-  color: $primaryLight;
-  text-decoration: none;
-  border-bottom: none;
-}
-
-svg {
-  fill: currentColor;
-  // margin: 0 1px 3px;
-}
-
-table {
-  text-align: center;
-}
-
-.table-striped tbody tr:nth-of-type(odd) {
-  background-color: $lighterGray;
-}
+// Icon
+// Icon
+// Icon
 
 .react-icons {
   vertical-align: middle;
@@ -218,6 +190,10 @@ table {
   color: $primaryLight;
 }
 
+// Icon
+// Icon
+// Icon
+
 .social-label {
   text-transform: uppercase;
   color: #b4b4b4;
@@ -232,60 +208,12 @@ table {
   margin: 1em 0;
 }
 
-.btn {
-  padding: 12px 25px;
-  font-weight: 600;
-  background: none;
-  color: $lightGray;
-  overflow: hidden;
-  border-radius: 7px;
-  border: none;
-  position: relative;
-  z-index: 9;
-}
 
-.btn+.btn {
-  margin-left: 1em;
-}
-
-.btn-sm {
-  padding: 10px 20px;
-}
-
-.btn.btn-sm:not(.btn-theme) {
-  border: solid $lightGray 1px;
-  color: $lighterText;
-  font-weight: 400;
-}
-
-.btn.btn-theme {
-  color: $white;
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 400;
-
-  background: $primaryLight;
-  border-bottom: none;
-  box-shadow: $box-shadow-medium;
-
-  transition: all 200ms;
-}
-
-.btn.btn-theme:hover {
-  background: lighten($color: $primaryLight, $amount: 5);
-}
-
-.btn.btn-unstyled {
-  background-color: inherit;
-  border: none;
-  padding: 2px 6px;
-  color: $lighterText;
-}
-
-.button-unstyled>* {
-  pointer-events: none;
-}
 
 /* getstream activity */
+/* getstream activity */
+/* getstream activity */
+
 .stream {
   padding: 0.667em 1em 1em;
   border: solid 1px $lightGray;
@@ -310,7 +238,14 @@ table {
   font-size: 1.2em;
 }
 
+/* getstream activity */
+/* getstream activity */
+/* getstream activity */
+
 // Profile
+// Profile
+// Profile
+
 .user-container {
   min-height: 90vh;
 }
@@ -372,7 +307,10 @@ table {
   color: $lighterText;
 }
 
-// ^ Profile
+// Profile
+// Profile
+// Profile
+
 
 .url-bar .input-group-text {
   color: $lighterText;
@@ -380,12 +318,6 @@ table {
   background-color: $white;
   border-radius: 7px;
   border-color: $lightGray;
-}
-
-/* form */
-
-form>hr {
-  margin: 1rem -1rem;
 }
 
 .flashit {
@@ -421,157 +353,6 @@ form>hr {
   }
 }
 
-/* input range slider */
-.input-range {
-  margin: 36px 0 36px;
-}
-
-.input-range__label {
-  color: $lighterText;
-}
-
-.input-range__track--active {
-  background-color: $primaryLight;
-}
-
-.input-range__slider {
-  border-color: $primaryLight;
-  background-color: $primaryLight;
-}
-
-.form-control::-moz-placeholder {
-  color: $lightGray;
-}
-
-.form-control:-ms-input-placeholder {
-  color: $lightGray;
-}
-
-.form-control::-webkit-input-placeholder {
-  color: $lightGray;
-}
-
-textarea.form-control {
-  height: 80px;
-}
-
-.form-radio {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  display: inline-block;
-  position: relative;
-  top: 10px;
-  height: 30px;
-  width: 30px;
-  margin-right: 10px;
-  color: $lightText;
-  background-color: $white;
-  border: solid 1px $primaryLight;
-  border-radius: 50px;
-
-  outline: none;
-  cursor: pointer;
-  transition: all 200ms;
-}
-
-.form-radio:checked::before {
-  position: absolute;
-  font: 13px/1 'Open Sans', sans-serif;
-  left: 10px;
-  top: 6px;
-  content: '\02143';
-  transform: rotate(40deg);
-}
-
-.form-radio:hover {
-  border: solid 1px $primaryLight;
-  color: $lightGray;
-  content: '\02143';
-}
-
-.form-radio:checked {
-  color: $white;
-  background-color: $primaryLight;
-  border: solid 1px $primaryLight;
-}
-
-.form-radio:disabled,
-.form-control:disabled,
-.form-control[readonly] {
-  color: $darkText;
-  border: 1px solid $lightGray;
-  background-color: $lighterGray;
-  box-shadow: $box-shadow-inner;
-
-  // font-family: monospace;
-  // font-family: 'Nunito Sans';
-}
-
-.form-wrapper {
-  max-width: 48em;
-  margin: 0 auto;
-  // padding: 2em;
-  // border: solid 1px $lightGray;
-  // border-radius: 7px;
-  // box-shadow: $box-shadow;
-}
-
-fieldset {
-  margin-bottom: 1.5rem;
-}
-
-.form-control {
-  height: 50px;
-  font-size: 13px;
-  color: $darkText;
-  background: none;
-  // border: none;
-  border-radius: 4px;
-  border-bottom: 2px solid $primaryLight;
-}
-
-.form-amount {
-  border-radius: 7px;
-  font-family: 'Nunito Sans';
-  text-align: center;
-}
-
-.theme-bg .form-control,
-.dark-bg .form-control {
-  background: none;
-  border-bottom-color: $white;
-}
-
-.dark-bg .form-control,
-.theme-bg .form-control {
-  color: $white;
-}
-
-.grey-bg .form-control {
-  background: $white;
-}
-
-textarea.form-control {
-  height: 150px;
-}
-
-.form-control:focus {
-  box-shadow: none;
-  background: none;
-  border-color: $primaryLight;
-}
-
-.theme-bg .form-control:focus {
-  border-color: $primaryColor;
-}
-
-select.form-control {
-  -moz-appearance: none;
-  -webkit-appearance: none;
-  appearance: none;
-  height: 50px !important;
-}
 
 .employerOnboardingForm fieldset {
   padding: 1em;
@@ -590,86 +371,29 @@ select.form-control {
   }
 }
 
-.stripeWrapper {
-  padding: 1.5em;
-  border: solid 1px $lightGray;
-  border-radius: 7px;
-}
-
-#map {
-  width: 100%;
-  height: 100%;
-}
-
-iframe {
-  width: 100%;
-  border: none;
-  pointer-events: auto;
-}
-
-.iframe-h {
-  height: 500px !important;
-}
-
-.iframe-h-2 {
-  height: 600px !important;
-}
-
-.help-block.with-errors {
-  position: absolute;
-  color: red;
-  right: 15px;
-  font-size: 10px;
-  line-height: 14px;
-}
-
-.form-control::-webkit-input-placeholder {
-  color: #555;
-}
-
-.form-control::-moz-placeholder {
-  color: #555;
-}
-
-.form-control:-ms-input-placeholder {
-  color: #555;
-}
-
-.form-control:-moz-placeholder {
-  color: #555;
-}
-
-.dark-bg .form-control::-webkit-input-placeholder,
-.theme-bg .form-control::-webkit-input-placeholder {
-  color: $white;
-}
-
-.dark-bg .form-control::-moz-placeholder,
-.theme-bg .form-control::-moz-placeholder {
-  color: $white;
-}
-
-.dark-bg .form-control:-ms-input-placeholder,
-.theme-bg .form-control:-ms-input-placeholder {
-  color: $white;
-}
-
-.dark-bg .form-control:-moz-placeholder,
-.theme-bg .form-control:-moz-placeholder {
-  color: $white;
-}
-
 /* Data grid */
 .grid-left {
   display: grid;
   grid-template-columns: auto 1fr;
-  grid-gap: 1em;
+  grid-gap: 8px 12px;
 }
+
+@media screen and (min-width: 700px) {
+  .grid-left {
+    grid-template-columns: auto 1fr;
+    padding: 0 45px;
+  }
+}
+
 
 .grid-label {
   text-transform: uppercase;
   font-size: smaller;
   color: $lightText;
+  background: $lighterGray;
+  padding: 3px 5px 3px 9px;
+  border-radius: 1px;
+
   text-align: right;
   display: flex;
   flex-direction: column;
@@ -997,7 +721,7 @@ a.panel {
 
 .tool-grid {
   text-align: center;
-  padding: 20px 0;
+  // padding: 20px 0;
 
   grid-template-columns: 1fr 1fr;
 
@@ -1014,7 +738,7 @@ a.panel {
   }
 
   .tool-grid-item:nth-child(4) .icon-large {
-    color: $lighterText;
+    color: $purple;
   }
 
 }
@@ -1026,7 +750,7 @@ a.panel {
 @media screen and (min-width: 992px) {
 
   .tool-grid {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
   }
 
   .quote {

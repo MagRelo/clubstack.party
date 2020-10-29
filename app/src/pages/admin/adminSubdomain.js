@@ -165,7 +165,7 @@ export function UpdateSubdomainData({
   return (
     <div>
       <div className="panel">
-        <form name="updateContent" onSubmit={submit}>
+        <form name="adminSubdomain" onSubmit={submit}>
           <div className="grid grid-2">
             <div className="form-group">
               <label htmlFor="email" className="">

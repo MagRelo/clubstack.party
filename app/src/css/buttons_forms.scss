@@ -1,0 +1,235 @@
+@import 'variables.scss';
+
+
+
+form>hr {
+  margin: 1rem -1rem;
+}
+
+
+fieldset {
+  margin-bottom: 1.5rem;
+}
+
+
+// Buttons
+// Buttons
+// Buttons
+
+.btn {
+  padding: 12px 25px;
+  font-weight: 600;
+  background: none;
+  color: $lightGray;
+  overflow: hidden;
+  border-radius: 7px;
+  border: none;
+  position: relative;
+  z-index: 9;
+}
+
+.btn+.btn {
+  margin-left: 1em;
+}
+
+.btn-sm {
+  padding: 10px 20px;
+}
+
+.btn.btn-sm:not(.btn-theme) {
+  border: solid $primaryLight 1px;
+  color: $primaryLight;
+  font-weight: 400;
+}
+
+.btn.btn-theme {
+  color: $white;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+
+  background: $primaryLight;
+  border-bottom: none;
+  box-shadow: $box-shadow-medium;
+
+  transition: all 200ms;
+}
+
+.btn.btn-theme:hover {
+  background: lighten($color: $primaryLight, $amount: 5);
+}
+
+.btn.btn-unstyled {
+  background-color: inherit;
+  border: none;
+  padding: 2px 6px;
+  color: $lighterText;
+}
+
+.button-unstyled>* {
+  pointer-events: none;
+}
+
+// Buttons
+// Buttons
+// Buttons
+
+
+
+.form-wrapper {
+  max-width: 48em;
+  margin: 0 auto;
+}
+
+
+// PlaceHolder
+// PlaceHolder
+// PlaceHolder
+
+.form-control::-moz-placeholder,
+.form-control:-ms-input-placeholder,
+.form-control::-webkit-input-placeholder {
+  color: $lightGray;
+}
+
+// PlaceHolder
+// PlaceHolder
+// PlaceHolder
+
+
+
+// FormControl
+// FormControl
+// FormControl
+
+.form-control {
+  height: 50px;
+  font-size: 13px;
+  color: $darkText;
+  background: none;
+  // border: none;
+  border-radius: 4px;
+  border-bottom: 2px solid $primaryLight;
+}
+
+.theme-bg .form-control,
+.dark-bg .form-control {
+  background: none;
+  border-bottom-color: $white;
+  color: $white;
+}
+
+.grey-bg .form-control {
+  background: $white;
+}
+
+textarea.form-control {
+  height: 150px;
+}
+
+.form-control:focus {
+  box-shadow: none;
+  background: none;
+  border-color: $primaryLight;
+}
+
+.theme-bg .form-control:focus {
+  border-color: $primaryColor;
+}
+
+select.form-control {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 50px !important;
+}
+
+
+
+// FormControl
+// FormControl
+// FormControl
+
+// Radio
+// Radio
+// Radio
+
+.form-radio {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  display: inline-block;
+  position: relative;
+  top: 10px;
+  height: 30px;
+  width: 30px;
+  margin-right: 10px;
+  color: $lightText;
+  background-color: $white;
+  border: solid 1px $primaryLight;
+  border-radius: 50px;
+
+  outline: none;
+  cursor: pointer;
+  transition: all 200ms;
+}
+
+.form-radio:checked::before {
+  position: absolute;
+  font: 13px/1 'Open Sans', sans-serif;
+  left: 10px;
+  top: 6px;
+  content: '\02143';
+  transform: rotate(40deg);
+}
+
+.form-radio:hover {
+  border: solid 1px $primaryLight;
+  color: $lightGray;
+  content: '\02143';
+}
+
+.form-radio:checked {
+  color: $white;
+  background-color: $primaryLight;
+  border: solid 1px $primaryLight;
+}
+
+.form-radio:disabled,
+.form-control:disabled,
+.form-control[readonly] {
+  color: $darkText;
+  border: 1px solid $lightGray;
+  background-color: $lighterGray;
+  box-shadow: $box-shadow-inner;
+}
+
+// Radio
+// Radio
+// Radio
+
+// Input SLider
+// Input SLider
+// Input SLider
+
+
+/* input range slider */
+.input-range {
+  margin: 36px 0 36px;
+}
+
+.input-range__label {
+  color: $lighterText;
+}
+
+.input-range__track--active {
+  background-color: $primaryLight;
+}
+
+.input-range__slider {
+  border-color: $primaryLight;
+  background-color: $primaryLight;
+}
+
+// Input SLider
+// Input SLider
+// Input SLider

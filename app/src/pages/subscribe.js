@@ -16,15 +16,10 @@ function SubscribePage({ priceId, subdomain, title }) {
         <Subscribe
           priceId={priceId}
           caption={'Join Now'}
-          // legend={'Join ' + title}
           subdomain={subdomain}
         />
       ) : (
-        <JoinWaitlist
-          caption={'Join the Waitlist'}
-          // legend={'Launching Soon! Join the Waitlist'}
-          subdomain={subdomain}
-        />
+        <JoinWaitlist caption={'Join the Waitlist'} subdomain={subdomain} />
       )}
     </div>
   );
@@ -156,7 +151,7 @@ export function JoinWaitlist({ legend, caption, subdomain }) {
 
   return (
     <div className="">
-      <form name="loginForm" onSubmit={login}>
+      <form name="joinWaitlist" onSubmit={login}>
         {legend ? <legend>{legend}</legend> : null}
         <div className="form-group">
           <label htmlFor="email">Email Address</label>
@@ -197,7 +192,3 @@ export function JoinWaitlist({ legend, caption, subdomain }) {
     </div>
   );
 }
-
-// export default Subscribe;
-
-// <SubscribeButton />

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 // import { Link } from '@reach/router';
-// ,{ useState, useEffect, useContext }
 
+// import LineChart from 'components/lineChart';
 import { SubscriptionLink } from 'components/random';
 import UpdateProfile from 'pages/account/updateProfile';
 
@@ -11,9 +11,9 @@ import UpdateProfile from 'pages/account/updateProfile';
 // import { CgFeed } from 'react-icons/cg';
 // import { MdEmail } from 'react-icons/md';
 
-// import { AuthContext } from 'App';
+import { AuthContext } from 'App';
 function User({ userId }) {
-  // const { callApi, user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   // const [loading, setLoading] = useState(false);
   // const [error, setError] = useState(false);
@@ -44,7 +44,12 @@ function User({ userId }) {
           <h2>Account</h2>
         </div>
 
-        {/* Profile */}
+        <h3 className="background">
+          <span>Manage Subscriptions</span>
+        </h3>
+
+        <SubscriptionLink active={!!user.subscriptions.length} />
+
         <h3 className="background">
           <span>Manage Profile</span>
         </h3>
@@ -52,16 +57,6 @@ function User({ userId }) {
         <div className="panel">
           <UpdateProfile />
         </div>
-
-        <div className="mb-4"></div>
-
-        {/* Profile */}
-        <h3 className="background">
-          <span>Manage Subscriptions</span>
-        </h3>
-        <div className="mb-4"></div>
-
-        <SubscriptionLink />
       </section>
     </div>
   );
