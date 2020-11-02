@@ -17,7 +17,7 @@
 // User
 const UserModel = require('../models').UserModel;
 const EventModel = require('../models').EventModel;
-const { addUserToGroup, removeUserFromGroup } = require('./rocketchat');
+// const { addUserToGroup, removeUserFromGroup } = require('./rocketchat');
 
 // Stripe
 const subscribeEndpointSecret = process.env.STRIPE_SUBSCRIBE_SECRET;
@@ -186,7 +186,7 @@ exports.handleStripeEvent = async function(body, signature) {
     //
     // Add source to target channel
     //
-    await addUserToGroup(targetUser.rocketGroupId, sourceUser.rocketUserId);
+    // await addUserToGroup(targetUser.rocketGroupId, sourceUser.rocketUserId);
 
     //
     // Update target user
@@ -225,10 +225,10 @@ exports.handleStripeEvent = async function(body, signature) {
     //
     // Update Group
     //
-    await removeUserFromGroup(
-      targetUser.rocketGroupId,
-      sourceUser.rocketUserId
-    );
+    // await removeUserFromGroup(
+    //   targetUser.rocketGroupId,
+    //   sourceUser.rocketUserId
+    // );
 
     //
     // Update target user

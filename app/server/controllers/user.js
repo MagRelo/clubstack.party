@@ -2,7 +2,7 @@ const UserModel = require('../models').UserModel;
 const ContentModel = require('../models').ContentModel;
 const getStream = require('../integrations/getstream');
 const { getSubscriberRedirectURL } = require('../integrations/payments');
-const { addUser } = require('../integrations/rocketchat');
+// const { addUser } = require('../integrations/rocketchat');
 
 // get user
 exports.populateUser = async function(req, res) {
@@ -268,10 +268,10 @@ exports.createUser = async function(email) {
   newUser.getStreamToken = await getStream.createStreamChatUser(newUser.userId);
 
   // Create RocketChat User
-  const userResponse = await addUser(newUser);
-  newUser.rocketUserId = userResponse.user._id;
-  newUser.rocketUser = userResponse.user;
-  await newUser.save();
+  // const userResponse = await addUser(newUser);
+  // newUser.rocketUserId = userResponse.user._id;
+  // newUser.rocketUser = userResponse.user;
+  // await newUser.save();
 
   return {
     email: newUser.email,
