@@ -4,56 +4,27 @@ import { Link } from '@reach/router';
 import { BiChevronRight } from 'react-icons/bi';
 
 import { AuthContext } from 'App';
-import { Loading, useDebounce, Bouncing } from 'components/random';
+import { useDebounce, Bouncing } from 'components/random';
 import { FormStatusButtons } from 'components/random';
 
 export default function AdminPage({ subdomain }) {
-  const { callApi, user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   const editingContent = !!subdomain;
-  // console.log('editing', editingContent);
-
-  const [loading, setLoading] = useState(editingContent);
-  const [error, setError] = useState(false);
-  const [setContent] = useState(null);
-
-  useEffect(() => {
-    const method = 'GET';
-    const endPoint = '/api/user/' + user._id;
-
-    if (editingContent) {
-      setLoading(true);
-      callApi(method, endPoint)
-        .then((body) => {
-          setContent(body);
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.log(error);
-          setError(error.toString());
-          setLoading(false);
-        });
-    }
-  }, [callApi, user, editingContent, setContent]);
 
   return (
     <div className="container">
-      {error ? <p>{error}</p> : null}
-      {loading ? (
-        <Loading />
-      ) : (
-        <div>
-          <h2>{editingContent ? 'Update' : 'Activate'} Subdomain</h2>
-          <p>
-            <Link to="/admin">Admin</Link> <BiChevronRight />{' '}
-            <Link to="/admin/subdomain">Subdomain</Link> <BiChevronRight />{' '}
-            <u>{editingContent ? 'Update' : 'Activate'}</u>
-          </p>
-          <UpdateSubdomain incomingSubdomain={user.subdomain} />
+      <div>
+        <h2>{editingContent ? 'Update' : 'Activate'} Subdomain</h2>
+        <p>
+          <Link to="/admin">Admin</Link> <BiChevronRight />{' '}
+          <Link to="/admin/subdomain">Subdomain</Link> <BiChevronRight />{' '}
+          <u>{editingContent ? 'Update' : 'Activate'}</u>
+        </p>
+        <UpdateSubdomain incomingSubdomain={user.group.subdomain} />
 
-          <UpdateSubdomainData subdomainData={user.subdomainData} />
-        </div>
-      )}
+        <UpdateSubdomainData subdomainData={user.group} />
+      </div>
     </div>
   );
 }
@@ -142,7 +113,7 @@ export function UpdateSubdomain() {
 
     // send to server
     let method = 'PUT';
-    let endpoint = '/api/user/subdomain';
+    let endpoint = '/api/group/subdomain';
 
     await callApi(method, endpoint, { subdomain })
       .then(async (user) => {
@@ -253,7 +224,6 @@ export function UpdateSubdomainData() {
 
   const onChange = (e) => {
     const { name, value } = e.target;
-
     setFormDirty(true);
     setState((prevState) => ({ ...prevState, [name]: value }));
   };
@@ -264,7 +234,7 @@ export function UpdateSubdomainData() {
 
     // send to server
     let method = 'PUT';
-    let endpoint = '/api/user/subdomain';
+    let endpoint = '/api/group/subdomain';
     await callApi(method, endpoint, {
       subdomainData: { title, description, copyright, owner, image, alt },
     })

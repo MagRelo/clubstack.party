@@ -4,11 +4,12 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Bouncing } from 'components/random';
 
 import { GroupPic } from './allGroups';
+import { ChatPanel } from './chat';
 
 import { AuthContext } from 'App';
 
 function Group({ subdomain }) {
-  const { callApi } = useContext(AuthContext);
+  const { callApi, user } = useContext(AuthContext);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
@@ -38,14 +39,19 @@ function Group({ subdomain }) {
       {group ? (
         <div className="grid grid-5-3">
           <div>
-            <GroupHeader displayName={'Clubhouse'} subdomain={'clubhouse'} />
+            <GroupHeader
+              displayName={group.title}
+              subdomain={group.subdomain}
+            />
 
-            {/* <div className="grid-left">
-              <div className="grid-label">Website Address</div>
-              <div>https://clubstack.com</div>
-              <div className="grid-label">Chat Room</div>
-              <div>'Automatic'</div>
-            </div> */}
+            <div className="mb-3"></div>
+            <ChatPanel
+              userId={user.userId}
+              userName={user.displayName}
+              avatar={user.avatar}
+              userToken={user.getStreamToken}
+              channelName={user.subdomain}
+            />
           </div>
 
           <div>

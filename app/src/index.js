@@ -7,6 +7,7 @@ import 'react-input-range/lib/css/index.css';
 import '@reach/dialog/styles.css';
 import '@reach/menu-button/styles.css';
 // import 'react-google-places-autocomplete/dist/assets/index.css';
+import 'stream-chat-react/dist/css/index.css';
 
 // Template CSS
 import './css/bootstrap.min.css';
@@ -20,6 +21,7 @@ import './css/loaders.scss';
 import './css/stars.scss';
 import './css/addPosition.scss';
 import './css/buttons_forms.scss';
+import './css/streamChat.scss';
 
 // import * as serviceWorker from './serviceWorker';
 // If you want your app to work offline and load faster, you can change

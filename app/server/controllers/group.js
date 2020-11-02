@@ -1,5 +1,17 @@
 const GroupModel = require('../models').GroupModel;
-const { addGroup } = require('../integrations/rocketchat');
+// const { addGroup } = require('../integrations/rocketchat');
+const { createStreamChatChannel } = require('../integrations/getstream');
+
+exports.getAllGroups = async function(req, res) {
+  try {
+    const groups = await GroupModel.find({ owner: { $ne: req.user._id } });
+
+    res.status(200).send(groups);
+  } catch (error) {
+    console.log({ error: error.message });
+    res.status(500).send({ error: error.message });
+  }
+};
 
 exports.getGroup = async function(req, res) {
   try {
@@ -21,21 +33,29 @@ exports.getGroup = async function(req, res) {
 
 exports.createGroup = async function(req, res) {
   try {
-    const group = new GroupModel({
-      owner: req.body._id,
-      status: 'Active',
+    // create the Group
+    const newGroup = new GroupModel({
+      owner: req.user._id,
       subdomain: req.body.subdomain,
+      name: req.body.disaplyName,
+      caption: req.body.caption,
+      description: req.body.description,
+      image: req.body.image,
+      imageAlt: req.body.alt,
+    });
+    await newGroup.save();
+
+    // create getstream channel
+    await createStreamChatChannel({
+      channelName: req.body.subdomain,
+      image: req.body.image,
+      members: [req.user._id],
+      created_by_id: req.user._id,
     });
 
-    // Create RocketChat Group
-    const groupResponse = await addGroup(req.body.subdomain, [
-      req.user.rocketUserId,
-    ]);
-    group.rocketGroupId = groupResponse.group._id;
-    group.rocketGroup = groupResponse.group;
-    await group.save();
+    // update user
 
-    res.status(201).send(group);
+    res.status(201).send(newGroup);
   } catch (error) {
     console.log({ error: error.message });
     res.status(500).send({ error: error.message });

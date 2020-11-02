@@ -44,9 +44,9 @@ function User({ userId }) {
         <div className="section-title">
           <h2>Community</h2>
           <p>Connect Your People · Build A Network</p>
-          <div className="form-wrapper">
+          {/* <div className="form-wrapper">
             <ToolGrid />
-          </div>
+          </div> */}
         </div>
 
         <h3 className="background">

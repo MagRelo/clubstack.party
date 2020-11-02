@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Link } from '@reach/router';
 
-import { SiteGrid } from 'components/random';
+// import { SiteGrid } from 'components/random';
 import LineChart from 'components/lineChart';
 import VideoCard from 'components/videoCard';
 import { BiBookAdd, BiEdit } from 'react-icons/bi';
@@ -16,10 +16,10 @@ function Website() {
         <div className="section-title">
           <h2>Publishing</h2>
           <p>Find Your People · Build Your Audience</p>
-
+          {/* 
           <div className="form-wrapper">
             <SiteGrid />
-          </div>
+          </div> */}
         </div>
 
         {/* Website */}
@@ -69,45 +69,6 @@ function Website() {
         </div>
 
         <h3 className="background">
-          <span>Settings</span>
-        </h3>
-
-        <div className="grid grid-2">
-          <div className="grid-left">
-            <div className="grid-label">Status</div>
-            <div>Active</div>
-            <div className="grid-label">Web Address</div>
-            <div>{`https://${user.subdomain}.clubstack.party`}</div>
-            <div className="grid-label">Start Date</div>
-            <div>12/21/2019</div>
-            <div className="grid-label">Email Schedule</div>
-            <div>'Sunday 7PM'</div>
-            <div className="grid-label">Email Send</div>
-            <div>'Automatic'</div>
-          </div>
-
-          <div className="grid-left">
-            <div className="grid-label">Title</div>
-            <div>{user?.subdomainData.title}</div>
-            <div className="grid-label">Description</div>
-            <div>{trimString(user?.subdomainData.description)}</div>
-            <div className="grid-label">Copyright</div>
-            <div>{user?.subdomainData.copyright}</div>
-            <div className="grid-label">Email Schedule</div>
-            <div>'Sunday 7PM'</div>
-            <div className="grid-label">Email Send</div>
-            <div>'Automatic'</div>
-          </div>
-        </div>
-
-        <div className="mb-4"></div>
-        <div className="text-center">
-          <Link to="/website/settings" className="btn btn-theme btn-sm">
-            Edit Settings <BiEdit />
-          </Link>
-        </div>
-
-        <h3 className="background">
           <span>Content</span>
         </h3>
 
@@ -137,6 +98,45 @@ function Website() {
               Add Content <BiBookAdd />
             </Link>
           </div>
+        </div>
+
+        <h3 className="background">
+          <span>Settings</span>
+        </h3>
+
+        <div className="grid grid-2">
+          <div className="grid-left">
+            <div className="grid-label">Status</div>
+            <div>Active</div>
+            <div className="grid-label">Web Address</div>
+            <div>{`https://${user.group.subdomain}.clubstack.party`}</div>
+            <div className="grid-label">Start Date</div>
+            <div>12/21/2019</div>
+            <div className="grid-label">Email Schedule</div>
+            <div>'Sunday 7PM'</div>
+            <div className="grid-label">Email Send</div>
+            <div>'Automatic'</div>
+          </div>
+
+          <div className="grid-left">
+            <div className="grid-label">Title</div>
+            <div>{user?.group.title}</div>
+            <div className="grid-label">Description</div>
+            <div>{trimString(user?.group.description)}</div>
+            <div className="grid-label">Copyright</div>
+            <div>{user?.group.copyright}</div>
+            <div className="grid-label">Email Schedule</div>
+            <div>'Sunday 7PM'</div>
+            <div className="grid-label">Email Send</div>
+            <div>'Automatic'</div>
+          </div>
+        </div>
+
+        <div className="mb-4"></div>
+        <div className="text-center">
+          <Link to="/website/settings" className="btn btn-theme btn-sm">
+            Edit Settings <BiEdit />
+          </Link>
         </div>
       </section>
     </div>

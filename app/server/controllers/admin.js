@@ -1,43 +1,47 @@
 const UserModel = require('../models').UserModel;
-const { addUser, addGroup } = require('../integrations/rocketchat');
+const GroupModel = require('../models').GroupModel;
+// const { addUser, addGroup } = require('../integrations/rocketchat');
+const {
+  createStreamChatUser,
+  createStreamChatChannel,
+} = require('../integrations/getstream');
 
 exports.activateSubdomain = async function(req, res) {
   try {
     // Create or Update User
     let owner = await UserModel.findOne({ email: req.body.email });
-    if (owner) {
-      // update
-      owner.subdomain = req.body.subdomain;
-      owner.productCode = req.body.productCode;
-      owner.subdomainData = req.body;
-      owner.status = 'Active';
-    } else {
+    if (!owner) {
       // create
       owner = new UserModel({
         email: req.body.email,
-        productCode: req.body.productCode,
-        subdomain: req.body.subdomain,
         status: 'Active',
-        subdomainData: req.body,
       });
+      owner.getStreamToken = await createStreamChatUser(owner.userId);
+      console.log('create user', owner.userId, owner.getStreamToken);
+      await owner.save();
     }
-    await owner.save();
 
-    // Create RocketChat User
-    const userResponse = await addUser(owner);
-    owner.rocketUserId = userResponse.user._id;
-    owner.rocketUser = userResponse.user;
-    await owner.save();
+    // create the Group
+    const newGroup = new GroupModel({
+      owner: owner,
+      subdomain: req.body.subdomain,
+      name: req.body.disaplyName,
+      caption: req.body.caption,
+      description: req.body.description,
+      image: req.body.image,
+      imageAlt: req.body.alt,
+    });
+    await newGroup.save();
 
-    // Create RocketChat Group
-    const groupResponse = await addGroup(owner, owner.subdomain, [
-      owner.rocketUser.username,
-    ]);
-    owner.rocketGroupId = groupResponse.group._id;
-    owner.rocketGroup = groupResponse.group;
-    await owner.save();
+    // create getstream channel
+    await createStreamChatChannel({
+      channelName: req.body.subdomain,
+      image: req.body.image,
+      members: [owner.userId],
+      created_by_id: owner.userId,
+    });
 
-    res.status(200).send(owner);
+    res.status(200).send(newGroup);
   } catch (error) {
     console.log({ error: error.message });
     res.status(500).send({ error: error.message });
@@ -47,10 +51,7 @@ exports.activateSubdomain = async function(req, res) {
 exports.listSubdomains = async function(req, res) {
   try {
     // look for Email; dont overwrite?
-    let subdomains = await UserModel.find({
-      status: 'Active',
-      subdomain: { $exists: true },
-    }).select('subdomain email');
+    let subdomains = await GroupModel.find({}).select('subdomain');
 
     res.status(200).send(subdomains);
   } catch (error) {

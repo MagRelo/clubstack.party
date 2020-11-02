@@ -39,10 +39,11 @@ const UserSchema = new mongoose.Schema(
     stripeCustomerId: String,
     stripeEvents: [Object],
 
+    getStreamToken: String,
     rocketUserId: String,
     rocketUser: Object,
 
-    subscriptions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    subscriptions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Group' }],
 
     follows: { type: Array, default: [] },
   },
@@ -67,12 +68,13 @@ const GroupSchema = new mongoose.Schema(
   {
     owner: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     subdomain: String,
+    name: String,
+    caption: String,
+    description: String,
+    image: String,
+    imageAlt: String,
+
     productCode: String,
-
-    subdomainData: Object,
-
-    rocketGroupId: String,
-    rocketGroup: Object,
     subscribers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     waitlist: [
       {
@@ -100,13 +102,18 @@ const ContentSchema = new mongoose.Schema(
     title: String,
     length: String,
     description: String,
-    image: String,
+    image: {
+      type: String,
+      default: 'https://picsum.photos/200/300',
+    },
     alt: String,
     category: String,
     renderedHtml: String,
-    rawState: Object,
+    rawState: {
+      type: Object,
+    },
   },
-  { timestamps: true }
+  { timestamps: true, minimize: false }
 );
 exports.ContentModel = mongoose.model('ContentItem', ContentSchema);
 

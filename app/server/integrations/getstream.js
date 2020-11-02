@@ -1,4 +1,5 @@
 const stream = require('getstream');
+const { StreamChat } = require('stream-chat');
 
 const UserModel = require('../models').UserModel;
 
@@ -6,6 +7,29 @@ const UserModel = require('../models').UserModel;
 const apiKey = process.env.STREAM_API_KEY;
 const apiKeySecret = process.env.STREAM_API_SECRET;
 const streamClient = stream.connect(apiKey, apiKeySecret);
+const chatClient = new StreamChat(
+  process.env.STREAM_CHAT_KEY,
+  process.env.STREAM_CHAT_SECRET
+);
+
+exports.createStreamChatUser = async function(userId) {
+  return chatClient.createToken(userId);
+};
+
+exports.createStreamChatChannel = async function({
+  channelName = 'default',
+  image = 'default',
+  members = [],
+  created_by_id = '123',
+}) {
+  const newChannel = chatClient.channel('messaging', channelName, {
+    channelName,
+    image,
+    members,
+    created_by_id,
+  });
+  return newChannel.create();
+};
 
 // => create User(?)
 exports.addUser = async function(user) {

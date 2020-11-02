@@ -244,11 +244,11 @@ export default App;
 function MetaData() {
   return (
     <Helmet>
-      <title>ClubStack</title>
+      <title>Incentive Exchange</title>
       <meta name="description" content="User-Generated Communities" />
       <link rel="canonical" href={'https://clubstack.party'} />
 
-      <meta property="og:site_name" content="ClubStack" />
+      <meta property="og:site_name" content="Incentive Exchange" />
       <meta property="og:type" content="website" />
       <meta property="og:url" content={'https://clubstack.party'} />
       <meta property="og:image:secure_url" content="https://clubstack.party" />
@@ -262,8 +262,8 @@ function MetaData() {
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:site" content="@i_dot_e" />
-      <meta name="twitter:title" content="ClubStack" />
-      <meta name="twitter:description" content="ClubStack" />
+      <meta name="twitter:title" content="Incentive Exchange" />
+      <meta name="twitter:description" content="Incentive Exchange" />
       <meta
         name="twitter:image"
         content="https://clubstack.party/logo_share.png"

@@ -29,9 +29,14 @@ router.post('/user/subscription', authenticate, User.manageSubscriptionLink);
 router.put('/user/follow', authenticate, User.userFollow);
 // router.get('/user/network', authenticate, User.getUserNetwork);
 
-// groups
-router.get('/group/:subdomain', User.getUserBySubdomain);
-router.put('/group/', authenticate, User.updateSubdomain, User.populateUser);
+//
+// GROUPS
+//
+const Group = require('./controllers/group');
+router.get('/group', Group.getAllGroups);
+router.get('/group/:subdomain', Group.getGroup);
+router.post('/group/', authenticate, Group.createGroup, User.populateUser);
+router.put('/group/', authenticate, Group.updateGroup, User.populateUser);
 
 //
 // ADMIN

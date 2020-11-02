@@ -31,15 +31,17 @@ function VideoCard({
         className="content-card panel"
         style={{ display: 'grid', gridTemplateRows: 'auto 1fr auto' }}
       >
-        <aside>
-          <img src={image} alt={alt} height="175px" />
+        {image ? (
+          <aside>
+            <img src={image} alt={alt} height="175px" />
 
-          {active ? (
-            <button href="#" className="btn btn-unstyled button">
-              {locked ? <FaLock /> : <FaPlay />}
-            </button>
-          ) : null}
-        </aside>
+            {active ? (
+              <button href="#" className="btn btn-unstyled button">
+                {locked ? <FaLock /> : <FaPlay />}
+              </button>
+            ) : null}
+          </aside>
+        ) : null}
 
         <article>
           <div className="h3 title">{title}</div>
@@ -73,25 +75,32 @@ function VideoCard({
   } else {
     return (
       <div className="content-card panel">
-        <aside>
-          <img src={image} alt={alt} height="175px" />
+        {image ? (
+          <aside>
+            <img src={image} alt={alt} height="175px" />
 
-          {active ? (
-            <button href="#" className="btn btn-unstyled button">
-              {locked ? <FaLock /> : <FaPlay />}
-            </button>
-          ) : null}
-        </aside>
+            {active ? (
+              <button href="#" className="btn btn-unstyled button">
+                {locked ? <FaLock /> : <FaPlay />}
+              </button>
+            ) : null}
+          </aside>
+        ) : null}
 
         <article>
           <div className="h3 title">{title}</div>
 
-          <div className="category">
-            <span>{category}</span>
-            <span style={{ float: 'right' }}>
-              <FaRegClock /> <span>{length}</span>
-            </span>
-          </div>
+          {category ? (
+            <div className="category">
+              <span>{category}</span>
+
+              {length ? (
+                <span style={{ float: 'right' }}>
+                  <FaRegClock /> <span>{length}</span>
+                </span>
+              ) : null}
+            </div>
+          ) : null}
 
           <p dangerouslySetInnerHTML={createMarkup()} />
         </article>

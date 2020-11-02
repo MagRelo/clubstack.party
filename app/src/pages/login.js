@@ -1,28 +1,22 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from 'App';
-// import { Link } from '@reach/router';
 
-import { ImWarning } from 'react-icons/im';
+import { FormStatusButtons } from 'components/random';
 
 import { magicLogin } from 'api/magic';
-import { Bouncing } from 'components/random';
 
 function Login(props) {
   const { createSession } = useContext(AuthContext);
+
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+
+  const [email, setEmail] = useState(null);
 
   async function login(event) {
     event.preventDefault();
 
     setLoading(true);
-
-    // get form data
-    const formObject = {};
-    const formData = new FormData(event.target);
-    formData.forEach((value, key) => {
-      formObject[key] = value;
-    });
 
     try {
       // test email
@@ -31,12 +25,12 @@ function Login(props) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: formObject.email }),
+        body: JSON.stringify({ email }),
       });
 
       if (status === 200 || status === 201) {
         // do magic thing
-        const didToken = await magicLogin(formObject.email);
+        const didToken = await magicLogin(email);
 
         return fetch(`/auth/login`, {
           headers: new Headers({
@@ -74,29 +68,22 @@ function Login(props) {
                   name="email"
                   required={true}
                   className="form-control"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
                 />
               </div>
 
               <hr />
 
-              <button className="btn btn-theme">
-                {loading ? (
-                  <span>
-                    <Bouncing />
-                  </span>
-                ) : (
-                  <span>Sign In</span>
-                )}
-              </button>
-
-              <div className="mb-4"></div>
-
-              {errorMessage ? (
-                <div>
-                  <ImWarning />{' '}
-                  <span>{errorMessage ? errorMessage : null}</span>
-                </div>
-              ) : null}
+              <FormStatusButtons
+                saveFunction={login}
+                saveLabel={'Sign In'}
+                isDirty={true}
+                isLoading={loading}
+                errorMessage={errorMessage}
+              />
             </form>
           </div>
         </div>

@@ -40,7 +40,7 @@ function Header() {
         <div className="header-container">
           {activeSession ? (
             <NavLink to="/clubs">
-              <BiSearch /> Houses
+              <BiSearch /> Publications
             </NavLink>
           ) : (
             <span className="header-tagline">User-Generated Communities</span>

@@ -1,0 +1,14 @@
+@import 'variables.scss';
+
+.str-chat.str-chat-channel {
+  height: 70vh;
+  border: solid 1px $lightGray;
+}
+
+.commerce.str-chat .str-chat__list {
+  padding: 0 30px;
+}
+
+.livestream.str-chat .str-chat__input textarea {
+  border-bottom: solid 2px $primaryLight;
+}

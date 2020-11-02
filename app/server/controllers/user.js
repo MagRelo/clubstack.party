@@ -14,30 +14,22 @@ exports.populateUser = async function(req, res) {
       })
       .populate({
         path: 'subscriptions',
-        select: 'avatar displayName caption subdomain',
+        select: 'subdomain title caption description image imageAlt',
+      })
+      .populate({
+        path: 'group',
+        select: 'subdomain title caption description image imageAlt',
       })
       .select(
-        `avatar displayName caption subdomain subdomainData email publicAddress type`
+        `avatar displayName caption subdomain subdomainData email publicAddress type getStreamToken userId`
       )
       .lean();
     if (!user) {
       return res.status(401).send({ error: 'no user' });
     }
 
-    // add user to subscriptions
-    user.subscriptions = [
-      {
-        _id: user._id,
-        displayName: user.subdomainData.title,
-        avatar: user.subdomainData.image,
-        subdomain: user.subdomain,
-        caption: user.subdomainData.description,
-      },
-      ...user.subscriptions,
-    ];
-
     const content = await ContentModel.find({ user: req.user.id })
-      .sort({ createdAt: 1 })
+      .sort({ createdAt: -1 })
       .limit(5);
 
     // get queries and links
@@ -271,6 +263,9 @@ exports.createUser = async function(email) {
   let newUser = new UserModel({
     email: email,
   });
+
+  // Stream Chat
+  newUser.getStreamToken = await getStream.createStreamChatUser(newUser.userId);
 
   // Create RocketChat User
   const userResponse = await addUser(newUser);

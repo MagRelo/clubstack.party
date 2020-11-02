@@ -318,12 +318,19 @@ export function SiteGrid() {
 
 export function FormStatusButtons({
   saveFunction,
+  saveLabel = 'Save',
   resetFunction,
   isDirty,
   isLoading,
   errorMessage,
   successMessage,
 }) {
+  let showCancel = false;
+  if (typeof resetFunction === 'function') {
+    console.log('function:', typeof resetFunction);
+    showCancel = true;
+  }
+
   return (
     <React.Fragment>
       {/* Save */}
@@ -332,17 +339,19 @@ export function FormStatusButtons({
         disabled={!isDirty || isLoading || errorMessage}
         onClick={saveFunction}
       >
-        <span>Save</span>
+        <span>{saveLabel}</span>
       </button>
 
       {/* Cancel */}
-      <button
-        className="btn btn-sm"
-        onClick={resetFunction}
-        disabled={!isDirty || isLoading || errorMessage}
-      >
-        <span>Cancel</span>
-      </button>
+      {showCancel ? (
+        <button
+          className="btn btn-sm"
+          onClick={resetFunction}
+          disabled={!isDirty || isLoading || errorMessage}
+        >
+          <span>Cancel</span>
+        </button>
+      ) : null}
 
       {/* loading */}
       {isLoading ? <Bouncing /> : null}
