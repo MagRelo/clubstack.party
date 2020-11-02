@@ -3,6 +3,7 @@ import { useLocation } from '@reach/router';
 
 // headerimage
 import cassette from 'images/cassette_black.jpg';
+import logo from 'images/ie_logo.png';
 
 import { getParams, Loading, ToolGrid } from 'components/random';
 import VideoCard from 'components/videoCard';
@@ -177,11 +178,26 @@ export default Preview;
 function Hero() {
   return (
     <div className="container">
-      <h1 className="hero">
-        <span className="">Club</span>Stack <br />{' '}
-        <span className="sub">( dot )</span> <span className="sub">PARTY</span>
-      </h1>
-      <p style={{ textAlign: 'center' }}>User-Generated Communities</p>
+      <div className="hero">
+        <img src={logo} alt="logo" height="200px" style={{ float: 'left' }} />
+
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            height: '200px',
+            paddingLeft: '20px',
+          }}
+        >
+          <h1>
+            <span className="">Incentive</span>
+            <br />
+            <span>Exchange</span>
+          </h1>
+          <p>User-Generated Communities</p>
+        </div>
+      </div>
     </div>
   );
 }

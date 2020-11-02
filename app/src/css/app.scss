@@ -613,6 +613,11 @@ a.panel {
 }
 
 /* Hero */
+.hero {
+  max-width: 500px;
+  margin: 100px auto;
+}
+
 .hero-grid {
   display: grid;
   gap: 1.5em;
