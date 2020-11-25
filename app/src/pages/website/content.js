@@ -3,9 +3,9 @@ import { Link } from '@reach/router';
 
 import { Loading } from 'components/random';
 import { AuthContext } from 'App';
-import VideoCard from 'components/videoCard';
+import ContentCard from 'components/contentCard';
 
-import { BiBookAdd } from 'react-icons/bi';
+import { BiBookAdd, BiChevronRight } from 'react-icons/bi';
 
 function Content() {
   const { callApi, user } = useContext(AuthContext);
@@ -34,8 +34,10 @@ function Content() {
     <div className="container">
       <div>
         <h2>Manage Content</h2>
+        <p>
+          <Link to="/website">Publishing</Link> <BiChevronRight /> Content
+        </p>
 
-        <div className="mb-4"></div>
         <h3 className="background">
           <span>Website Content</span>
         </h3>
@@ -49,16 +51,13 @@ function Content() {
           {content &&
             content.map((item) => {
               return (
-                <VideoCard
-                  {...item}
-                  key={item._id}
-                  active={false}
-                  editing={true}
-                />
+                <Link to={'/website/content/' + item._id} key={item._id}>
+                  <ContentCard {...item} />
+                </Link>
               );
             })}
 
-          <div className="panel">
+          <div>
             <Link
               to="/website/content/add"
               className="btn btn-theme btn-sm"

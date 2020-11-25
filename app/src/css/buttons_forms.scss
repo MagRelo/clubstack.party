@@ -1,6 +1,11 @@
 @import 'variables.scss';
 
 
+legend {
+  font-family: 'Libre Baskerville';
+  color: $darkText;
+  font-size: 18px;
+}
 
 form>hr {
   margin: 1rem -1rem;
@@ -125,6 +130,21 @@ fieldset {
 textarea.form-control {
   height: 150px;
 }
+
+select,
+option {
+  font-size: small;
+}
+
+
+.md-RichEditor-root {
+  padding: 0 1rem;
+
+  min-height: 500px;
+  border: dashed 2px $lightGray;
+  border-radius: 4px;
+}
+
 
 .form-control:focus {
   box-shadow: none;

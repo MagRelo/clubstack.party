@@ -327,7 +327,7 @@ export function FormStatusButtons({
 }) {
   let showCancel = false;
   if (typeof resetFunction === 'function') {
-    console.log('function:', typeof resetFunction);
+    // console.log('function:', typeof resetFunction);
     showCancel = true;
   }
 

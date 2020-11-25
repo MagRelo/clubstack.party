@@ -169,7 +169,6 @@ function App() {
       value={{
         activeSession,
         createSession,
-        clearSession,
         callApi,
         user,
         updateUser,

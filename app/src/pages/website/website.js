@@ -3,12 +3,17 @@ import { Link } from '@reach/router';
 
 // import { SiteGrid } from 'components/random';
 import LineChart from 'components/lineChart';
-import VideoCard from 'components/videoCard';
+// import VideoCard from 'components/videoCard';
+import ContentCard from 'components/contentCard';
 import { BiBookAdd, BiEdit } from 'react-icons/bi';
 
 import { AuthContext } from 'App';
 function Website() {
   const { user } = useContext(AuthContext);
+
+  const website = user.group
+    ? `https://${user.group.subdomain}.clubstack.party`
+    : 'not active';
 
   return (
     <div className="container">
@@ -69,30 +74,22 @@ function Website() {
         </div>
 
         <h3 className="background">
-          <span>Content</span>
+          <Link to="/website/content">
+            <span>Content</span>
+          </Link>
         </h3>
 
         <div className="grid grid-3">
           {user.content &&
             user.content.map((item) => {
               return (
-                <VideoCard
-                  {...item}
-                  key={item._id}
-                  active={false}
-                  editing={true}
-                />
+                <div key={item._id}>
+                  <ContentCard {...item} />
+                </div>
               );
             })}
 
           <div className=" text-center">
-            <p>View Existing Content</p>
-
-            <Link to="/website/content" className="btn btn-theme btn-sm">
-              See All Content...
-            </Link>
-            <div className="mb-3"></div>
-
             <p>Add a new peice of content</p>
             <Link to="/website/content/add" className="btn btn-theme btn-sm">
               Add Content <BiBookAdd />
@@ -109,7 +106,7 @@ function Website() {
             <div className="grid-label">Status</div>
             <div>Active</div>
             <div className="grid-label">Web Address</div>
-            <div>{`https://${user.group.subdomain}.clubstack.party`}</div>
+            <div>{website}</div>
             <div className="grid-label">Start Date</div>
             <div>12/21/2019</div>
             <div className="grid-label">Email Schedule</div>

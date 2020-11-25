@@ -50,13 +50,11 @@ function Content({ contentId }) {
         <div>
           <h2>{editingContent ? 'Update' : 'Add'} Content</h2>
           <p>
-            <Link to="/website">Website</Link> <BiChevronRight />{' '}
+            <Link to="/website">Publishing</Link> <BiChevronRight />{' '}
             <Link to="/website/content">Content</Link> <BiChevronRight />{' '}
             <u>{editingContent ? 'Update' : 'Add'}</u>
           </p>
-          <div className="panel">
-            <UpdateContent editingContent={editingContent} content={content} />
-          </div>
+          <UpdateContent editingContent={editingContent} content={content} />
         </div>
       )}
     </div>
@@ -80,15 +78,23 @@ function UpdateContent({ editingContent, content }) {
   );
   const refsEditor = React.createRef();
 
-  const [{ title, description, image, alt, category }, setState] = useState(
+  const [{ title, description, image, alt }, setState] = useState(
     content || {
       title: '',
       description: '',
-      category: '',
       image: '',
       alt: '',
     }
   );
+
+  const [category, setCategory] = useState(content?.category);
+  const categories = ['Blogpost', 'Content'];
+  const Add = categories.map((Add) => Add);
+  const handleAddrTypeChange = (e) => {
+    // console.log(categories[e.target.value]);
+    setFormDirty(true);
+    setCategory(categories[e.target.value]);
+  };
 
   const editorChange = (e) => {
     setFormDirty(true);
@@ -129,6 +135,11 @@ function UpdateContent({ editingContent, content }) {
       method = 'POST';
     }
 
+    // TEST
+    // console.log(formObject);
+    // setLoading(false);
+    // TEST
+
     await callApi(method, endpoint, formObject)
       .then(async (user) => {
         // navigate('/website');
@@ -160,23 +171,61 @@ function UpdateContent({ editingContent, content }) {
 
   return (
     <form name="updateContent" onSubmit={submit}>
-      <div>
-        <label htmlFor="displayName" className="">
-          Content Web Address
-        </label>
-        <input
-          type="text"
-          name="title"
-          id="title"
-          className="form-control"
-          value={title}
-          onChange={onChange}
-          placeholder="https://google.com/cats"
-        />
-      </div>
+      <div className="grid grid-3-5">
+        <div>
+          <div className="panel">
+            <div className="form-group">
+              <label htmlFor="category" className="">
+                Category
+              </label>
+              <select
+                onChange={(e) => handleAddrTypeChange(e)}
+                className="browser-default custom-select"
+              >
+                {Add.map((address, key) => (
+                  <option value={key}>{address}</option>
+                ))}
+              </select>
 
-      <hr />
-      <div className="grid grid-5-3">
+              {/* 
+            <input
+              type="text"
+              name="category"
+              id="category"
+              className="form-control"
+              value={category}
+              onChange={onChange}
+            /> */}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="displayName" className="">
+                Title
+              </label>
+              <input
+                type="text"
+                name="title"
+                id="title"
+                className="form-control"
+                value={title}
+                onChange={onChange}
+              />
+            </div>
+            {/* <div className="form-group">
+              <label htmlFor="caption" className="">
+                Description
+              </label>
+              <textarea
+                type="text"
+                name="description"
+                id="description"
+                className="form-control"
+                value={description}
+                onChange={onChange}
+              />
+            </div> */}
+          </div>
+        </div>
         <div>
           <label htmlFor="editor" className="sr-only">
             Post Content
@@ -189,76 +238,6 @@ function UpdateContent({ editingContent, content }) {
             sideButtons={[]}
             placeholder="Add content here! (highlight text to format)"
           />
-        </div>
-
-        <div>
-          <div className="form-group">
-            <label htmlFor="image" className="">
-              Image
-            </label>
-            <input
-              type="text"
-              name="image"
-              id="image"
-              className="form-control"
-              value={image}
-              onChange={onChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="alt" className="">
-              Image Alt Text
-            </label>
-            <input
-              type="text"
-              name="alt"
-              id="alt"
-              className="form-control"
-              value={alt}
-              onChange={onChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="displayName" className="">
-              Title
-            </label>
-            <input
-              type="text"
-              name="title"
-              id="title"
-              className="form-control"
-              value={title}
-              onChange={onChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="caption" className="">
-              Description
-            </label>
-            <input
-              type="text"
-              name="description"
-              id="description"
-              className="form-control"
-              value={description}
-              onChange={onChange}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="publicAddress" className="">
-              Category
-            </label>
-            <input
-              type="text"
-              name="category"
-              id="category"
-              className="form-control"
-              value={category}
-              onChange={onChange}
-            />
-          </div>
         </div>
       </div>
 

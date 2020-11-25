@@ -4,6 +4,7 @@ import React, { useContext } from 'react';
 // import LineChart from 'components/lineChart';
 import { SubscriptionLink } from 'components/random';
 import UpdateProfile from 'pages/account/updateProfile';
+import UserBankAccount from 'pages/account/userBankAccount';
 
 // import LineChart from 'components/lineChart';
 // import { BsFillChatDotsFill } from 'react-icons/bs';
@@ -45,18 +46,32 @@ function User({ userId }) {
         </div>
 
         <h3 className="background">
-          <span>Manage Subscriptions</span>
-        </h3>
-
-        <SubscriptionLink active={!!user.subscriptions.length} />
-
-        <h3 className="background">
           <span>Manage Profile</span>
         </h3>
 
         <div className="panel">
           <UpdateProfile />
         </div>
+
+        <h3 className="background">
+          <span>Payment Account</span>
+        </h3>
+
+        <p>We deposit your earnings directly into your bank account.</p>
+
+        <div className="panel">
+          <UserBankAccount />
+        </div>
+
+        <h3 className="background">
+          <span>Manage Subscriptions</span>
+        </h3>
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Molestiae
+          praesentium quam obcaecati ut non eaque? Fugiat omnis labore soluta
+          itaque? Reiciendis, est magni? Autem et, eos corporis eum ex alias.
+        </p>
+        <SubscriptionLink active={!!user.subscriptions.length} />
       </section>
     </div>
   );
